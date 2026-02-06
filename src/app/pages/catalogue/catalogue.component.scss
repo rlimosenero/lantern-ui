@@ -1,0 +1,33 @@
+.status-online {
+  --mdc-chip-elevated-container-color: #e8f5e9; // Light Green
+  --mdc-chip-label-text-color: #2e7d32;        // Dark Green
+}
+
+.status-offline {
+  --mdc-chip-elevated-container-color: #ffebee; // Light Red
+  --mdc-chip-label-text-color: #d32f2f;        // Dark Red
+}
+
+.mat-mdc-card {
+  border-radius: 16px !important;
+  border: 1px solid #e0e0e0 !important;
+}
+
+// Targeting the Swagger button to look like a real action
+.swagger-btn {
+  border-radius: 20px !important;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+
+// Clean status indicators without the heavy boxes
+.status-pill {
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 8px;
+  
+  &.online { background: #e6fffa; color: #234e52; }
+  &.offline { background: #fff5f5; color: #a02020; }
+}

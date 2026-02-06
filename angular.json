@@ -7,8 +7,17 @@
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
-          "style": "scss"
-        }
+          "standalone": true,
+        "style": "scss",
+        "displayBlock": true
+        },
+        
+      "@schematics/angular:directive": {
+        "standalone": true
+      },
+      "@schematics/angular:pipe": {
+        "standalone": true
+      }
       },
       "root": "",
       "sourceRoot": "src",
@@ -32,12 +41,7 @@
               }
             ],
             "styles": [
-              "node_modules/bootstrap-icons/font/bootstrap-icons.css",
-              "node_modules/bootstrap/scss/bootstrap.scss",
               "src/styles.scss"
-            ],
-            "scripts": [
-              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
             ]
           },
           "configurations": {

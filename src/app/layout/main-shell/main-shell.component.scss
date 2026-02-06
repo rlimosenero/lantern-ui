@@ -1,0 +1,30 @@
+.active-link {
+  background-color: rgba(186, 26, 26, 0.1); // Light tint of your primary red
+  color: #ba1a1a !important; // Your Lantern Red
+  
+  mat-icon {
+    color: #ba1a1a !important;
+  }
+}
+.lantern-wrapper {
+  height: 100vh;
+}
+
+mat-sidenav {
+  width: 260px;
+  border-right: none; // Remove the harsh line
+  background-color: #f8f9fa; // Light grey for the sidebar
+}
+
+mat-toolbar {
+  // Use a clean white background for the header
+  background-color: white !important;
+  color: #202124 !important;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.main-content {
+  background-color: #fdfdfd; // Very light tint
+  min-height: calc(100vh - 64px);
+  padding: 32px; // This is the "breath" your canvas needs
+}
