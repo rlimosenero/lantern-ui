@@ -1,30 +1,21 @@
-<div class="analytics-container" style="padding: 20px;">
-  <h2>System Overview</h2>
-  
-  <mat-grid-list cols="3" rowHeight="150px" gutterSize="20px">
-    @for (stat of stats; track stat.title) {
+<div class="page-container" style="padding: 24px;">
+  <h1 style="font-weight: 300; margin-bottom: 24px;">System Overview</h1>
+
+  <mat-grid-list cols="3" rowHeight="180px" gutterSize="24px">
+    @for (stat of stats(); track stat.title) {
       <mat-grid-tile>
-        <mat-card appearance="outlined" class="stat-card">
-          <mat-card-content>
-            <div class="stat-header">
-              <mat-icon [style.color]="stat.color">{{stat.icon}}</mat-icon>
-              <span class="stat-title">{{stat.title}}</span>
+        <mat-card appearance="outlined" class="stat-card" style="width: 100%; height: 100%; border-radius: 12px;">
+          <mat-card-content style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;">
+            <div style="display: flex; align-items: center; gap: 8px; color: #5f6368;">
+              <mat-icon [style.color]="stat.color">{{ stat.icon }}</mat-icon>
+              <span style="font-weight: 500;">{{ stat.title }}</span>
             </div>
-            <div class="stat-value">{{stat.value}}</div>
+            <div style="font-size: 3rem; font-weight: 700; margin-top: 8px;">
+              {{ stat.value }}
+            </div>
           </mat-card-content>
         </mat-card>
       </mat-grid-tile>
     }
   </mat-grid-list>
-  <mat-card appearance="outlined" style="margin-top: 24px; min-height: 300px;">
-  <mat-card-header>
-    <mat-card-title>System Uptime (Last 24 Hours)</mat-card-title>
-  </mat-card-header>
-  <mat-card-content style="display: flex; align-items: center; justify-content: center; height: 100%;">
-    <div style="color: #999; font-style: italic;">
-      <mat-icon inline style="vertical-align: middle;">show_chart</mat-icon>
-      Chart data integration coming soon...
-    </div>
-  </mat-card-content>
-</mat-card>
 </div>

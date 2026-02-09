@@ -4,6 +4,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { CatalogueComponent } from './pages/catalogue/catalogue.component';
 import { MainShellComponent } from './layout/main-shell/main-shell.component';
 import { AdminAnalyticsComponent } from './pages/admin-analytics/admin-analytics.component';
+import { ApplicationComponent } from './pages/application/application.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -13,6 +14,7 @@ export const routes: Routes = [
     children: [
       { path: 'admin', component: AdminAnalyticsComponent },
       { path: 'catalogue', component: CatalogueComponent },
+      { path: 'application', component: ApplicationComponent },
       { path: '', redirectTo: 'admin', pathMatch: 'full' } // Default inside the shell
       
     ]

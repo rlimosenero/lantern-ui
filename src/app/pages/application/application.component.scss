@@ -1,0 +1,149 @@
+:host {
+  display: block;
+  width: 100%;
+}
+.status-online {
+  --mdc-chip-elevated-container-color: #e8f5e9; // Light Green
+  --mdc-chip-label-text-color: #2e7d32;        // Dark Green
+}
+
+.status-offline {
+  --mdc-chip-elevated-container-color: #ffebee; // Light Red
+  --mdc-chip-label-text-color: #d32f2f;        // Dark Red
+}
+
+.mat-mdc-card {
+  border-radius: 16px !important;
+  border: 1px solid #e0e0e0 !important;
+}
+
+// Targeting the Swagger button to look like a real action
+.swagger-btn {
+  border-radius: 20px !important;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+.status-pill {
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.active { background-color: #e6f4ea; color: #1e7e34; }
+.for-deprecation { background-color: #fff9e6; color: #856404; }
+.deprecated { background-color: #fff3f3; color: #721c24; }
+.for-retirement { background-color: #fce8e8; color: #d93025; }
+// // Clean status indicators without the heavy boxes
+// .status-pill {
+//   font-weight: 600;
+//   padding: 4px 12px;
+//   border-radius: 8px;
+  
+//   &.active { background: #e6fffa; color: #234e52; }
+//   &.deprecated { background: #fff5f5; color: #a02020; }
+//   &.for deprecation { background: #fff5f5; color: #99a020; }
+// }
+.header-container {
+  display: flex;
+  align-items: center; /* Vertically centers the button with the title group */
+  padding: 16px;
+}
+
+.title-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.title-group h2 {
+  margin: 0; /* Remove default margins to keep it tight */
+  font-weight: bold;
+}
+
+.app-count {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #666; /* Greyish color for the count */
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.search-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.search-box {
+  background: #f4f4f9;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  width: 50%; /* Adjust based on preference */
+}
+
+.search-box input {
+  border: none;
+  background: transparent;
+  outline: none;
+  margin-left: 10px;
+  width: 100%;
+  color: #666;
+}
+
+.main-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.sub-text {
+  font-size: 13px;
+  color: #888;
+}
+
+.add-btn {
+  background-color: #1a73e8 !important; /* The blue from your mockup */
+  color: white !important;
+  border-radius: 8px !important;
+  padding: 0 16px !important;
+}
+
+.add-btn mat-icon {
+  margin-right: 4px;
+}
+
+
+.page-container {
+  width: 100%;
+}
+
+/* Force the table and its host to stretch */
+table, .mat-mdc-table {
+  width: 100% !important;
+  display: table !important; /* Forces the layout to behave like a standard table */
+}
+
+/* Ensure the card allows the table to expand */
+mat-card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* This makes the 'Description' column take up all the "extra" space */
+.mat-column-desc {
+  flex-grow: 1; 
+  padding-left: 16px;
+}
+
+/* Ensure other columns don't shrink too much */
+.mat-column-name {
+  width: 20%;
+  min-width: 150px;
+}
