@@ -1,0 +1,149 @@
+:host {
+  display: block;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+// Global Variables
+$border-color: #e9ecef;
+$text-muted: #6c757d;
+$active-green: #e6f4ea;
+$active-text: #1e7e34;
+$warning-yellow: #fff3cd;
+$warning-text: #856404;
+
+.page-layout {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  .back-link {
+    margin-bottom: 1rem;
+    color: #444;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+}
+
+.detail-container {
+  border-radius: 12px !important;
+  border: 1px solid $border-color;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+  background: white;
+
+  .header-section {
+    padding: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    .title-block {
+      .title-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        h1 { margin: 0; font-size: 2rem; font-weight: 700; }
+      }
+      .description { font-size: 1.1rem; color: $text-muted; margin: 8px 0 16px 0; }
+    }
+  }
+}
+
+.content-body {
+  padding: 2rem;
+
+  section {
+    margin-bottom: 3rem;
+    
+    h3 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: #212529;
+    }
+  }
+}
+
+// Grid Layouts
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+}
+
+.data-field {
+  label { display: block; font-size: 0.85rem; color: $text-muted; margin-bottom: 4px; }
+  p { font-weight: 500; margin: 0; font-size: 1rem; }
+}
+
+// Links & Resources Styles
+.link-field {
+  margin-bottom: 1.25rem;
+  label { display: block; font-size: 0.8rem; color: $text-muted; margin-bottom: 2px; }
+  a { 
+    color: #1a73e8; 
+    text-decoration: none; 
+    display: inline-flex; 
+    align-items: center; 
+    gap: 6px;
+    font-size: 0.95rem;
+    &:hover { text-decoration: underline; }
+    mat-icon { font-size: 16px; width: 16px; height: 16px; }
+  }
+}
+
+// Tech Stack Styles
+.stack-group {
+  margin-bottom: 1.5rem;
+  label { display: block; font-size: 0.85rem; color: $text-muted; margin-bottom: 8px; }
+  mat-chip-set { display: flex; gap: 8px; }
+  mat-chip { 
+    --mdc-chip-container-shape: 4px; 
+    background-color: #f1f3f4 !important; 
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+}
+
+// Table Styles
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.border-table {
+  width: 100%;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  overflow: hidden;
+  
+  th.mat-mdc-header-cell { background-color: #fafafa; font-weight: 600; color: #444; }
+  td.mat-mdc-cell { padding: 12px 16px; border-bottom: 1px solid #eee; }
+}
+
+// Badges & Status
+.badge {
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  &.active { background-color: $active-green; color: $active-text; }
+  &.active-sm { background: $active-green; color: $active-text; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; }
+}
+
+.status-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  .version-text { color: $text-muted; font-size: 0.9rem; }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .grid-2 { grid-template-columns: 1fr; }
+  .header-section { flex-direction: column; gap: 1rem; }
+}

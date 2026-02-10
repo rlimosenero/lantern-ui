@@ -1,0 +1,149 @@
+<div class="page-layout">
+  <!-- <button mat-button class="back-link"><mat-icon>arrow_back</mat-icon> Back to Catalog</button> -->
+
+  <mat-card class="detail-container">
+    <div class="header-section">
+      <div class="title-block">
+        <div class="title-row">
+          <h1>Customer Portal</h1>
+          <mat-chip-set>
+            <mat-chip>Application</mat-chip>
+            <mat-chip>UI</mat-chip>
+          </mat-chip-set>
+        </div>
+        <p class="description">Self-service portal for customer account management</p>
+        <div class="status-row">
+          <span class="badge active">Active</span>
+          <span class="version-text">Version 3.2.1</span>
+        </div>
+      </div>
+      <button mat-stroked-button>Edit Details</button>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="content-body">
+      
+      <section>
+        <h3>Basic Information</h3>
+        <div class="grid-2">
+          <div class="data-field"><label>Application ID</label><p>app-1</p></div>
+          <div class="data-field"><label>Owner Name</label><p>Jennifer Smith</p></div>
+          <div class="data-field"><label>Owner Department</label><p>Customer Experience</p></div>
+          <div class="data-field"><label>BAU Support Name</label><p>Customer Support Tech Team</p></div>
+          <div class="data-field"><label>BAU Support Department</label><p>Customer Service</p></div>
+        </div>
+      </section>
+
+      <section>
+        <h3>Links & Resources</h3>
+        <div class="link-field">
+          <label>Git Repository</label>
+          <a href="#">https://github.com/company/customer-portal <mat-icon>open_in_new</mat-icon></a>
+        </div>
+        <div class="link-field">
+          <label>Swagger/API Documentation</label>
+          <a href="#">https://api.company.com/customer-portal/docs <mat-icon>open_in_new</mat-icon></a>
+        </div>
+        <div class="link-field">
+          <label>SharePoint Documents</label>
+          <a href="#">https://company.sharepoint.com/sites/docs/customer-portal <mat-icon>open_in_new</mat-icon></a>
+        </div>
+      </section>
+
+      <section>
+        <h3>Technology Stack</h3>
+        <div class="stack-group">
+          <label>Platform</label>
+          <mat-chip-set><mat-chip>KUBERNETES</mat-chip><mat-chip>CONTAINERIZED</mat-chip></mat-chip-set>
+        </div>
+        <div class="stack-group">
+          <label>Application Technologies</label>
+          <mat-chip-set><mat-chip>React</mat-chip><mat-chip>TypeScript</mat-chip><mat-chip>Node.js (Express)</mat-chip></mat-chip-set>
+        </div>
+        <div class="stack-group">
+          <label>Storage & Data</label>
+          <mat-chip-set><mat-chip>PostgreSQL</mat-chip><mat-chip>Redis (cache)</mat-chip></mat-chip-set>
+        </div>
+        <div class="stack-group">
+          <label>Security</label>
+          <mat-chip-set><mat-chip>Keycloak</mat-chip><mat-chip>TLS</mat-chip><mat-chip>Vault</mat-chip></mat-chip-set>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-header">
+          <h3>Web Services</h3>
+          <button mat-stroked-button>Add Web Service</button>
+        </div>
+        <table mat-table [dataSource]="webServices" class="mat-elevation-z0 border-table">
+          <ng-container matColumnDef="name"><th mat-header-cell *matHeaderCellDef>Name</th><td mat-cell *matCellDef="let s"><b>{{s.name}}</b></td></ng-container>
+          <ng-container matColumnDef="description"><th mat-header-cell *matHeaderCellDef>Description</th><td mat-cell *matCellDef="let s">{{s.desc}}</td></ng-container>
+          <ng-container matColumnDef="version"><th mat-header-cell *matHeaderCellDef>Version</th><td mat-cell *matCellDef="let s">{{s.version}}</td></ng-container>
+          <ng-container matColumnDef="status"><th mat-header-cell *matHeaderCellDef>Status</th><td mat-cell *matCellDef="let s"><span class="badge active-sm">{{s.status}}</span></td></ng-container>
+          <ng-container matColumnDef="options"><th mat-header-cell *matHeaderCellDef>Options</th><td mat-cell *matCellDef="let s"><mat-icon>visibility</mat-icon></td></ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedServiceColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedServiceColumns;"></tr>
+        </table>
+      </section>
+
+      <section class="audit-section">
+  <div class="section-header">
+    <h3>Version History / Change Log</h3>
+    <button mat-stroked-button><mat-icon>add</mat-icon> Add Version</button>
+  </div>
+
+  <table mat-table [dataSource]="versionHistory" class="mat-elevation-z0 border-table">
+    
+    <ng-container matColumnDef="version">
+      <th mat-header-cell *matHeaderCellDef>Application Version</th>
+      <td mat-cell *matCellDef="let v">{{v.version}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="date">
+      <th mat-header-cell *matHeaderCellDef>Modified Date&Time</th>
+      <td mat-cell *matCellDef="let v">{{v.date}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="stage">
+      <th mat-header-cell *matHeaderCellDef>Release Stage</th>
+      <td mat-cell *matCellDef="let v">
+        <span class="stage-pill">{{v.stage}}</span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="env">
+      <th mat-header-cell *matHeaderCellDef>Environment</th>
+      <td mat-cell *matCellDef="let v">
+        <span class="env-badge" [ngClass]="v.env.toLowerCase()">{{v.env}}</span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="build">
+      <th mat-header-cell *matHeaderCellDef>Build Version</th>
+      <td mat-cell *matCellDef="let v" class="text-muted">{{v.build}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="documents">
+      <th mat-header-cell *matHeaderCellDef>Documents</th>
+      <td mat-cell *matCellDef="let v">
+        <button mat-icon-button color="primary"><mat-icon>open_in_new</mat-icon></button>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="options">
+      <th mat-header-cell *matHeaderCellDef>Options</th>
+      <td mat-cell *matCellDef="let v">
+        <mat-icon class="action-icon">visibility</mat-icon>
+        <mat-icon class="action-icon">edit</mat-icon>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedVersionColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedVersionColumns;"></tr>
+  </table>
+</section>
+
+    </div>
+  </mat-card>
+</div>
