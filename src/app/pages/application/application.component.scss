@@ -36,16 +36,7 @@
 .for-deprecation { background-color: #fff9e6; color: #856404; }
 .deprecated { background-color: #fff3f3; color: #721c24; }
 .for-retirement { background-color: #fce8e8; color: #d93025; }
-// // Clean status indicators without the heavy boxes
-// .status-pill {
-//   font-weight: 600;
-//   padding: 4px 12px;
-//   border-radius: 8px;
-  
-//   &.active { background: #e6fffa; color: #234e52; }
-//   &.deprecated { background: #fff5f5; color: #a02020; }
-//   &.for deprecation { background: #fff5f5; color: #99a020; }
-// }
+
 .header-container {
   display: flex;
   align-items: center; /* Vertically centers the button with the title group */
