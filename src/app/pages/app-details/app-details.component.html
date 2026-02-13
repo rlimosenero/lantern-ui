@@ -5,16 +5,16 @@
     <div class="header-section">
       <div class="title-block">
         <div class="title-row">
-          <h1>Customer Portal</h1>
+          <h1>{{appBasicInfo?.name}}</h1>
           <mat-chip-set>
             <mat-chip>Application</mat-chip>
             <mat-chip>UI</mat-chip>
           </mat-chip-set>
         </div>
-        <p class="description">Self-service portal for customer account management</p>
+        <p class="description">{{appBasicInfo?.description}}</p>
         <div class="status-row">
-          <span class="badge active">Active</span>
-          <span class="version-text">Version 3.2.1</span>
+          <span class="badge active">{{appBasicInfo?.status}}</span>
+          <span class="version-text">Version {{appBasicInfo?.version}}</span>
         </div>
       </div>
       <button mat-stroked-button>Edit Details</button>
@@ -27,11 +27,11 @@
       <section>
         <h3>Basic Information</h3>
         <div class="grid-2">
-          <div class="data-field"><label>Application ID</label><p>app-1</p></div>
-          <div class="data-field"><label>Owner Name</label><p>Jennifer Smith</p></div>
-          <div class="data-field"><label>Owner Department</label><p>Customer Experience</p></div>
-          <div class="data-field"><label>BAU Support Name</label><p>Customer Support Tech Team</p></div>
-          <div class="data-field"><label>BAU Support Department</label><p>Customer Service</p></div>
+          <div class="data-field"><label>Application ID</label><p>{{appDetails?.applicationId}}</p></div>
+          <div class="data-field"><label>Owner Name</label><p>{{appBasicInfo?.ownerName}}</p></div>
+          <div class="data-field"><label>Owner Department</label><p>{{appBasicInfo?.ownerDept}}</p></div>
+          <div class="data-field"><label>BAU Support Name</label><p>{{appBasicInfo?.bauSuppName}}</p></div>
+          <div class="data-field"><label>BAU Support Department</label><p>{{appBasicInfo?.bauSuppDept}}</p></div>
         </div>
       </section>
 
@@ -39,15 +39,15 @@
         <h3>Links & Resources</h3>
         <div class="link-field">
           <label>Git Repository</label>
-          <a href="#">https://github.com/company/customer-portal <mat-icon>open_in_new</mat-icon></a>
+          <a href="#">{{appLinkAndResources?.gitRepoLink}} <mat-icon>open_in_new</mat-icon></a>
         </div>
         <div class="link-field">
           <label>Swagger/API Documentation</label>
-          <a href="#">https://api.company.com/customer-portal/docs <mat-icon>open_in_new</mat-icon></a>
+          <a href="#">{{appLinkAndResources?.swaggerLink}} <mat-icon>open_in_new</mat-icon></a>
         </div>
         <div class="link-field">
           <label>SharePoint Documents</label>
-          <a href="#">https://company.sharepoint.com/sites/docs/customer-portal <mat-icon>open_in_new</mat-icon></a>
+          <a href="#">{{appLinkAndResources?.sharepointLink}} <mat-icon>open_in_new</mat-icon></a>
         </div>
       </section>
 

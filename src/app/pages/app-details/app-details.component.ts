@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -7,18 +7,52 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTableModule } from '@angular/material/table';
+import { Application, BasicInfo, LinkAndResources, TechStack } from '../../models/interface';
+import { ApplicationApiServiceService } from '../../services/application-api-service.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-app-details',
   standalone: true,
   imports: [
-    CommonModule, MatCardModule, MatButtonModule, MatChipsModule, 
+    CommonModule, MatCardModule, MatButtonModule, MatChipsModule,
     MatIconModule, MatProgressBarModule, MatDividerModule, MatTableModule
   ],
   templateUrl: './app-details.component.html',
   styleUrls: ['./app-details.component.scss']
 })
-export class AppDetailsComponent {
+export class AppDetailsComponent implements OnInit {
+  appDetails: Application | undefined = undefined;
+  appBasicInfo: BasicInfo | undefined = undefined;
+  appLinkAndResources: LinkAndResources | undefined = undefined;
+  appTechStack: TechStack | undefined = undefined;
+
+  constructor(
+    private applicationApiService: ApplicationApiServiceService,
+    private router: Router
+  ) { }
+
+  ngOnInit(): void {
+    this.fetchAppDetails();
+
+  }
+
+  fetchAppDetails() {
+    const appId = this.getIdFromUrl();
+
+    // get app details by id
+    this.appDetails = this.applicationApiService.getAppDetails(appId);
+    this.appBasicInfo = this.appDetails?.basicInfo[0];
+    this.appTechStack = this.appDetails?.techStack[0];
+    this.appLinkAndResources = this.appDetails?.linkAndResources[0];
+  }
+
+  // get id from url
+  getIdFromUrl(){
+    return this.router.url.split('/')[2];
+  }
+
+
   // Mock Data for Tables
   webServices = [
     { name: 'User Authentication API', desc: 'OAuth 2.0 authentication and authorization service', version: '1.5.0', status: 'Active' },

@@ -1,41 +1,75 @@
 <div class="page-container">
+  <div class="search-container">
+    <div class="search-box">
+      <mat-icon>search</mat-icon>
+      <input type="text" placeholder="Search applications and web services...">
+    </div>
+  </div>
+  <br>
   <mat-card appearance="outlined">
-    <mat-card-header>
-      <mat-card-title>Service Catalogue</mat-card-title>
-    </mat-card-header>
-    
-    <mat-table [dataSource]="dataSource()" class="mat-elevation-z0">
-      
-      <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef> Service Name </th>
-        <td mat-cell *matCellDef="let service"> {{service.name}} </td>
-      </ng-container>
 
-      <ng-container matColumnDef="status">
-        <th mat-header-cell *matHeaderCellDef> Status </th>
-        <td mat-cell *matCellDef="let service">
-          <span class="status-pill" [ngClass]="service.status.toLowerCase()">
-            {{service.status}}
-          </span>
-        </td>
-      </ng-container>
+    <div class="header-container">
+      <div class="title-group">
+        <h2 class="mat-h2">Web Services</h2>
+        <p class="app-count">Showing {{ webServicesList.length }} items</p>
+      </div>
 
-      <ng-container matColumnDef="lastDeployment">
-        <th mat-header-cell *matHeaderCellDef> Last Deployment </th>
-        <td mat-cell *matCellDef="let service"> {{service.lastDeployment}} </td>
-      </ng-container>
+      <span class="spacer"></span>
 
-      <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef> Actions </th>
-        <td mat-cell *matCellDef="let service">
-          <button mat-icon-button (click)="toggleService(service.name)" color="primary">
-            <mat-icon>{{ service.status === 'Online' ? 'pause_circle' : 'play_circle' }}</mat-icon>
-          </button>
-        </td>
-      </ng-container>
+      <!-- <button mat-flat-button class="add-btn">
+        <mat-icon>add</mat-icon>
+        Add Application
+      </button> -->
+    </div>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </mat-table>
+    @if (webServicesList.length > 0) {
+      <mat-table [dataSource]="webServicesList" class="mat-elevation-z0">
+
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef> Application Name </th>
+          <td mat-cell *matCellDef="let service"> {{service.serviceConfig[0].name}} </td>
+        </ng-container>
+        <ng-container matColumnDef="desc">
+          <th mat-header-cell *matHeaderCellDef> Description </th>
+          <td mat-cell *matCellDef="let service"> {{service.serviceConfig[0].description}} </td>
+        </ng-container>
+        <ng-container matColumnDef="version">
+          <th mat-header-cell *matHeaderCellDef> Version </th>
+          <td mat-cell *matCellDef="let service"> {{service.serviceConfig[0].version}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef> Status </th>
+          <td mat-cell *matCellDef="let service">
+            <span class="status-pill">
+              {{service.serviceConfig[0].status}}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="options">
+          <th mat-header-cell *matHeaderCellDef> Options </th>
+          <td mat-cell *matCellDef="let service; index as i">
+            <button mat-icon-button color="primary">
+              <mat-icon>{{ 'visibility' }}</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </mat-table>
+    } @else {
+
+      <div class="empty-state-wrapper">
+        <mat-icon class="huge-icon">inventory_2</mat-icon>
+        <h3>No Applications Yet</h3>
+        <p>Get started by adding your first web service.</p>
+        <!-- <button mat-stroked-button>
+          <mat-icon>add</mat-icon> Add Now
+        </button> -->
+      </div>
+    }
+
   </mat-card>
 </div>
