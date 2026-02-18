@@ -1,0 +1,98 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.mat-mdc-card {
+  border-radius: .625rem;
+  border: none;
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  padding: 24px;
+}
+
+.header-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.table-header{
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+.title-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.app-count {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #666;
+  margin-top: 4px;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.search-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.search-box {
+  background: #f3f3f5;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  width: 50%; /* Adjust based on preference */
+}
+
+.search-box input {
+  border: none;
+  background: transparent;
+  outline: none;
+  margin-left: 10px;
+  width: 100%;
+  color: #666;
+}
+
+.main-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.sub-text {
+  font-size: 13px;
+  color: #888;
+}
+
+.add-btn {
+  background-color: #1a73e8 !important; /* The blue from your mockup */
+  color: white !important;
+  border-radius: 8px !important;
+  padding: 0 16px !important;
+}
+
+.add-btn mat-icon {
+  margin-right: 4px;
+}
+
+
+.page-container {
+  width: 100%;
+}
+
+/* Ensure the card allows the table to expand */
+mat-card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}

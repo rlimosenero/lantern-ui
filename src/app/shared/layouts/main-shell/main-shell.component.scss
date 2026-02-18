@@ -1,0 +1,60 @@
+// Layout Container
+.lantern-wrapper {
+  height: 100dvh;
+}
+
+// Sidebar Styling
+mat-sidenav.sidebar {
+  width: 260px;
+  border-right: none;
+}
+
+.sidebar-header {
+  padding: 20px;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  align-items: center;
+
+  .header-icon {
+    vertical-align: middle;
+  }
+
+  .header-text {
+    margin-left: 10px;
+    letter-spacing: 1px;
+    font-weight: 600;
+  }
+}
+
+// Toolbar Styling
+mat-toolbar {
+  background-color: white !important;
+  color: #202124 !important;
+  border-bottom: 1px solid #e0e0e0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+.viewport-content {
+  display: flex;
+  flex-direction: column;
+  background-color: #F8F9F9;
+}
+
+.main-content {
+  padding: 32px;
+}
+
+.active-link {
+  background-color: rgba(186, 26, 26, 0.1); 
+  color: #ba1a1a !important; 
+  
+  mat-icon {
+    color: #ba1a1a !important;
+  }
+}

@@ -1,26 +1,26 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './components/login/login.component';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { CatalogueComponent } from './pages/catalogue/catalogue.component';
-import { MainShellComponent } from './layout/main-shell/main-shell.component';
-import { AdminAnalyticsComponent } from './pages/admin-analytics/admin-analytics.component';
-import { ApplicationComponent } from './pages/application/application.component';
-import { AddAppComponent } from './pages/add-app/add-app.component';
-import { AppDetailsComponent } from './pages/app-details/app-details.component';
+import { LoginComponent } from './features/auth/login/login.component';
+import { MainShellComponent } from './shared/layouts/main-shell/main-shell.component';
+import { AdminAnalyticsComponent } from './features/admin/admin-analytics/admin-analytics.component';
+import { ApplicationComponent } from './features/application/application/application.component';
+import { AddAppComponent } from './features/application/add-app/add-app.component';
+import { AppDetailsComponent } from './features/application/app-details/app-details.component';
+import { WebServicesDetailsComponent } from './features/web-services/web-services-details/web-services-details.component';
+import { WebServicesDashboardComponent } from './features/web-services/web-services-dashboard/web-services-dashboard.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
-  { 
-    path: '', 
+  {
+    path: '',
     component: MainShellComponent, // Wrap your dashboard/catalogue inside the shell
     children: [
       { path: 'admin', component: AdminAnalyticsComponent },
-      { path: 'catalogue', component: CatalogueComponent },
       { path: 'application', component: ApplicationComponent },
       { path: 'add-app', component: AddAppComponent },
-      { path: 'app-details', component: AppDetailsComponent },
+      { path: 'app-details/:id', component: AppDetailsComponent },
+      { path: 'web-services', component: WebServicesDashboardComponent },
+      { path: 'web-service-details/:id', component: WebServicesDetailsComponent },
       { path: '', redirectTo: 'admin', pathMatch: 'full' } // Default inside the shell
-      
     ]
   }
 ];

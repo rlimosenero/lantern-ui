@@ -1,59 +1,89 @@
-# Dashboard
+# Project Lantern: Technical Architecture Documentation
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.6.
+## 1. Directory Structure
+The application follows a Feature-Driven architecture. This vertical slicing ensures that the system remains scalable and maintainable by grouping related logic, state, and UI components by domain rather than by technical type.
 
-## Development server
 
-To start a local development server, run:
 
-```bash
+### 1.1 Core Module (`src/app/core/`)
+* **Purpose**: Houses singleton services and global configurations that are instantiated once during the application lifecycle.
+* **Contents**: Authentication services, global HTTP interceptors, route guards, and base models.
+
+### 1.2 Shared Module (`src/app/shared/`)
+* **Purpose**: A library of reusable UI assets and structural utilities accessible by any feature module.
+* **Contents**: 
+    * `components/`: Pure components such as custom buttons, status indicators, and navigation fragments.
+    * `layouts/`: Structural shell components that define the application's visual frame.
+    * `directives/` & `pipes/`: Shared logic for DOM manipulation and data transformation.
+
+### 1.3 Features Module (`src/app/features/`)
+* **Purpose**: Contains the primary business logic and domain-specific pages.
+* **Contents**: 
+    * `admin/`: Administrative dashboards and system analytics.
+    * `applications/`: Workflows for application registration, listing, and monitoring.
+    * `catalogue/`: Service discovery and web service documentation.
+
+### 1.4 Environments (`src/environments/`)
+* **Purpose**: External configuration manifests for different deployment stages.
+
+---
+
+## 2. Environment Management
+Configuration is managed via the Angular CLI build system using file replacements. This ensures that the application code remains consistent across different stages of the deployment pipeline.
+
+### 2.1 Configuration Switching
+The Angular CLI executes file replacements during the build process based on the specified configuration flag.
+
+| Environment | Command | Active Manifest File |
+| :--- | :--- | :--- |
+| **Local / Development** | `ng serve` | `src/environments/environment.ts` |
+| **UAT** | `ng serve --configuration=uat` | `src/environments/environment.uat.ts` |
+| **Production** | `ng build --configuration=production` | `src/environments/environment.prod.ts` |
+
+---
+
+## 3. Development Operations
+
+### 3.1 Initial Setup
+To install all project dependencies defined in the package.json manifest, execute the following command:
+
+```
+npm install
+```
+
+### 3.2 Development Server
+Launch the local development server. The application will automatically reload upon any source code modifications.
+
+```
 ng serve
 ```
+*The default interface is accessible at http://localhost:4200/*
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+### 3.3 Code Generation
+Utilize the Angular CLI to generate standardized schematics. Ensure new items are placed within the appropriate architectural directories:
 
-## Code scaffolding
+```
+# Example: Generate a component within a specific feature domain
+ng generate component features/applications/pages/app-list
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
+# Example: Generate a singleton service within the core module
+ng generate service core/auth/auth
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+### 3.4 Production Build
+To compile and optimize the application for a production environment, use the following command. The output will be generated in the dist/ directory.
 
-```bash
-ng generate --help
+```
+ng build --configuration=production
 ```
 
-## Building
+### 3.5 Quality Assurance
+Maintain code integrity and standards by executing the testing and linting suites:
 
-To build the project run:
-
-```bash
-ng build
 ```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
+# Execute unit tests
 ng test
+
+# Perform static code analysis
+ng lint
 ```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.

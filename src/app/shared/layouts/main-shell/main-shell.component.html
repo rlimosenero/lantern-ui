@@ -1,0 +1,45 @@
+<mat-sidenav-container class="lantern-wrapper">
+
+  <mat-sidenav #drawer mode="side" opened class="sidebar">
+    <div class="sidebar-header">
+      <mat-icon color="primary" class="header-icon">flare</mat-icon>
+      <b class="header-text">LANTERN</b>
+    </div>
+
+    <mat-nav-list>
+
+      <!-- commented out for admin use only -->
+      <!-- <a mat-list-item routerLink="/admin" routerLinkActive="active-link">
+        <mat-icon matListItemIcon>analytics</mat-icon>
+        <div matListItemTitle>Admin Analytics</div>
+      </a> -->
+
+      <a mat-list-item routerLink="/application" routerLinkActive="active-link">
+        <mat-icon matListItemIcon>list_alt</mat-icon>
+        <div matListItemTitle>Applications</div>
+      </a>
+      
+      <a mat-list-item routerLink="/web-services" routerLinkActive="active-link">
+        <mat-icon matListItemIcon>list_alt</mat-icon>
+        <div matListItemTitle>Web Services</div>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="viewport-content">
+    <mat-toolbar>
+      <mat-toolbar-row>
+        <button mat-icon-button (click)="drawer.toggle()" aria-label="Toggle menu">
+          <mat-icon>menu</mat-icon>
+        </button>
+        <span class="ms-2">Project Lantern Monitoring</span>
+        <span class="example-spacer"></span>
+      </mat-toolbar-row>
+    </mat-toolbar>
+
+    <div class="main-content">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+
+</mat-sidenav-container>
