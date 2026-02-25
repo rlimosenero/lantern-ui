@@ -1,0 +1,109 @@
+<div class="page-container">
+
+    <div class="search-container">
+        <div class="search-box">
+            <input type="text" [(ngModel)]="searchQuery" placeholder="Search applications and web services...">
+
+            <button mat-icon-button [matMenuTriggerFor]="filterMenu" aria-label="Filter results">
+                <mat-icon>tune</mat-icon>
+            </button>
+
+            <button  mat-icon-button>
+                <mat-icon>search</mat-icon>
+            </button>
+
+        </div>
+    </div>
+
+    <mat-menu #filterMenu="matMenu" xPosition="before" class="filter-popout">
+        <div class="filter-content" (click)="$event.stopPropagation()">
+            <p class="filter-header">Filter by Type</p>
+
+            <mat-checkbox [(ngModel)]="filterApplication" (change)="onFilterChange()">
+                Applications
+            </mat-checkbox>
+
+            <mat-checkbox [(ngModel)]="filterWebService" (change)="onFilterChange()">
+                Web Services
+            </mat-checkbox>
+
+            <div class="filter-actions">
+                <button mat-button color="primary" (click)="onFilterChange()">Apply Filters</button>
+            </div>
+        </div>
+    </mat-menu>
+
+    <br>
+
+    <mat-card appearance="outlined">
+
+        <div class="header-container">
+            <div class="title-group">
+                <h2 class="table-header">Search Result</h2>
+                <p class="app-count">Showing {{ searchList.length }} items</p>
+            </div>
+
+            <span class="spacer"></span>
+
+        </div>
+
+        @if (searchList.length > 0) {
+
+        <table mat-table [dataSource]="searchList" class="mat-elevation-z0 lantern-table">
+
+            <ng-container matColumnDef="type">
+                <th mat-header-cell *matHeaderCellDef> Type </th>
+                <td mat-cell *matCellDef="let list">
+                    {{list.type}}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef> Name </th>
+                <td mat-cell *matCellDef="let list">
+                    {{list.name}}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="match">
+                <th mat-header-cell *matHeaderCellDef> Match(es) </th>
+                <td mat-cell *matCellDef="let list">
+                    <div class="match-details">
+                        @for (item of list.match; track item) {
+                        @for (entry of item | keyvalue; track entry.key) {
+                        <div class="match-item">
+                            <strong>{{ entry.key }} : </strong>
+                            <span [innerHTML]="entry.value | highlight: searchQuery"></span>
+                        </div>
+                        }
+                        }
+                    </div>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="view">
+                <th mat-header-cell *matHeaderCellDef> View </th>
+                <td mat-cell *matCellDef="let list; index as i">
+                    <button mat-icon-button color="primary">
+                        <mat-icon>visibility</mat-icon>
+                    </button>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+
+        } @else {
+
+        <div class="empty-state-wrapper">
+            <!-- <mat-icon class="huge-icon">playlist_remove</mat-icon> -->
+            <h3>No results found</h3>
+            <p>Try searching using another keyword</p>
+
+        </div>
+        }
+
+    </mat-card>
+</div>

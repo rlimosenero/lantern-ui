@@ -58,3 +58,20 @@ mat-toolbar {
     color: #ba1a1a !important;
   }
 }
+
+button.mat-mdc-list-item{
+  border: none;
+  text-align: left;
+  font-size: 16px;
+  margin-bottom: 1rem;
+}
+
+button.mat-mdc-list-item:hover{
+ background-color:  rgba(186, 26, 26, 0.1);
+}
+
+::ng-deep .mat-drawer-inner-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}

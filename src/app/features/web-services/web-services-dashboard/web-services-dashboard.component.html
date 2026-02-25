@@ -1,11 +1,11 @@
 <div class="page-container">
-  <div class="search-container">
+  <!-- <div class="search-container">
     <div class="search-box">
       <mat-icon>search</mat-icon>
       <input type="text" placeholder="Search web services...">
     </div>
   </div>
-  <br>
+  <br> -->
   <mat-card appearance="outlined">
 
     <div class="header-container">
@@ -25,17 +25,17 @@
 
     @if (webServicesList.length > 0) {
 
-      <app-table-list [dataSource]="webServicesList" [format]="'WEBSERVICE'"/>
+    <app-table-list [dataSource]="webServicesList" />
 
     } @else {
 
-      <div class="empty-state-wrapper">
-        <mat-icon class="huge-icon">inventory_2</mat-icon>
-        
-        <h3>No Applications Yet</h3>
-        <p>Get started by adding your first web service.</p>
+    <div class="empty-state-wrapper">
+      <mat-icon class="huge-icon">inventory_2</mat-icon>
 
-      </div>
+      <h3>No Applications Yet</h3>
+      <p>Get started by adding your first web service.</p>
+
+    </div>
     }
 
   </mat-card>

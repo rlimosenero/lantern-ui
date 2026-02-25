@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '../../../core/auth/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -10,27 +11,18 @@ import { Router } from '@angular/router';
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
-  loginForm: FormGroup;
+  private auth = inject(AuthService);
 
-  constructor(
-    private fb: FormBuilder,
-    private http: HttpClient,
-    private router: Router
-  ) {
-    this.loginForm = this.fb.group({
-        username: ['', Validators.required],
-        password: ['', Validators.required]
-    })
+  private readonly ADMIN_JWT = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEyMzQ1Njc4OTAiLCJuYW1lIjoiQWQgTWVhbiIsInJvbGUiOiJBRE1JTiJ9.mrfbumq_NJ1pjNjlIepC6Rrh5hZNPmebpKqh85H6zIU';
+  private readonly USER_JWT = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjA5ODc2NTQzMjEiLCJuYW1lIjoiWXUgU2lyIiwicm9sZSI6IlVTRVIifQ.9h5SwHgpPTvycysPH1KFqZUdRTeMgSmM8P_Qak5Cllw';
+  
+  loginAdmin() {
+    console.log('Logging in as Admin...');
+    this.auth.login(this.ADMIN_JWT);
   }
-   onSubmit(){
-      const formData = this.loginForm.value;
-      this.http.post('https://dummyjson.com/auth/login', formData).subscribe({
-        next: (res) => {
-          this.router.navigate(['/dashboard']);
-        }, error: (err) => {
-          console.log(err);
-          
-        }
-      })
-   }
+
+  loginUser() {
+    console.log('Logging in as User...');
+    this.auth.login(this.USER_JWT);
+  }
 }

@@ -462,7 +462,7 @@ export const appListTable = [
                     "stableVersion": "2.0.1",
                     "betaVersion": "2.0.1"
                 }
-                
+
             ],
             "currentPage": 0,
             "pageSize": 10
@@ -525,3 +525,44 @@ export const webServicesListTable = [
     }
 ]
 
+export const resultListTable = [
+    {
+        "data": {
+            "hasNextPage": false,
+            "totalElements": 4,
+            "results": [
+                {
+                    "type": "Web Service",
+                    "appUuid": "550e8400-e29b-41d4-a716-446655440000",
+                    "name": "User Authentication API",
+                    "match": [
+                        { "authentication method": "bearer token" },
+                        { "sample value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." },
+                        { "description": "Bearer token for authentication" }
+                    ],
+                },
+                {
+                    "type": "Web Service",
+                    "appUuid": "550e8400-e29b-41d4-a716-446655440000",
+                    "name": "Payment Gateway",
+                    "match": [
+                        { "sample value": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9..." },
+                    ],
+                },
+                {
+                    "type": "Application",
+                    "appUuid": "550e8400-e29b-41d4-a716-446655440000",
+                    "name": "Customer Portal",
+                    "match": [
+                        { "owner name": "Bearer Grills" },
+                    ],
+                },
+            ],
+            "currentPage": 0,
+            "pageSize": 10
+        },
+        "flag": "S",
+        "message": "Transaction successful.",
+        "tranRefNo": "d2ba3fd00d2843eaafa4e12fa4da9ae2"
+    }
+]

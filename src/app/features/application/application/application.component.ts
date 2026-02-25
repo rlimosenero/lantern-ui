@@ -9,6 +9,7 @@ import { MatTableModule } from '@angular/material/table';
 import { Application, TableItem } from '../../../core/models/interface';
 import { ApplicationApiService } from '../services/application-api-service.service';
 import { TableListComponent } from '../../../shared/components/table-list/table-list.component';
+import { AuthService } from '../../../core/auth/auth.service';
 
 @Component({
   selector: 'app-application',
@@ -25,6 +26,7 @@ import { TableListComponent } from '../../../shared/components/table-list/table-
   styleUrl: './application.component.scss',
 })
 export class ApplicationComponent implements OnInit {
+  public auth = inject(AuthService);
   private route = inject(Router);
   displayedColumns: string[] = ['name', 'desc', 'version', 'status', 'options'];
 

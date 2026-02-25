@@ -7,12 +7,15 @@ import { AddAppComponent } from './features/application/add-app/add-app.componen
 import { AppDetailsComponent } from './features/application/app-details/app-details.component';
 import { WebServicesDetailsComponent } from './features/web-services/web-services-details/web-services-details.component';
 import { WebServicesDashboardComponent } from './features/web-services/web-services-dashboard/web-services-dashboard.component';
+import { authGuard } from './core/guards/auth.guard';
+import { SearchComponent } from './features/search/search.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   {
     path: '',
     component: MainShellComponent, // Wrap your dashboard/catalogue inside the shell
+    canActivate: [authGuard],
     children: [
       { path: 'admin', component: AdminAnalyticsComponent },
       { path: 'application', component: ApplicationComponent },
@@ -20,7 +23,12 @@ export const routes: Routes = [
       { path: 'app-details/:id', component: AppDetailsComponent },
       { path: 'web-services', component: WebServicesDashboardComponent },
       { path: 'web-service-details/:id', component: WebServicesDetailsComponent },
+      { path: 'search', component: SearchComponent },
       { path: '', redirectTo: 'admin', pathMatch: 'full' } // Default inside the shell
     ]
+  },
+  {
+    path: '**',
+    redirectTo: 'login'
   }
 ];

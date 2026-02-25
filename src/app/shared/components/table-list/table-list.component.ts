@@ -23,18 +23,17 @@ import { TableItem } from '../../../core/models/interface';
 })
 export class TableListComponent implements OnChanges, OnInit {
   @Input() dataSource: any = [];
-  @Input() format: 'APP' | 'WEBSERVICE' = 'APP';
 
   tableList: TableItem[] = [];
   private route = inject(Router);
-  displayedColumns: string[] = ['name', 'desc', 'version', 'status', 'options'];
+  displayedColumns: string[] = ['name', 'desc','stableVersion' , 'betaVersion', 'status', 'options'];
 
   constructor(
     private router: Router
   ) { }
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.mapList(changes['dataSource'].currentValue, this.format)
+    this.mapList(changes['dataSource'].currentValue)
 
   }
 
@@ -42,7 +41,7 @@ export class TableListComponent implements OnChanges, OnInit {
     // throw new Error('Method not implemented.');
   }
 
-  mapList(data: any, format?: 'APP' | 'WEBSERVICE') {
+  mapList(data: any) {
     for (let index = 0; index < data.length; index++) {
 
       const element = data[index];

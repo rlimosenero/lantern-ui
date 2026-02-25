@@ -56,3 +56,10 @@ export interface CatalogListItem {
   message: string;
   tranRefNo: string;
 }
+
+export interface User {
+  id: string;
+  name: string;
+  role: 'ADMIN' | 'USER';
+  token: string;
+}

@@ -1,0 +1,184 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+table,
+.mat-mdc-table {
+  width: 100% !important;
+  display: table !important;
+  border: 1px solid #E0E0E0;
+  border-radius: .625rem;
+}
+
+.mat-column-type {
+  width: 15%;
+  min-width: 100px;
+  font-weight: 500;
+}
+
+.mat-mdc-card {
+  border-radius: .625rem;
+  border: none;
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  padding: 24px;
+}
+
+.header-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.table-header {
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+.title-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.app-count {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #666;
+  margin-top: 4px;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.search-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.search-box {
+  background: #f3f3f5;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  width: 50%;
+  /* Adjust based on preference */
+}
+
+.search-box input {
+  border: none;
+  background: transparent;
+  outline: none;
+  margin-left: 10px;
+  width: 100%;
+  color: #666;
+}
+
+.main-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.sub-text {
+  font-size: 13px;
+  color: #888;
+}
+
+.add-btn {
+  background-color: #1a73e8 !important;
+  color: white !important;
+  border-radius: 8px !important;
+  padding: 0 16px !important;
+}
+
+.add-btn mat-icon {
+  margin-right: 4px;
+}
+
+
+.page-container {
+  width: 100%;
+}
+
+mat-card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.match-item {
+  font-size: 12px;
+  line-height: 1.4;
+  color: #5f6368;
+}
+
+.match-item strong {
+  text-transform: capitalize;
+  color: #3c4043;
+  font-weight: 500;
+}
+
+.mat-column-match {
+  word-break: break-all;
+}
+
+
+.lantern-table {
+
+  tr.mat-mdc-row.mdc-data-table__row.cdk-row {
+    height: 39px;
+  }
+
+  .mat-mdc-header-cell {
+    vertical-align: middle !important;
+  }
+
+  .mat-mdc-header-row {
+    display: table-row !important;
+    height: 40px;
+  }
+
+}
+
+.match-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+
+.filter-content {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 150px;
+  font-size: 14px;
+}
+
+.filter-header {
+  margin: 0 0 4px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #5f6368;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.filter-actions {
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: flex-end;
+}
+
+::ng-deep .mat-mdc-menu-panel.filter-popout {
+  border-radius: 12px !important;
+  margin-top: 8px;
+  background: white;
+  font-family: inherit;
+}
