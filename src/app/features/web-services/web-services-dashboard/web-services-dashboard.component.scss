@@ -1,6 +1,17 @@
 :host {
-  display: block;
+  display: flex;
   width: 100%;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+  font-family: var(--font-sans);
+}
+
+.table-container {
+  overflow-x: auto;
+  max-width: 100%;
+  border: 1px solid #E0E0E0;
+  border-radius: .625rem;
 }
 
 .mat-mdc-card {
@@ -17,7 +28,7 @@
   margin-bottom: 1rem;
 }
 
-.table-header{
+.table-header {
   font-size: 1.25rem;
   font-weight: 500;
   margin: 0;
@@ -42,7 +53,7 @@
 .search-container {
   display: flex;
   justify-content: center;
-  margin-bottom: 24px;
+  margin-bottom: 1rem;
 }
 
 .search-box {
@@ -51,7 +62,8 @@
   display: flex;
   align-items: center;
   padding: 8px 16px;
-  width: 50%; /* Adjust based on preference */
+  width: 50%;
+  /* Adjust based on preference */
 }
 
 .search-box input {
@@ -75,7 +87,8 @@
 }
 
 .add-btn {
-  background-color: #1a73e8 !important; /* The blue from your mockup */
+  background-color: #1a73e8 !important;
+  /* The blue from your mockup */
   color: white !important;
   border-radius: 8px !important;
   padding: 0 16px !important;
@@ -88,11 +101,53 @@
 
 .page-container {
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
-/* Ensure the card allows the table to expand */
 mat-card {
   width: 100%;
   display: flex;
   flex-direction: column;
+}
+
+
+@container (min-width: 1536px) {
+  .page-container {
+    width: 1488px;
+  }
+}
+
+@container (min-width: 1535px) {
+  .page-container {
+    width: 1232px;
+  }
+}
+
+
+@container (max-width: 1279px) {
+  .page-container {
+    width: 1024px;
+  }
+}
+
+@container (max-width: 1279px) {
+  .page-container {
+    width: 976px;
+  }
+}
+
+@container (max-width: 1023px) {
+  .page-container {
+    width: 720px;
+  }
+}
+
+@container (max-width: 767px) {
+  .page-container {
+    max-width: 592px;
+    width: 100%;
+  }
 }

@@ -6,10 +6,10 @@
       <div class="title-block">
         <div class="title-row">
           <h1>{{appBasicInfo?.name}}</h1>
-          <mat-chip-set>
-            <mat-chip>Application</mat-chip>
-            <mat-chip>UI</mat-chip>
-          </mat-chip-set>
+          <div class="chip-container">
+            <span class="custom-chip header-chip">Application</span>
+            <span class="custom-chip header-chip">UI</span>
+          </div>
         </div>
         <p class="description">{{appBasicInfo?.description}}</p>
         <div class="status-row">
@@ -17,21 +17,31 @@
           <span class="version-text">Version {{appBasicInfo?.version}}</span>
         </div>
       </div>
-      <button mat-stroked-button>Edit Details</button>
+      <!-- <app-button [name]="'Edit Details'" (click)="openEditPage()" /> -->
     </div>
 
     <mat-divider></mat-divider>
 
     <div class="content-body">
-      
+
       <section>
         <h3>Basic Information</h3>
         <div class="grid-2">
-          <div class="data-field"><label>Application ID</label><p>{{appDetails?.applicationId}}</p></div>
-          <div class="data-field"><label>Owner Name</label><p>{{appBasicInfo?.ownerName}}</p></div>
-          <div class="data-field"><label>Owner Department</label><p>{{appBasicInfo?.ownerDept}}</p></div>
-          <div class="data-field"><label>BAU Support Name</label><p>{{appBasicInfo?.bauSuppName}}</p></div>
-          <div class="data-field"><label>BAU Support Department</label><p>{{appBasicInfo?.bauSuppDept}}</p></div>
+          <div class="data-field"><label>Application ID</label>
+            <p>{{appDetails?.applicationId}}</p>
+          </div>
+          <div class="data-field"><label>Owner Name</label>
+            <p>{{appBasicInfo?.ownerName}}</p>
+          </div>
+          <div class="data-field"><label>Owner Department</label>
+            <p>{{appBasicInfo?.ownerDept}}</p>
+          </div>
+          <div class="data-field"><label>BAU Support Name</label>
+            <p>{{appBasicInfo?.bauSuppName}}</p>
+          </div>
+          <div class="data-field"><label>BAU Support Department</label>
+            <p>{{appBasicInfo?.bauSuppDept}}</p>
+          </div>
         </div>
       </section>
 
@@ -51,98 +61,240 @@
         </div>
       </section>
 
-      <section>
+      <section class="tech-stack-section">
         <h3>Technology Stack</h3>
+
         <div class="stack-group">
           <label>Platform</label>
-          <mat-chip-set><mat-chip>KUBERNETES</mat-chip><mat-chip>CONTAINERIZED</mat-chip></mat-chip-set>
+          <div>
+            @for (item of appTechStack?.platform; track item) {
+            <span class="custom-chip">{{ item }}</span>
+            } @empty {
+            <span class="no-data">No platform information available</span>
+            }
+          </div>
         </div>
+
         <div class="stack-group">
           <label>Application Technologies</label>
-          <mat-chip-set><mat-chip>React</mat-chip><mat-chip>TypeScript</mat-chip><mat-chip>Node.js (Express)</mat-chip></mat-chip-set>
+          <div>
+            @for (item of appTechStack?.appTech; track item) {
+            <span class="custom-chip">{{ item }}</span>
+            } @empty {
+            <span class="no-data">No technology data available</span>
+            }
+          </div>
         </div>
+
         <div class="stack-group">
           <label>Storage & Data</label>
-          <mat-chip-set><mat-chip>PostgreSQL</mat-chip><mat-chip>Redis (cache)</mat-chip></mat-chip-set>
+          <div>
+            @for (item of appTechStack?.storageAndData; track item) {
+            <span class="custom-chip">{{ item }}</span>
+            } @empty {
+            <span class="no-data">No storage information available</span>
+            }
+          </div>
         </div>
+
         <div class="stack-group">
           <label>Security</label>
-          <mat-chip-set><mat-chip>Keycloak</mat-chip><mat-chip>TLS</mat-chip><mat-chip>Vault</mat-chip></mat-chip-set>
+          <div>
+            @for (item of appTechStack?.security; track item) {
+            <span class="custom-chip">{{ item }}</span>
+            } @empty {
+            <span class="no-data">No security protocols listed</span>
+            }
+          </div>
         </div>
+      </section>
+
+      <section class="analytics-section">
+        <div class="section-header">
+          <h3>Analytics Metrics</h3>
+          <app-button [name]="'Refresh'" (click)="openEditPage()" />
+        </div>
+
+        <span class="info-bar">
+          <span class="font-medium">Data gathered: </span><span>2/4/2024, 6:30:00 PM</span>
+        </span>
+
+        <div class="card-container">
+          <span class="card-analytics">
+            <h3>CPU Usage</h3>
+            <span class="card-content">
+              <h1>45.2</h1>
+              <p>%</p>
+            </span>
+            <span>
+              <mat-progress-bar class="cpu-usage" mode="determinate" value="40"></mat-progress-bar>
+            </span>
+          </span>
+
+          <span class="card-analytics">
+            <h3>Memory Usage</h3>
+            <span class="card-content">
+              <h1>1024</h1>
+              <p>MB/ 2047 MB</p>
+            </span>
+            <span>
+              <mat-progress-bar class="cpu-usage" mode="determinate" value="50"></mat-progress-bar>
+            </span>
+            <p class="footer">50.0% utilized</p>
+          </span>
+
+          <span class="card-analytics">
+            <h3>Avg Response Time</h3>
+            <span class="card-content">
+              <h1>235</h1>
+              <p>ms</p>
+            </span>
+            <span>
+              <span class="custom-chip active">Fast</span>
+            </span>
+          </span>
+
+          <span class="card-analytics">
+            <h3>Error Rate</h3>
+            <span class="card-content">
+              <h1>0.12</h1>
+              <p>%</p>
+            </span>
+            <span>
+              <span class="custom-chip active">Fast</span>
+            </span>
+          </span>
+
+          <span class="card-analytics">
+            <h3>Crashes (Last 24h)</h3>
+            <span class="card-content">
+              <h1>2</h1>
+              <p>incident(s)</p>
+            </span>
+            <span>
+              <span class="custom-chip deprecated">Attention needed</span>
+            </span>
+          </span>
+
+          <span class="card-analytics">
+            <h3>Storage</h3>
+            <span class="card-content">
+              <h1>15.8</h1>
+              <p>GB/ 50 GB</p>
+            </span>
+            <span>
+              <mat-progress-bar class="cpu-usage" mode="determinate" value="31"></mat-progress-bar>
+            </span>
+            <p class="footer">31.6% utilized</p>
+          </span>
+
+        </div>
+
       </section>
 
       <section>
         <div class="section-header">
           <h3>Web Services</h3>
-          <button mat-stroked-button>Add Web Service</button>
+          <app-button [name]="'Add Web Service'" (click)="openEditPage()" />
         </div>
+
         <table mat-table [dataSource]="webServices" class="mat-elevation-z0 border-table">
-          <ng-container matColumnDef="name"><th mat-header-cell *matHeaderCellDef>Name</th><td mat-cell *matCellDef="let s"><b>{{s.name}}</b></td></ng-container>
-          <ng-container matColumnDef="description"><th mat-header-cell *matHeaderCellDef>Description</th><td mat-cell *matCellDef="let s">{{s.desc}}</td></ng-container>
-          <ng-container matColumnDef="version"><th mat-header-cell *matHeaderCellDef>Version</th><td mat-cell *matCellDef="let s">{{s.version}}</td></ng-container>
-          <ng-container matColumnDef="status"><th mat-header-cell *matHeaderCellDef>Status</th><td mat-cell *matCellDef="let s"><span class="badge active-sm">{{s.status}}</span></td></ng-container>
-          <ng-container matColumnDef="options"><th mat-header-cell *matHeaderCellDef>Options</th><td mat-cell *matCellDef="let s"><mat-icon>visibility</mat-icon></td></ng-container>
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>Name</th>
+            <td mat-cell *matCellDef="let s" class="app-name">{{s.name}}</td>
+          </ng-container>
+          <ng-container matColumnDef="description">
+            <th mat-header-cell *matHeaderCellDef>Description</th>
+            <td mat-cell *matCellDef="let s">{{s.desc}}</td>
+          </ng-container>
+          <ng-container matColumnDef="version">
+            <th mat-header-cell *matHeaderCellDef>Version</th>
+            <td mat-cell *matCellDef="let s">{{s.version}}</td>
+          </ng-container>
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let s">
+              <span class="custom-chip" [ngClass]="{
+                'active': s.status === 'Active',
+                'for-deprecation': s.status === 'FOR DEPRECATION',
+                'deprecated': s.status === 'DEPRECATED',
+                'for-retirement': s.status === 'FOR RETIREMENT'
+              }">
+                {{s.status}}
+              </span>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="options">
+            <th mat-header-cell *matHeaderCellDef>Options</th>
+            <td mat-cell *matCellDef="let s"><mat-icon>visibility</mat-icon></td>
+          </ng-container>
           <tr mat-header-row *matHeaderRowDef="displayedServiceColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedServiceColumns;"></tr>
         </table>
       </section>
 
       <section class="audit-section">
-  <div class="section-header">
-    <h3>Version History / Change Log</h3>
-    <button mat-stroked-button><mat-icon>add</mat-icon> Add Version</button>
-  </div>
+        <div class="section-header">
+          <h3>Version History / Change Log</h3>
+          <app-button [name]="'Add Version'" (click)="openEditPage()" />
+        </div>
 
-  <table mat-table [dataSource]="versionHistory" class="mat-elevation-z0 border-table">
-    
-    <ng-container matColumnDef="version">
-      <th mat-header-cell *matHeaderCellDef>Application Version</th>
-      <td mat-cell *matCellDef="let v">{{v.version}}</td>
-    </ng-container>
+        <table mat-table [dataSource]="versionHistory" class="mat-elevation-z0 border-table">
 
-    <ng-container matColumnDef="date">
-      <th mat-header-cell *matHeaderCellDef>Modified Date&Time</th>
-      <td mat-cell *matCellDef="let v">{{v.date}}</td>
-    </ng-container>
+          <ng-container matColumnDef="version">
+            <th mat-header-cell *matHeaderCellDef>Application Version</th>
+            <td mat-cell *matCellDef="let v">{{v.version}}</td>
+          </ng-container>
 
-    <ng-container matColumnDef="stage">
-      <th mat-header-cell *matHeaderCellDef>Release Stage</th>
-      <td mat-cell *matCellDef="let v">
-        <span class="stage-pill">{{v.stage}}</span>
-      </td>
-    </ng-container>
+          <ng-container matColumnDef="date">
+            <th mat-header-cell *matHeaderCellDef>Modified Date&Time</th>
+            <td mat-cell *matCellDef="let v">{{v.date}}</td>
+          </ng-container>
 
-    <ng-container matColumnDef="env">
-      <th mat-header-cell *matHeaderCellDef>Environment</th>
-      <td mat-cell *matCellDef="let v">
-        <span class="env-badge" [ngClass]="v.env.toLowerCase()">{{v.env}}</span>
-      </td>
-    </ng-container>
+          <ng-container matColumnDef="stage">
+            <th mat-header-cell *matHeaderCellDef>Release Stage</th>
+            <td mat-cell *matCellDef="let v">
+              <span class="custom-chip">{{v.stage}}</span>
+            </td>
+          </ng-container>
 
-    <ng-container matColumnDef="build">
-      <th mat-header-cell *matHeaderCellDef>Build Version</th>
-      <td mat-cell *matCellDef="let v" class="text-muted">{{v.build}}</td>
-    </ng-container>
+          <ng-container matColumnDef="env">
+            <th mat-header-cell *matHeaderCellDef>Environment</th>
+            <td mat-cell *matCellDef="let v">
+              <span class="custom-chip" [ngClass]="{
+                'prod': v.env === 'PROD',
+                'uat': v.env === 'UAT',
+                'sit': v.env === 'SIT'
+              }">
+                {{v.env}}
+              </span>
+            </td>
+          </ng-container>
 
-    <ng-container matColumnDef="documents">
-      <th mat-header-cell *matHeaderCellDef>Documents</th>
-      <td mat-cell *matCellDef="let v">
-        <button mat-icon-button color="primary"><mat-icon>open_in_new</mat-icon></button>
-      </td>
-    </ng-container>
+          <ng-container matColumnDef="build">
+            <th mat-header-cell *matHeaderCellDef>Build Version</th>
+            <td mat-cell *matCellDef="let v" class="text-muted">{{v.build}}</td>
+          </ng-container>
 
-    <ng-container matColumnDef="options">
-      <th mat-header-cell *matHeaderCellDef>Options</th>
-      <td mat-cell *matCellDef="let v">
-        <mat-icon class="action-icon">visibility</mat-icon>
-        <mat-icon class="action-icon">edit</mat-icon>
-      </td>
-    </ng-container>
+          <ng-container matColumnDef="documents">
+            <th mat-header-cell *matHeaderCellDef>Documents</th>
+            <td mat-cell *matCellDef="let v">
+              <button mat-icon-button class="btn-custom-blue"><mat-icon>open_in_new</mat-icon></button>
+            </td>
+          </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedVersionColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedVersionColumns;"></tr>
-  </table>
-</section>
+          <ng-container matColumnDef="options">
+            <th mat-header-cell *matHeaderCellDef>Options</th>
+            <td mat-cell *matCellDef="let v">
+              <button (click)="openDialog()"><mat-icon class="action-icon">visibility</mat-icon></button>
+              <mat-icon class="action-icon">edit</mat-icon>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedVersionColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedVersionColumns;"></tr>
+        </table>
+      </section>
 
     </div>
   </mat-card>

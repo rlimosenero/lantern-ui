@@ -8,16 +8,15 @@
       "schematics": {
         "@schematics/angular:component": {
           "standalone": true,
-        "style": "scss",
-        "displayBlock": true
+          "style": "scss",
+          "displayBlock": true
         },
-        
-      "@schematics/angular:directive": {
-        "standalone": true
-      },
-      "@schematics/angular:pipe": {
-        "standalone": true
-      }
+        "@schematics/angular:directive": {
+          "standalone": true
+        },
+        "@schematics/angular:pipe": {
+          "standalone": true
+        }
       },
       "root": "",
       "sourceRoot": "src",
@@ -70,6 +69,9 @@
         },
         "serve": {
           "builder": "@angular/build:dev-server",
+          "options": {
+            "proxyConfig": "proxy.conf.json"
+          },
           "configurations": {
             "production": {
               "buildTarget": "dashboard:build:production"

@@ -1,3 +1,395 @@
 :host {
   display: block;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+  font-family: var(--font-sans);
+}
+
+mat-divider.mat-divider.mat-divider-horizontal {
+  width: 93%;
+  align-self: center;
+  border-top-color: #a1a1a180 !important;
+}
+
+// Global Variables
+$border-color: #e9ecef;
+$text-muted: #6c757d;
+$active-green: #dcfce7;
+$active-text: #016630;
+$warning-yellow: #fff3cd;
+$warning-text: #856404;
+
+.page-layout {
+  width: 100%;
+  margin: 0 auto;
+
+  .back-link {
+    margin-bottom: 1rem;
+    color: #444;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+}
+
+.detail-container {
+  border-radius: 12px !important;
+  border: 1px solid $border-color;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+  background: white;
+
+  .header-section {
+    padding: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    .title-block {
+      .title-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        h1 {
+          margin: 0;
+          font-size: 1.875rem;
+          font-weight: 500;
+          line-height: 1.2rem;
+        }
+      }
+
+      .description {
+        font-size: 1.1rem;
+        color: $text-muted;
+        margin: 8px 0 16px 0;
+      }
+    }
+  }
+
+
+  .chip-container {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  span.header-chip {
+    background-color: #f2edee;
+  }
+}
+
+.content-body {
+  padding: 0.5rem 2rem;
+
+  section {
+    margin-bottom: 2rem;
+
+    h3 {
+      font-size: 1.25rem;
+      font-weight: 500;
+      color: #212529;
+      margin: 0.5rem 0;
+    }
+
+    .analytics-header {
+      margin: 1.5rem 0;
+    }
+  }
+}
+
+.divider {
+  margin: 2rem 0 0 0;
+}
+
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 23px;
+
+
+  h3 {
+    margin: 0 0 0.5rem;
+    color: #6a7282 !important;
+    font-size: 0.875rem !important;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+    line-height: 1.33rem;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  .card-analytics {
+    padding: 1rem;
+    width: 100%;
+    border: 1px solid #0000001a;
+    border-radius: 0.625rem;
+    height: 130px;
+    width: 304px;
+  }
+
+  .card-content {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: baseline;
+    margin: 1rem 0 0.5rem;
+  }
+
+  p {
+    margin: 0;
+    color: #6a7282;
+    font-size: 0.875rem;
+    line-height: 1.42rem;
+  }
+
+  p.footer {
+    font-size: 0.75rem;
+    margin: 0;
+  }
+
+  span.custom-chip {
+    margin: 0;
+    border: 1px solid #0000001a;
+  }
+
+  .cpu-usage {
+    height: 8px;
+    border-radius: 10px;
+
+    ::ng-deep .mdc-linear-progress__bar-inner {
+      border-color: #00c951 !important;
+      border-top-width: 8px;
+      transform: translateY(-2px);
+    }
+
+    ::ng-deep .mdc-linear-progress__buffer {
+      background: #ebe6e7;
+      height: 8px;
+    }
+  }
+
+}
+
+.mat-column-options {
+  button {
+    border: none;
+    margin: 0;
+    background: transparent;
+  }
+}
+
+// Grid Layouts
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+}
+
+.data-field {
+  label {
+    display: block;
+    font-size: 0.85rem;
+    color: $text-muted;
+    margin-bottom: 4px;
+    font-weight: 500;
+    line-height: 1.5rem;
+
+  }
+
+  p {
+    margin: 0;
+    font-size: 1rem;
+  }
+}
+
+// Links & Resources Styles
+.link-field {
+  margin-bottom: 1.25rem;
+
+  label {
+    display: block;
+    font-size: 0.85rem;
+    color: $text-muted;
+    margin-bottom: 4px;
+    font-weight: 500;
+    line-height: 1.5rem;
+  }
+
+  a {
+    color: #1a73e8;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.95rem;
+
+    &:hover {
+      text-decoration: underline;
+    }
+
+    mat-icon {
+      font-size: 16px;
+      width: 16px;
+      height: 16px;
+    }
+  }
+}
+
+// Tech Stack Styles
+.stack-group {
+  margin-bottom: 1rem;
+
+  label {
+    font-size: 0.85rem;
+    color: $text-muted;
+    font-weight: 500;
+    line-height: 1.5rem;
+  }
+
+  div {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  span.custom-chip {
+    background-color: #f2edee;
+  }
+
+}
+
+span.custom-chip {
+  padding: 2px 8px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  display: inline-block;
+  line-height: calc(1rem);
+  margin: 0.5rem 0;
+}
+
+.info-bar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background: #eff6ff;
+  border: 1px solid #bedbff;
+  border-radius: 0.625rem;
+  padding: 1rem;
+  font-size: 14px;
+  color: #193cb8;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+.font-medium {
+  font-weight: 500;
+}
+
+// Table Styles
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.border-table {
+  width: 100%;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 0.5rem 0 2rem 0;
+
+  .mat-mdc-header-row {
+    height: 40px;
+  }
+
+  .mat-mdc-row {
+    height: 39px;
+  }
+
+  .app-name {
+    font-weight: 500;
+  }
+
+  span.custom-chip {
+    border: 1px solid #0000001a;
+  }
+}
+
+.btn-custom-blue {
+  color: #155dfc !important;
+}
+
+.badge {
+  padding: 2px 8px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  display: inline-block;
+  line-height: calc(1rem);
+  border: 1px solid #a1a1a180;
+
+  &.active {
+    background-color: $active-green;
+    color: $active-text;
+  }
+
+  &.active-sm {
+    background: $active-green;
+    color: $active-text;
+  }
+}
+
+.status-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  .version-text {
+    color: $text-muted;
+    font-size: 0.9rem;
+  }
+}
+
+.code-container {
+  background-color: #1e1e1e;
+  color: #d4d4d4;
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid #333;
+  margin-top: 10px;
+
+  pre {
+    margin: 0;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.9rem;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+}
+
+@container (min-width: 1280px) {
+  .page-layout {
+    width: 1024px;
+  }
+}
+
+@container (max-width: 1279px) {
+  .page-layout {
+    width: 976px;
+  }
+}
+
+@container (max-width: 1023px) {
+  .page-layout {
+    width: 720px;
+  }
+}
+
+@container (max-width: 767px) {
+  .page-layout {
+    max-width: 592px;
+    width: 100%;
+  }
 }

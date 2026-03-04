@@ -3,26 +3,34 @@ import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../core/auth/auth.service';
+import { MatIconModule } from '@angular/material/icon';
+import { ButtonComponent } from '../../../shared/components/button/button.component';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule],
+  imports: [
+    ReactiveFormsModule,
+    MatIconModule,
+    ButtonComponent
+  ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
   private auth = inject(AuthService);
+  private fb = inject(FormBuilder);
 
-  private readonly ADMIN_JWT = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEyMzQ1Njc4OTAiLCJuYW1lIjoiQWQgTWVhbiIsInJvbGUiOiJBRE1JTiJ9.mrfbumq_NJ1pjNjlIepC6Rrh5hZNPmebpKqh85H6zIU';
-  private readonly USER_JWT = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjA5ODc2NTQzMjEiLCJuYW1lIjoiWXUgU2lyIiwicm9sZSI6IlVTRVIifQ.9h5SwHgpPTvycysPH1KFqZUdRTeMgSmM8P_Qak5Cllw';
-  
-  loginAdmin() {
-    console.log('Logging in as Admin...');
-    this.auth.login(this.ADMIN_JWT);
-  }
+  loginForm = this.fb.group({
+    username: ['', Validators.required],
+    password: ['', Validators.required]
+  });
 
-  loginUser() {
-    console.log('Logging in as User...');
-    this.auth.login(this.USER_JWT);
+  onSubmit() {
+    if (this.loginForm.valid) {
+      this.auth.authenticate(this.loginForm.value).subscribe({
+        next: () => console.log('Successfully logged in'),
+        error: (err) => alert('Login failed. Please check your credentials.')
+      });
+    }
   }
 }

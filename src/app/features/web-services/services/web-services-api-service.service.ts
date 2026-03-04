@@ -14,8 +14,8 @@ export class WebServicesApiServiceService {
       return webServicesListTable;
     }
   
-    getWebServicesDetails(appID: string): any {
-      return webServicesData.find(obj => obj['id'] === appID)
+    getWebServicesDetails(uuid: string): any {
+      return webServicesData.find(app => app.uuid === uuid);
     }
   
 }

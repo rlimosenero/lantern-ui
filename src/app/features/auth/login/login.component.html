@@ -1,7 +1,24 @@
-<div class="login-box">
-      <h1>Project Lantern</h1>
-      <p>Select Access Level</p>
-      
-      <button (click)="loginAdmin()">Login as Administrator</button>
-      <button (click)="loginUser()">Login as Standard User</button>
+<div class="login-wrapper">
+  <div class="login-box">
+    <div class="login-sec app-icon">
+      <mat-icon color="primary" class="login-icon">flare</mat-icon>
+      <span>
+        <h1>Project Lantern</h1>
+      </span>
     </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-sec">
+      <h3>Sign In</h3>
+
+      <div class="input-container">
+        <input type="text" formControlName="username" placeholder="Username" autocomplete="username" />
+        <input type="password" formControlName="password" placeholder="Password" autocomplete="current-password" />
+      </div>
+
+      <span class="btn-sec">
+        <app-button [name]="'Login'" type="submit" [disabled]="loginForm.invalid" />
+      </span>
+    </form>
+
+  </div>
+</div>

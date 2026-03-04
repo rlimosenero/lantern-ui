@@ -5,9 +5,9 @@ import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
-import { HighlightPipe } from '../../shared/pipes/highlight/highlight.pipe';
+import { HighlightPipe } from '../../../shared/pipes/highlight/highlight.pipe';
 import { FormsModule } from '@angular/forms';
-import { resultListTable } from '../../core/models/static';
+import { resultListTable } from '../../../core/models/static';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 

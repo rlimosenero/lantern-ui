@@ -1,11 +1,11 @@
 <div class="page-container">
-  <!-- <div class="search-container">
+  <div class="search-container">
     <div class="search-box">
       <mat-icon>search</mat-icon>
       <input type="text" placeholder="Search web services...">
     </div>
   </div>
-  <br> -->
+  <br>
   <mat-card appearance="outlined">
 
     <div class="header-container">
@@ -16,16 +16,12 @@
 
       <span class="spacer"></span>
 
-      <!-- <button mat-flat-button class="add-btn">
-        <mat-icon>add</mat-icon>
-        Add Application
-      </button> -->
-
     </div>
 
     @if (webServicesList.length > 0) {
-
-    <app-table-list [dataSource]="webServicesList" />
+    <div class="table-container">
+      <app-table-list [dataSource]="webServicesList" [type]="'WEBSERVICE'" />
+    </div>
 
     } @else {
 

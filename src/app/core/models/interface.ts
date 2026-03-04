@@ -26,6 +26,7 @@ export interface TechStack {
 
 export interface Application {
   applicationId: string;
+  uuid:string,
   basicInfo: BasicInfo[];
   linkAndResources: LinkAndResources[];
   techStack: TechStack[];
@@ -60,6 +61,6 @@ export interface CatalogListItem {
 export interface User {
   id: string;
   name: string;
-  role: 'ADMIN' | 'USER';
+  role: 'ROLE_ADMIN' | 'ROLE_USER';
   token: string;
 }

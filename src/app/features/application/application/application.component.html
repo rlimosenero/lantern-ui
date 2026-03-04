@@ -1,11 +1,62 @@
 <div class="page-container">
-  <!-- <div class="search-container">
-    <div class="search-box">
-      <mat-icon>search</mat-icon>
-      <input type="text" placeholder="Search applications...">
+  <div class="search-container">
+    <div class="search-row">
+      <div class="search-box">
+        <mat-icon>search</mat-icon>
+        <input type="text" placeholder="Search applications...">
+      </div>
+
+      <button mat-icon-button (click)="toggleFilters()" [class.active-filter]="isFilterExpanded">
+        <mat-icon>filter_list</mat-icon>
+      </button>
+
+      <app-button [name]="'Search'" />
+    </div>
+
+    @if (selectedStatuses.length > 0) {
+    <div class="selected-tags" @tagAnimation>
+      <span class="tags-title">Tags:</span>
+      @for (status of selectedStatuses; track status) {
+      <span class="tag" [ngClass]="{
+          'active': status === 'Active',
+          'for-deprecation': status === 'For Deprecation',
+          'deprecated': status === 'Deprecated',
+          'for-retirement': status === 'For Retirement'
+        }">
+        {{ status }}
+        <mat-icon (click)="removeStatus(status)">close</mat-icon>
+      </span>
+      }
+      <button class="clear-all" (click)="selectedStatuses = []">Clear all</button>
+    </div>
+    }
+
+    <div class="filter-section" [@expandCollapse]="isFilterExpanded ? 'expanded' : 'collapsed'">
+      <div class="filter-content">
+        <div class="custom-dropdown">
+          <div class="dropdown-trigger" (click)="isStatusDropdownOpen = !isStatusDropdownOpen">
+            <span>Filter by Status</span>
+            <mat-icon [class.rotated]="isStatusDropdownOpen">expand_more</mat-icon>
+          </div>
+
+          @if (isStatusDropdownOpen) {
+          <div class="options-grid">
+            @for (option of statusOptions; track option) {
+            <div class="option-item" [class.selected]="selectedStatuses.includes(option)"
+              (click)="toggleStatus(option)">
+              <div class="checkbox">
+                @if (selectedStatuses.includes(option)) { <mat-icon>done</mat-icon> }
+              </div>
+              {{ option }}
+            </div>
+            }
+          </div>
+          }
+        </div>
+      </div>
     </div>
   </div>
-  <br> -->
+  <br>
   <mat-card appearance="outlined">
 
     <div class="header-container">
@@ -16,28 +67,25 @@
 
       <span class="spacer"></span>
 
-      @if (auth.isAdmin()) {
+      <!-- @if (auth.isAdmin()) {
       <button mat-flat-button class="add-btn">
         <mat-icon>add</mat-icon>
         Add Application
       </button>
-      }
+      } -->
 
     </div>
 
     @if (appList.length > 0) {
-
-    <app-table-list [dataSource]="appList" />
+    <div class="table-container">
+      <app-table-list [dataSource]="appList" [type]="'APP'" />
+    </div>
 
     } @else {
 
     <div class="empty-state-wrapper">
       <mat-icon class="huge-icon">inventory_2</mat-icon>
-      <h3>No Applications Yet</h3>
-      <p>Get started by adding your first web service.</p>
-      <!-- <button mat-stroked-button>
-          <mat-icon>add</mat-icon> Add Now
-        </button> -->
+      <h3>No Applications Found</h3>
     </div>
     }
 

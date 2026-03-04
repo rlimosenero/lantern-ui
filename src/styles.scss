@@ -15,6 +15,11 @@ body {
 html {
   --mat-sys-body-large-font: var(--font-sans);
   --mat-sys-body-medium-font: var(--font-sans);
+  box-sizing: border-box;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
 }
 
 .status-online {
@@ -32,3 +37,6 @@ html {
 .for-deprecation { background-color: #fef9c2; color: #894b00; }
 .for-retirement { background-color: #ffe2e2; color: #9f0712; }
 
+.prod { background-color: #dcfce7; color: #016630; }
+.sit { background-color: #f3e8ff; color: #6e11b0; }
+.uat { background-color: #dbeafe; color: #193cb8; }

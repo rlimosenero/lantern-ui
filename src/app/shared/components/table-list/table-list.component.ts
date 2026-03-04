@@ -23,10 +23,11 @@ import { TableItem } from '../../../core/models/interface';
 })
 export class TableListComponent implements OnChanges, OnInit {
   @Input() dataSource: any = [];
+  @Input() type: 'APP' | 'WEBSERVICE' = 'APP';
 
   tableList: TableItem[] = [];
   private route = inject(Router);
-  displayedColumns: string[] = ['name', 'desc','stableVersion' , 'betaVersion', 'status', 'options'];
+  displayedColumns: string[] = ['name', 'desc', 'stableVersion', 'betaVersion', 'status', 'options'];
 
   constructor(
     private router: Router
@@ -64,5 +65,12 @@ export class TableListComponent implements OnChanges, OnInit {
     }
   }
 
+  openDetails(rowData: any) {
+    if(this.type == 'WEBSERVICE'){
+      this.router.navigate(['/web-service-details/' + rowData.appUuid])
+    } else if (this.type == 'APP'){
+      this.router.navigate(['/app-details/' + rowData.appUuid])
+    }
+  }
 
 }

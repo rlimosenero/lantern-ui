@@ -10,13 +10,23 @@ import { MatTableModule } from '@angular/material/table';
 import { Application, BasicInfo, LinkAndResources, TechStack } from '../../../core/models/interface';
 import { ApplicationApiService } from '../services/application-api-service.service';
 import { Router } from '@angular/router';
+import { ButtonComponent } from '../../../shared/components/button/button.component';
+import { MatDialog } from '@angular/material/dialog';
+import { VersionModalComponent } from '../../../shared/components/version-modal/version-modal.component';
 
 @Component({
   selector: 'app-app-details',
   standalone: true,
   imports: [
-    CommonModule, MatCardModule, MatButtonModule, MatChipsModule,
-    MatIconModule, MatProgressBarModule, MatDividerModule, MatTableModule
+    CommonModule, 
+    MatCardModule, 
+    MatButtonModule, 
+    MatChipsModule,
+    MatIconModule, 
+    MatProgressBarModule, 
+    MatDividerModule, 
+    MatTableModule,
+    ButtonComponent
   ],
   templateUrl: './app-details.component.html',
   styleUrls: ['./app-details.component.scss']
@@ -29,7 +39,8 @@ export class AppDetailsComponent implements OnInit {
 
   constructor(
     private applicationApiService: ApplicationApiService,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -38,20 +49,23 @@ export class AppDetailsComponent implements OnInit {
   }
 
   fetchAppDetails() {
-    const appId = this.getIdFromUrl();
+    const appUuid = this.getIdFromUrl();
 
     // get app details by id
-    this.appDetails = this.applicationApiService.getAppDetails(appId);
+    this.appDetails = this.applicationApiService.getAppDetails(appUuid);
     this.appBasicInfo = this.appDetails?.basicInfo[0];
     this.appTechStack = this.appDetails?.techStack[0];
     this.appLinkAndResources = this.appDetails?.linkAndResources[0];
   }
 
   // get id from url
-  getIdFromUrl(){
+  getIdFromUrl() {
     return this.router.url.split('/')[2];
   }
 
+  openEditPage(){
+    console.log('Edit');
+  }
 
   // Mock Data for Tables
   webServices = [
@@ -69,4 +83,16 @@ export class AppDetailsComponent implements OnInit {
 
   displayedServiceColumns: string[] = ['name', 'description', 'version', 'status', 'options'];
   displayedVersionColumns: string[] = ['version', 'date', 'stage', 'env', 'build', 'documents', 'options'];
+
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(VersionModalComponent, {
+      width: '1000px',
+      data: { name: 'App Detail' } // Optional: pass data to the dialog
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed', result);
+    });
+  }
 }

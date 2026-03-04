@@ -1,0 +1,40 @@
+:host {
+  display: block;
+}
+
+.btn-generic {
+  color: #0a0a0a;
+  font-weight: 600;
+  border: 1px solid #a1a1a180;
+  border-radius: calc(.625rem - 2px);
+  background: #fff;
+  padding: .5rem .8rem;
+  font-family: var(--font-sans);
+
+  // Hover state - only triggers if NOT disabled
+  &:hover:not(:disabled):not(.btn-disabled) {
+    background-color: #e9ebef;
+    border-color: #a1a1a1;
+  }
+
+  // Active state (click feel)
+  &:active:not(:disabled):not(.btn-disabled) {
+    transform: scale(0.98);
+    background-color: #d1d5db;
+  }
+
+  // Disabled state
+  &:disabled,
+  &.btn-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: #f3f4f6; // Light gray background for disabled
+    border-color: #d1d5db;
+    filter: grayscale(1);
+
+    // Ensure hover doesn't change anything while disabled
+    &:hover {
+      background-color: #f3f4f6;
+    }
+  }
+}

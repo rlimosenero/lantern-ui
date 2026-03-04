@@ -9,12 +9,12 @@
 
       <mat-nav-list>
 
-        @if (auth.isAdmin()) {
+        <!-- @if (auth.isAdmin()) {
         <a mat-list-item routerLink="/admin" routerLinkActive="active-link">
           <mat-icon matListItemIcon>analytics</mat-icon>
           <div matListItemTitle>Admin Analytics</div>
         </a>
-        }
+        } -->
 
         <a mat-list-item routerLink="/search" routerLinkActive="active-link">
           <mat-icon matListItemIcon>manage_search</mat-icon>
@@ -56,7 +56,9 @@
     </mat-toolbar>
 
     <div class="main-content">
-      <router-outlet></router-outlet>
+      <div class="main-content-container">
+        <router-outlet></router-outlet>
+      </div>
     </div>
   </mat-sidenav-content>
 

@@ -1,4 +1,5 @@
 import { CommonModule } from '@angular/common';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Component, inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -6,10 +7,13 @@ import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
-import { Application, TableItem } from '../../../core/models/interface';
+import { TableItem } from '../../../core/models/interface';
 import { ApplicationApiService } from '../services/application-api-service.service';
 import { TableListComponent } from '../../../shared/components/table-list/table-list.component';
 import { AuthService } from '../../../core/auth/auth.service';
+import { ButtonComponent } from '../../../shared/components/button/button.component';
+import { MatFormField, MatLabel } from '@angular/material/input';
+import { MatOption, MatSelect } from '@angular/material/select';
 
 @Component({
   selector: 'app-application',
@@ -20,15 +24,42 @@ import { AuthService } from '../../../core/auth/auth.service';
     MatIconModule,
     MatChipsModule,
     MatCardModule,
-    TableListComponent
+    TableListComponent,
+    ButtonComponent
   ],
   templateUrl: './application.component.html',
   styleUrl: './application.component.scss',
+
+  animations: [
+    trigger('expandCollapse', [
+      state('collapsed', style({ height: '0px', opacity: 0, overflow: 'hidden', margin: '0' })),
+      state('expanded', style({ height: '*', opacity: 1, margin: '16px 0 0 0' })),
+      transition('collapsed <=> expanded', [
+        animate('300ms ease-in-out')
+      ]),
+    ]),
+    trigger('tagAnimation', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(-10px)' }),
+        animate('200ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+      ]),
+      transition(':leave', [
+        animate('150ms ease-in', style({ opacity: 0, transform: 'scale(0.95)' }))
+      ])
+    ])
+  ],
 })
 export class ApplicationComponent implements OnInit {
   public auth = inject(AuthService);
-  private route = inject(Router);
+  isFilterExpanded = false;
+  isStatusDropdownOpen = false;
+
+  // table columns
   displayedColumns: string[] = ['name', 'desc', 'version', 'status', 'options'];
+
+  // filter tags
+  statusOptions = ['Active', 'For Deprecation', 'Deprecated', 'For Retirement'];
+  selectedStatuses: string[] = [];
 
   appList: TableItem[] | [] = [];
 
@@ -39,10 +70,38 @@ export class ApplicationComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchAppDetails();
+    this.fetchAppDetailsBE();
+  }
+
+  fetchAppDetailsBE() {
+    this.applicationApiService.getAppListTest().subscribe({
+      next: (data) => {
+        console.log('DATA: ' + JSON.stringify(data));
+      },
+      error: (err) => {
+        console.log('Error: ' + err);
+      }
+    })
   }
 
   fetchAppDetails() {
     this.appList = this.applicationApiService.getAppList()[0].data.results;
   }
 
+  toggleFilters() {
+    this.isFilterExpanded = !this.isFilterExpanded;
+  }
+
+  toggleStatus(status: string) {
+    const index = this.selectedStatuses.indexOf(status);
+    if (index > -1) {
+      this.selectedStatuses.splice(index, 1); // Remove if exists
+    } else {
+      this.selectedStatuses.push(status); // Add if new
+    }
+  }
+
+  removeStatus(status: string) {
+    this.selectedStatuses = this.selectedStatuses.filter(s => s !== status);
+  }
 }
