@@ -1,19 +1,18 @@
 import { CommonModule } from '@angular/common';
 import { trigger, state, style, transition, animate } from '@angular/animations';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { Component, inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
-import { TableItem } from '../../../core/models/interface';
 import { ApplicationApiService } from '../services/application-api-service.service';
 import { TableListComponent } from '../../../shared/components/table-list/table-list.component';
 import { AuthService } from '../../../core/auth/auth.service';
 import { ButtonComponent } from '../../../shared/components/button/button.component';
-import { MatFormField, MatLabel } from '@angular/material/input';
-import { MatOption, MatSelect } from '@angular/material/select';
+import { ApplicationSummary, PaginatedData, SearchResponse } from '../../../core/models/interface';
+import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
 
 @Component({
   selector: 'app-application',
@@ -25,7 +24,8 @@ import { MatOption, MatSelect } from '@angular/material/select';
     MatChipsModule,
     MatCardModule,
     TableListComponent,
-    ButtonComponent
+    ButtonComponent,
+    PaginationComponent
   ],
   templateUrl: './application.component.html',
   styleUrl: './application.component.scss',
@@ -61,7 +61,8 @@ export class ApplicationComponent implements OnInit {
   statusOptions = ['Active', 'For Deprecation', 'Deprecated', 'For Retirement'];
   selectedStatuses: string[] = [];
 
-  appList: TableItem[] | [] = [];
+  dataRes: any | [] = [];
+  appList: ApplicationSummary[] | [] = [];
 
   constructor(
     private applicationApiService: ApplicationApiService,
@@ -70,13 +71,13 @@ export class ApplicationComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchAppDetails();
-    this.fetchAppDetailsBE();
   }
 
-  fetchAppDetailsBE() {
-    this.applicationApiService.getAppListTest().subscribe({
+  fetchAppDetails() {
+    this.applicationApiService.getAppList(0).subscribe({
       next: (data) => {
-        console.log('DATA: ' + JSON.stringify(data));
+        this.dataRes = data.data;
+        this.appList = data.data.results;
       },
       error: (err) => {
         console.log('Error: ' + err);
@@ -84,9 +85,21 @@ export class ApplicationComponent implements OnInit {
     })
   }
 
-  fetchAppDetails() {
-    this.appList = this.applicationApiService.getAppList()[0].data.results;
-  }
+onHandlePage(newPage: number) {
+  this.appList = []; 
+  
+  this.applicationApiService.getAppList(newPage).subscribe({
+    next: (res) => {
+      this.dataRes = res.data;
+      this.appList = res.data.results;
+    },
+    error: (err) => console.error(err)
+  });
+}
+
+  // fetchAppDetails() {
+  //   this.appList = this.applicationApiService.getAppList()[0].data.results;
+  // }
 
   toggleFilters() {
     this.isFilterExpanded = !this.isFilterExpanded;

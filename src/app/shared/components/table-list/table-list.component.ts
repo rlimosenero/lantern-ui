@@ -26,7 +26,6 @@ export class TableListComponent implements OnChanges, OnInit {
   @Input() type: 'APP' | 'WEBSERVICE' = 'APP';
 
   tableList: TableItem[] = [];
-  private route = inject(Router);
   displayedColumns: string[] = ['name', 'desc', 'stableVersion', 'betaVersion', 'status', 'options'];
 
   constructor(
@@ -34,6 +33,8 @@ export class TableListComponent implements OnChanges, OnInit {
   ) { }
 
   ngOnChanges(changes: SimpleChanges): void {
+    console.log('changes: ' + changes);
+    console.log(changes);
     this.mapList(changes['dataSource'].currentValue)
 
   }
@@ -42,33 +43,34 @@ export class TableListComponent implements OnChanges, OnInit {
     // throw new Error('Method not implemented.');
   }
 
-  mapList(data: any) {
+  mapList(data: any[]) {
     for (let index = 0; index < data.length; index++) {
 
       const element = data[index];
 
-      this.tableList.push(this.mapToList(element))
-
+      // this.tableList.push(this.mapToList(element))
+      this.tableList = data.map(element => this.mapToList(element));
 
     }
   }
 
   mapToList(data: any): TableItem {
+    console.log(data)
     return {
       id: data.id,
       appUuid: data.appUuid,
-      name: data.name,
-      description: data.description,
-      status: data.status,
-      stableVersion: data.stableVersion,
-      betaVersion: data.betaVersion
+      name: data.appName,
+      description: data.appDesc,
+      status: data.lifecycleStatus,
+      stableVersion: data.stableProdVersion,
+      betaVersion: data.betaUatVersion
     }
   }
 
   openDetails(rowData: any) {
-    if(this.type == 'WEBSERVICE'){
+    if (this.type == 'WEBSERVICE') {
       this.router.navigate(['/web-service-details/' + rowData.appUuid])
-    } else if (this.type == 'APP'){
+    } else if (this.type == 'APP') {
       this.router.navigate(['/app-details/' + rowData.appUuid])
     }
   }

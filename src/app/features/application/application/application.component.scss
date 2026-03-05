@@ -14,6 +14,19 @@
   border-radius: .625rem;
 }
 
+.empty-container{
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+
+  h3, mat-icon{
+    font-weight: 500;
+    color: #808080;
+  }
+}
+
 .mat-mdc-card {
   border-radius: .625rem;
   border: none;

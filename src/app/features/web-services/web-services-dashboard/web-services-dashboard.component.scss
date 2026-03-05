@@ -14,6 +14,19 @@
   border-radius: .625rem;
 }
 
+.empty-container{
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+
+  h3, mat-icon{
+    font-weight: 500;
+    color: #808080;
+  }
+}
+
 .mat-mdc-card {
   border-radius: .625rem;
   border: none;
@@ -54,6 +67,16 @@
   display: flex;
   justify-content: center;
   margin-bottom: 1rem;
+  flex-direction: column;
+  width: 672px;
+}
+
+.search-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  justify-content: center;
 }
 
 .search-box {
@@ -62,8 +85,7 @@
   display: flex;
   align-items: center;
   padding: 8px 16px;
-  width: 50%;
-  /* Adjust based on preference */
+  width: 100%;
 }
 
 .search-box input {
@@ -73,6 +95,138 @@
   margin-left: 10px;
   width: 100%;
   color: #666;
+}
+
+.active-filter {
+  color: #155dfc;
+  background-color: rgba(21, 93, 252, 0.1);
+}
+
+.filter-section {
+  border-top: 1px solid #eee;
+
+  .filter-content {
+    padding-top: 16px;
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+}
+
+.selected-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px 0 4px 0;
+  align-items: center;
+
+  .tags-title {
+    font-size: 0.85rem;
+    font-weight: 500;
+    line-height: 1.5rem;
+    color: #6c757d;
+  }
+
+  .tag {
+    margin: 0;
+    border: 1px solid #0000001a;
+    padding: 2px 8px;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    display: inline-block;
+    line-height: calc(1rem);
+    margin: 0.5rem 0;
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    align-items: center;
+
+    mat-icon {
+      font-size: 14px;
+      width: 14px;
+      height: 14px;
+      cursor: pointer;
+
+      &:hover {
+        color: #ef4444;
+      }
+    }
+  }
+
+  .clear-all {
+    border: none;
+    background: none;
+    color: #6366f1;
+    font-size: 12px;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+}
+
+.custom-dropdown {
+  width: 100%;
+  max-width: 168px;
+
+  .dropdown-trigger {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0.8rem;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: calc(0.625rem - 2px);
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: border-color 0.2s;
+
+    &:hover {
+      border-color: #155dfc;
+    }
+
+    mat-icon {
+      transition: transform 0.3s ease;
+
+      &.rotated {
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  .options-grid {
+    margin-top: 4px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 8px;
+    position: absolute;
+    z-index: 10;
+    width: 168px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  }
+
+  .option-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+
+    &:hover {
+      background: #f5f5f5;
+    }
+
+    &.selected {
+      color: #155dfc;
+      background: #eff6ff;
+    }
+  }
 }
 
 .main-title {
@@ -107,12 +261,12 @@
   align-items: center;
 }
 
+/* Ensure the card allows the table to expand */
 mat-card {
   width: 100%;
   display: flex;
   flex-direction: column;
 }
-
 
 @container (min-width: 1536px) {
   .page-container {
@@ -120,7 +274,7 @@ mat-card {
   }
 }
 
-@container (min-width: 1535px) {
+@container (max-width: 1535px) {
   .page-container {
     width: 1232px;
   }

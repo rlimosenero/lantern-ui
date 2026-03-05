@@ -64,3 +64,30 @@ export interface User {
   role: 'ROLE_ADMIN' | 'ROLE_USER';
   token: string;
 }
+
+// start of backend interface
+export interface SearchResponse {
+  [x: string]: any;
+  data: PaginatedData;
+  flag: string;
+  message: string;
+  tranRefNo: string;
+}
+
+export interface PaginatedData {
+  hasNextPage: boolean;
+  totalElements: number;
+  results: ApplicationSummary[];
+  currentPage: number;
+  pageSize: number;
+}
+
+export interface ApplicationSummary {
+  id: number;
+  appUuid: string;
+  appName: string;
+  appDesc: string;
+  lifecycleStatus: string; // Added common statuses
+  stableProdVersion: string | null;
+  betaUatVersion: string | null;
+}

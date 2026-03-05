@@ -62,7 +62,7 @@
     <div class="header-container">
       <div class="title-group">
         <h2 class="table-header">Applications</h2>
-        <p class="app-count">Showing {{ appList.length }} items</p>
+        <!-- <p class="app-count">Showing {{ appList.length }} items</p> -->
       </div>
 
       <span class="spacer"></span>
@@ -81,11 +81,17 @@
       <app-table-list [dataSource]="appList" [type]="'APP'" />
     </div>
 
+    <app-pagination [totalElements]="dataRes.totalElements" [pageSize]="dataRes.pageSize"
+      [currentPage]="dataRes.currentPage" (pageChange)="onHandlePage($event)">
+    </app-pagination>
+
     } @else {
 
-    <div class="empty-state-wrapper">
-      <mat-icon class="huge-icon">inventory_2</mat-icon>
-      <h3>No Applications Found</h3>
+    <div class="table-container">
+      <div class="empty-container">
+        <mat-icon>warning</mat-icon>
+        <h3>No Applications Found</h3>
+      </div>
     </div>
     }
 
