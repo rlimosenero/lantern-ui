@@ -46,18 +46,7 @@ export class AppDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchAppDetails();
-    // this.fetchAppDetailsBE();
   }
-
-  // fetchAppDetails() {
-  //   const appUuid = this.getIdFromUrl();
-
-  //   // get app details by id
-  //   this.appDetails = this.applicationApiService.getAppDetails(appUuid);
-  //   this.appBasicInfo = this.appDetails?.basicInfo[0];
-  //   this.appTechStack = this.appDetails?.techStack[0];
-  //   this.appLinkAndResources = this.appDetails?.linkAndResources[0];
-  // }
 
   fetchAppDetails(){
     const appUuid = this.getIdFromUrl();

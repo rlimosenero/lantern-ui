@@ -17,9 +17,36 @@ export class PaginationComponent {
 
   totalPages = computed(() => Math.ceil(this.totalElements / this.pageSize));
 
-  get pages(): number[] {
+  // Generates the array with numbers for pages and `null` for the ellipsis
+  get visiblePages(): (number | null)[] {
     const total = this.totalPages();
-    return Array.from({ length: total }, (_, i) => i);
+    const current = this.currentPage;
+    const delta = 1; // How many pages to show beside the current page
+    const range: number[] = [];
+    const rangeWithDots: (number | null)[] = [];
+    let l: number | undefined;
+
+    // Build the core list of pages we want to show
+    for (let i = 0; i < total; i++) {
+      if (i === 0 || i === total - 1 || (i >= current - delta && i <= current + delta)) {
+        range.push(i);
+      }
+    }
+
+    // Insert nulls (...) where gaps exist
+    for (const i of range) {
+      if (l !== undefined) {
+        if (i - l === 2) {
+          rangeWithDots.push(l + 1); // Fill gap if it's exactly 1 page
+        } else if (i - l !== 1) {
+          rangeWithDots.push(null); // Insert ellipsis for larger gaps
+        }
+      }
+      rangeWithDots.push(i);
+      l = i;
+    }
+
+    return rangeWithDots;
   }
 
   onPageClick(page: number) {

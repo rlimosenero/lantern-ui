@@ -68,6 +68,7 @@
     </div>
 
     @if (webServicesList.length > 0) {
+      
     <div class="table-container">
       <app-table-list [dataSource]="webServicesList" [type]="'WEBSERVICE'" />
     </div>
@@ -78,12 +79,11 @@
 
     } @else {
 
-    <div class="empty-state-wrapper">
-      <mat-icon class="huge-icon">inventory_2</mat-icon>
-
-      <h3>No Applications Yet</h3>
-      <p>Get started by adding your first web service.</p>
-
+    <div class="table-container">
+      <div class="empty-container">
+        <mat-icon>warning</mat-icon>
+        <h3>No Web Services Found</h3>
+      </div>
     </div>
     }
 

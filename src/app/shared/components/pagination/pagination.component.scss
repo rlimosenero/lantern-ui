@@ -15,6 +15,13 @@
   .pagination-controls {
     display: flex;
     gap: 0.25rem;
+    align-items: center; // Keeps the ellipsis vertically centered
+  }
+
+  .ellipsis {
+    padding: 0 0.5rem;
+    color: #9ca3af;
+    user-select: none;
   }
 
   .pag-btn {

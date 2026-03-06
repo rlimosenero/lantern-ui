@@ -12,8 +12,8 @@
         </div>
         <p class="description">{{applicationDetails.appDesc}}</p>
         <div class="status-row">
-          <span class="badge active">{{appBasicInfo?.status}}</span>
-          <span class="version-text">Version {{appBasicInfo?.version}}</span>
+          <span class="badge active">{{applicationDetails.lifecycleStatus}}</span>
+          <span class="version-text">Version: {{applicationDetails.version}}</span>
         </div>
       </div>
       <!-- <app-button [name]="'Edit Details'" (click)="openEditPage()" /> -->
@@ -27,19 +27,19 @@
         <h3>Basic Information</h3>
         <div class="grid-2">
           <div class="data-field"><label>Application ID</label>
-            <p>{{appDetails?.applicationId}}</p>
+            <p>{{applicationDetails.appUuid}}</p>
           </div>
           <div class="data-field"><label>Owner Name</label>
-            <p>{{appBasicInfo?.ownerName}}</p>
+            <p>{{applicationDetails.ownerName}}</p>
           </div>
           <div class="data-field"><label>Owner Department</label>
-            <p>{{appBasicInfo?.ownerDept}}</p>
+            <p>{{applicationDetails.ownerDept}}</p>
           </div>
           <div class="data-field"><label>BAU Support Name</label>
-            <p>{{appBasicInfo?.bauSuppName}}</p>
+            <p>{{applicationDetails.bauSupportName}}</p>
           </div>
           <div class="data-field"><label>BAU Support Department</label>
-            <p>{{appBasicInfo?.bauSuppDept}}</p>
+            <p>{{applicationDetails.bauSupportDept}}</p>
           </div>
         </div>
       </section>
@@ -48,15 +48,15 @@
         <h3>Links & Resources</h3>
         <div class="link-field">
           <label>Git Repository</label>
-          <a href="#">{{appLinkAndResources?.gitRepoLink}} <mat-icon>open_in_new</mat-icon></a>
+          <a href={{applicationDetails.repoUrl}}>{{applicationDetails.repoUrl}} <mat-icon>open_in_new</mat-icon></a>
         </div>
         <div class="link-field">
           <label>Swagger/API Documentation</label>
-          <a href="#">{{appLinkAndResources?.swaggerLink}} <mat-icon>open_in_new</mat-icon></a>
+          <a href={{applicationDetails.swaggerUrl}}>{{applicationDetails.swaggerUrl}} <mat-icon>open_in_new</mat-icon></a>
         </div>
         <div class="link-field">
           <label>SharePoint Documents</label>
-          <a href="#">{{appLinkAndResources?.sharepointLink}} <mat-icon>open_in_new</mat-icon></a>
+          <a href={{applicationDetails.docsUrl}}>{{applicationDetails.docsUrl}} <mat-icon>open_in_new</mat-icon></a>
         </div>
       </section>
 

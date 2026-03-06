@@ -13,13 +13,17 @@
       &laquo; Prev
     </button>
 
-    @for (page of pages; track page) {
-      <button 
-        class="pag-btn" 
-        [class.active]="page === currentPage"
-        (click)="onPageClick(page)">
-        {{ page + 1 }}
-      </button>
+    @for (page of visiblePages; track $index) {
+      @if (page === null) {
+        <span class="ellipsis">&hellip;</span>
+      } @else {
+        <button 
+          class="pag-btn" 
+          [class.active]="page === currentPage"
+          (click)="onPageClick(page)">
+          {{ page + 1 }}
+        </button>
+      }
     }
 
     <button 
