@@ -13,6 +13,7 @@ import { ApplicationSummary, FilterOption, TableItem } from '../../../core/model
 import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
 import { ButtonComponent } from '../../../shared/components/button/button.component';
 import { trigger, state, style, transition, animate } from '@angular/animations';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-web-services-dashboard',
@@ -25,7 +26,8 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
     MatCardModule,
     TableListComponent,
     PaginationComponent,
-    ButtonComponent
+    ButtonComponent,
+    FormsModule
   ],
   templateUrl: './web-services-dashboard.component.html',
   styleUrl: './web-services-dashboard.component.scss',
@@ -56,6 +58,7 @@ export class WebServicesDashboardComponent {
   isFilterExpanded = false;
   activeFilters: { [key: string]: string[] } = {};
   filterData: FilterOption[] = [];
+  searchQuery: string = '';
 
   dataRes: any | [] = [];
 
@@ -71,8 +74,6 @@ export class WebServicesDashboardComponent {
   }
 
   getWebServicesList() {
-    // this.webServicesList = this.webServicesApiService.getWebServicesList()[0].data.results;
-    // console.log(this.webServicesList)
     this.webServicesApiService.getWebServicesList(0).subscribe({
       next: (data: any) => {
         this.dataRes = data.data;
@@ -99,15 +100,6 @@ export class WebServicesDashboardComponent {
   }
 
 
-
-  // private monitoringService = inject(MonitoringService);
-  // // displayedColumns: string[] = ['name', 'status', 'lastDeployment', 'actions'];
-  // dataSource = this.monitoringService.services;
-
-  // toggleService(name: string) {
-  //   this.monitoringService.toggleStatus(name);
-  // }
-
   toggleFilters() {
     this.isFilterExpanded = !this.isFilterExpanded;
   }
@@ -116,7 +108,6 @@ export class WebServicesDashboardComponent {
     if (!this.activeFilters[key]) {
       this.activeFilters[key] = [];
     }
-
 
     const index = this.activeFilters[key].indexOf(option);
     if (index > -1) {
@@ -144,9 +135,37 @@ export class WebServicesDashboardComponent {
     return tags;
   }
 
-  clearAll() {
-    this.activeFilters = {};
-  }
+  applyFilters() {
+  this.loadData(0);
+}
+
+loadData(page: number = 0) {
+  const formattedFilters = this.allSelectedTags.map(tag => ({
+    key: tag.key,
+    value: tag.value
+  }));
+
+
+  const payload = {
+    search: this.searchQuery,
+    filters: formattedFilters
+  };
+
+
+  this.webServicesApiService.getWebServicesList(page, payload).subscribe({
+    next: (data: any) => {
+      this.dataRes = data.data;
+      this.webServicesList = data.data.results;
+    },
+    error: (err: any) => console.error('Error fetching data:', err)
+  });
+}
+
+clearAll() {
+  this.activeFilters = {};
+  this.searchQuery = '';
+  this.applyFilters();
+}
 
   fetchFilterOptions() {
     this.webServicesApiService.getFilterOptions().subscribe({

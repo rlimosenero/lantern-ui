@@ -98,3 +98,8 @@ export interface FilterOption {
   options: string[];
   isOpen?: boolean;
 }
+
+export interface ApiFilterRequest {
+  search: string;
+  filters: Array<{ key: string; value: string }>;
+}

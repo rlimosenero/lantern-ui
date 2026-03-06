@@ -11,9 +11,15 @@ export class WebServicesApiServiceService {
   private http = inject(HttpClient);
   private config = inject(APP_CONFIG);
 
-  getWebServicesList(pageNumber: number): any {
+  // getWebServicesList(pageNumber: number): any {
+  //   const url = `${this.config.baseUrl}/web-services?page=${pageNumber}`;
+  //   return this.http.get<SearchResponse>(url);
+  // }
+
+  getWebServicesList(pageNumber: number, requestFilters: any = { search: '', filters: [] }) {
     const url = `${this.config.baseUrl}/web-services?page=${pageNumber}`;
-    return this.http.get<SearchResponse>(url);
+
+    return this.http.post<SearchResponse>(url, requestFilters);
   }
 
   getWebServicesDetails(uuid: string): any {
