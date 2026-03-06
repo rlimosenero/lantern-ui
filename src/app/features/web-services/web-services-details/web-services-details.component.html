@@ -5,16 +5,28 @@
         <div class="header-section">
             <div class="title-block">
                 <div class="title-row">
-                    <h1>{{ WSDetails?.serviceConfig?.[0]?.name }}</h1>
+                    <h1>{{ WSDetails?.serviceConfig?.[0]?.name ?? 'Unnamed Web Service' }}</h1>
+
                     <div class="chip-container">
-                        <span class="custom-chip header-chip">Application</span>
-                        <span class="custom-chip header-chip">UI</span>
+                        @if (WSDetails?.serviceConfig?.[0]?.type) {
+                        <span class="custom-chip header-chip">{{ WSDetails.serviceConfig[0].type }}</span>
+                        }
                     </div>
                 </div>
-                <p class="description">{{WSDetails.upstreamApplications[0].description}}</p>
+
+                <p class="description" [class.no-desc]="!WSDetails?.upstreamApplications?.[0]?.description">
+                    {{ WSDetails?.serviceConfig?.[0]?.description ?? 'No description available for this service.' }}
+                </p>
+
                 <div class="status-row">
-                    <span class="badge active">{{WSDetails.serviceConfig[0].status}}</span>
-                    <span class="version-text">Version {{WSDetails.serviceConfig[0].version}}</span>
+                    <span class="badge" [class.active]="WSDetails?.serviceConfig?.[0]?.status === 'ACTIVE'"
+                        [class.unknown]="!WSDetails?.serviceConfig?.[0]?.status">
+                        {{ WSDetails?.serviceConfig?.[0]?.status ?? 'UNKNOWN' }}
+                    </span>
+
+                    <span class="version-text">
+                        Version {{ WSDetails?.serviceConfig?.[0]?.version ?? 'N/A' }}
+                    </span>
                 </div>
             </div>
         </div>
@@ -26,26 +38,47 @@
             <section>
                 <h3>Service Configuration</h3>
                 <div class="grid-2">
-                    <div class="data-field"><label>Application</label>
-                        <p>{{ WSDetails?.serviceConfig?.[0]?.name }}</p>
+                    <div class="data-field">
+                        <label>Application</label>
+                        <p>{{ WSDetails?.serviceConfig?.[0]?.name ?? '—' }}</p>
                     </div>
-                    <div class="data-field"><label>Web Service Name</label>
-                        <p>{{WSDetails.serviceConfig[0].name}}</p>
+
+                    <div class="data-field">
+                        <label>Web Service Name</label>
+                        <p>{{ WSDetails?.serviceConfig?.[0]?.name ?? '—' }}</p>
                     </div>
-                    <div class="data-field"><label>Web Service Version</label>
-                        <p>{{WSDetails.serviceConfig[0].version}}</p>
+
+                    <div class="data-field">
+                        <label>Web Service Version</label>
+                        <p>{{ WSDetails?.serviceConfig?.[0]?.version ?? '—' }}</p>
                     </div>
-                    <div class="data-field"><label>Web Service Type</label>
-                        <p>{{WSDetails.serviceConfig[0].type}}</p>
+
+                    <div class="data-field">
+                        <label>Web Service Type</label>
+                        <p>{{ (WSDetails?.serviceConfig?.[0]?.type | titlecase) ?? '—' }}</p>
                     </div>
-                    <div class="data-field"><label>HTTP Method</label>
-                        <p>{{WSDetails.serviceConfig[0].method}}</p>
+
+                    <div class="data-field">
+                        <label>HTTP Method</label>
+                        <p>
+                            @if (WSDetails?.serviceConfig?.[0]?.method) {
+                            <span class="method-tag">{{ WSDetails.serviceConfig[0].method }}</span>
+                            } @else {
+                            —
+                            }
+                        </p>
                     </div>
-                    <div class="data-field"><label>Accessed via Gateway</label>
+
+                    <div class="data-field">
+                        <label>Accessed via Gateway</label>
                         <p>Yes</p>
                     </div>
-                    <div class="data-field"><label>Status</label>
-                        <p>{{WSDetails.serviceConfig[0].status}}</p>
+
+                    <div class="data-field">
+                        <label>Status</label>
+                        <span class="badge" [class.active]="WSDetails?.serviceConfig?.[0]?.status === 'ACTIVE'">
+                            {{ WSDetails?.serviceConfig?.[0]?.status ?? 'Unknown' }}
+                        </span>
                     </div>
                 </div>
             </section>
@@ -53,18 +86,40 @@
             <section>
                 <h3>Description</h3>
                 <div class="data-field">
-                    <p>{{WSDetails.serviceConfig[0].description}}</p>
+                    @if (WSDetails?.serviceConfig?.[0]?.description) {
+                    <p class="description-text">
+                        {{ WSDetails.serviceConfig[0].description }}
+                    </p>
+                    } @else {
+                    <div class="empty-description">
+                        <mat-icon>notes</mat-icon>
+                        <p>No functional description has been provided for this web service.</p>
+                    </div>
+                    }
                 </div>
             </section>
 
             <section>
                 <h3>Security & Authentication</h3>
                 <div class="grid-2">
-                    <div class="data-field"><label>Authentication Method</label>
-                        <p>{{WSDetails.securityAndAuth[0].authMethod}}</p>
+                    <div class="data-field">
+                        <label>Authentication Method</label>
+                        @if (WSDetails?.securityAndAuth?.[0]?.authMethod) {
+                        <p class="security-value">
+                            {{ WSDetails.securityAndAuth[0].authMethod }}
+                        </p>
+                        } @else {
+                        <p class="no-security">No authentication method defined</p>
+                        }
                     </div>
-                    <div class="data-field"><label>Authorization</label>
-                        <p>{{WSDetails.securityAndAuth[0].authorization}}</p>
+
+                    <div class="data-field">
+                        <label>Authorization</label>
+                        @if (WSDetails?.securityAndAuth?.[0]?.authorization) {
+                        <p class="security-value">{{ WSDetails.securityAndAuth[0].authorization }}</p>
+                        } @else {
+                        <p class="no-security">None (Open Access)</p>
+                        }
                     </div>
                 </div>
             </section>
@@ -72,27 +127,59 @@
             <section>
                 <h3>Request Configuration</h3>
                 <div class="data-field">
-                    <p>{{WSDetails.serviceConfig[0].description}}</p>
+                    @if (WSDetails?.serviceConfig?.[0]?.description) {
+                    <p>{{ WSDetails.serviceConfig[0].description }}</p>
+                    } @else {
+                    <p>No request configuration details provided.</p>
+                    }
                 </div>
             </section>
 
             <section>
                 <h3>Environment URLs</h3>
+
                 <div class="link-field">
                     <label>Production URL</label>
-                    <a href="#">{{WSDetails.environmentUrls[0].prodURL}} <mat-icon>open_in_new</mat-icon></a>
+                    @if (WSDetails?.environmentUrls?.[0]?.prodURL) {
+                    <a [href]="WSDetails.environmentUrls[0].prodURL" target="_blank">
+                        {{ WSDetails.environmentUrls[0].prodURL }} <mat-icon>open_in_new</mat-icon>
+                    </a>
+                    } @else {
+                    <span class="no-data">Not configured</span>
+                    }
                 </div>
+
                 <div class="link-field">
                     <label>DR URL</label>
-                    <a href="#">{{WSDetails.environmentUrls[0].drURL}} <mat-icon>open_in_new</mat-icon></a>
+                    @if (WSDetails?.environmentUrls?.[0]?.drURL) {
+                    <a [href]="WSDetails.environmentUrls[0].drURL" target="_blank">
+                        {{ WSDetails.environmentUrls[0].drURL }} <mat-icon>open_in_new</mat-icon>
+                    </a>
+                    } @else {
+                    <span class="no-data">Not configured</span>
+                    }
                 </div>
+
                 <div class="link-field">
                     <label>UAT URL</label>
-                    <a href="#">{{WSDetails.environmentUrls[0].uatURL}} <mat-icon>open_in_new</mat-icon></a>
+                    @if (WSDetails?.environmentUrls?.[0]?.uatURL) {
+                    <a [href]="WSDetails.environmentUrls[0].uatURL" target="_blank">
+                        {{ WSDetails.environmentUrls[0].uatURL }} <mat-icon>open_in_new</mat-icon>
+                    </a>
+                    } @else {
+                    <span class="no-data">Not configured</span>
+                    }
                 </div>
+
                 <div class="link-field">
                     <label>SIT URL</label>
-                    <a href="#">{{WSDetails.environmentUrls[0].sitURL}} <mat-icon>open_in_new</mat-icon></a>
+                    @if (WSDetails?.environmentUrls?.[0]?.sitURL) {
+                    <a [href]="WSDetails.environmentUrls[0].sitURL" target="_blank">
+                        {{ WSDetails.environmentUrls[0].sitURL }} <mat-icon>open_in_new</mat-icon>
+                    </a>
+                    } @else {
+                    <span class="no-data">Not configured</span>
+                    }
                 </div>
             </section>
 
@@ -102,89 +189,129 @@
                 </div>
                 <div class="data-field"><label>URL Path Parameters</label></div>
                 <div class="table-container">
+                    @if (WSDetails?.urlPathParameters?.length) {
                     <table mat-table [dataSource]="WSDetails.urlPathParameters" class="mat-elevation-z0 border-table">
 
                         <ng-container matColumnDef="paramName">
                             <th mat-header-cell *matHeaderCellDef>Parameter Name</th>
-                            <td mat-cell *matCellDef="let v">{{v.parameterName}}</td>
+                            <td mat-cell *matCellDef="let v">
+                                {{ v.parameterName ?? '—' }}
+                            </td>
                         </ng-container>
 
                         <ng-container matColumnDef="typeAndFormat">
                             <th mat-header-cell *matHeaderCellDef>Data Type and Format</th>
-                            <td mat-cell *matCellDef="let v">{{v.typeAndFormat}}</td>
+                            <td mat-cell *matCellDef="let v">
+                                {{ v.typeAndFormat ?? '—' }}
+                            </td>
                         </ng-container>
 
                         <ng-container matColumnDef="isRequired">
                             <th mat-header-cell *matHeaderCellDef>Required?</th>
                             <td mat-cell *matCellDef="let v">
-                                <span class="custom-chip">{{v.isRequired}}</span>
+                                @if (v.isRequired !== null && v.isRequired !== undefined) {
+                                <span class="custom-chip"
+                                    [class.req-yes]="v.isRequired === 'Y' || v.isRequired === true">
+                                    {{ v.isRequired }}
+                                </span>
+                                } @else {
+                                <span class="text-muted">N/A</span>
+                                }
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="value">
                             <th mat-header-cell *matHeaderCellDef>Sample Value</th>
                             <td mat-cell *matCellDef="let v">
-                                {{v.sampleValue}}
+                                <code>{{ v.sampleValue ?? 'n/a' }}</code>
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="desc">
                             <th mat-header-cell *matHeaderCellDef>Description</th>
-                            <td mat-cell *matCellDef="let v" class="text-muted">{{v.description}}</td>
+                            <td mat-cell *matCellDef="let v" class="text-muted">
+                                {{ v.description ?? 'No description provided.' }}
+                            </td>
                         </ng-container>
 
                         <tr mat-header-row *matHeaderRowDef="genericColumn"></tr>
                         <tr mat-row *matRowDef="let row; columns: genericColumn;"></tr>
                     </table>
+                    } @else {
+                    <div class="empty-container">
+                        <mat-icon>warning</mat-icon>
+                        <p>No URL path parameters defined for this service.</p>
+                    </div>
+                    }
                 </div>
 
                 <div class="data-field"><label>Request Headers</label></div>
+
                 <div class="table-container">
+                    @if (WSDetails?.requestHeaders?.length) {
                     <table mat-table [dataSource]="WSDetails.requestHeaders" class="mat-elevation-z0 border-table">
 
                         <ng-container matColumnDef="paramName">
                             <th mat-header-cell *matHeaderCellDef>Header Name</th>
-                            <td mat-cell *matCellDef="let v">{{v.parameterName}}</td>
+                            <td mat-cell *matCellDef="let v">
+                                <strong>{{ v.parameterName ?? '—' }}</strong>
+                            </td>
                         </ng-container>
 
                         <ng-container matColumnDef="typeAndFormat">
                             <th mat-header-cell *matHeaderCellDef>Data Type and Format</th>
-                            <td mat-cell *matCellDef="let v">{{v.typeAndFormat}}</td>
+                            <td mat-cell *matCellDef="let v">
+                                {{ v.typeAndFormat ?? 'string' }}
+                            </td>
                         </ng-container>
 
                         <ng-container matColumnDef="isRequired">
                             <th mat-header-cell *matHeaderCellDef>Required?</th>
                             <td mat-cell *matCellDef="let v">
-                                <span class="custom-chip">{{v.isRequired}}</span>
+                                @if (v.isRequired) {
+                                <span class="custom-chip">{{ v.isRequired }}</span>
+                                } @else {
+                                <span class="text-muted">—</span>
+                                }
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="value">
                             <th mat-header-cell *matHeaderCellDef>Sample Value</th>
                             <td mat-cell *matCellDef="let v">
-                                {{v.sampleValue}}
+                                <code>{{ v.sampleValue ?? '—' }}</code>
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="desc">
                             <th mat-header-cell *matHeaderCellDef>Description</th>
-                            <td mat-cell *matCellDef="let v" class="text-muted">{{v.description}}</td>
+                            <td mat-cell *matCellDef="let v" class="text-muted">
+                                {{ v.description ?? 'No header description provided.' }}
+                            </td>
                         </ng-container>
 
                         <tr mat-header-row *matHeaderRowDef="genericColumn"></tr>
                         <tr mat-row *matRowDef="let row; columns: genericColumn;"></tr>
                     </table>
+                    } @else {
+                    <div class="empty-container">
+                        <mat-icon>warning</mat-icon>
+                        <p>No specific request headers required for this service.</p>
+                    </div>
+                    }
                 </div>
 
 
                 <div class="grid-2">
-                    <div class="data-field"><label>Request Data Format</label>
-                        <p>{{WSDetails.requestDataFormat}}</p>
-                    </div>
-                    <div class="data-field"><label>Web Service Name</label>
-                        <p>{{WSDetails.dataSensitiveType}}</p>
+                    <div class="data-field">
+                        <label>Request Data Format</label>
+                        <p>{{ WSDetails?.requestDataFormat ?? '—' }}</p>
                     </div>
 
+                    <div class="data-field">
+                        <label>Web Service Name</label>
+                        <p>{{ WSDetails?.dataSensitiveType ?? '—' }}</p>
+                    </div>
                 </div>
 
                 <div class="divider"></div>
@@ -200,94 +327,111 @@
 
                 <div class="data-field"><label>Request Body Fields</label></div>
                 <div class="table-container">
+                    @if (WSDetails?.requestBodyFields?.length) {
                     <table mat-table [dataSource]="WSDetails.requestBodyFields" class="mat-elevation-z0 border-table">
 
                         <ng-container matColumnDef="name">
                             <th mat-header-cell *matHeaderCellDef>Field Name</th>
-                            <td mat-cell *matCellDef="let v">{{v.fieldName}}</td>
+                            <td mat-cell *matCellDef="let v"><strong>{{ v.fieldName ?? '—' }}</strong></td>
                         </ng-container>
 
                         <ng-container matColumnDef="typeAndFormat">
                             <th mat-header-cell *matHeaderCellDef>Data Type and Format</th>
-                            <td mat-cell *matCellDef="let v">{{v.typeAndFormat}}</td>
+                            <td mat-cell *matCellDef="let v">{{ v.typeAndFormat ?? '—' }}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="desc">
                             <th mat-header-cell *matHeaderCellDef>Description</th>
-                            <td mat-cell *matCellDef="let v" class="text-muted">{{v.description}}</td>
+                            <td mat-cell *matCellDef="let v" class="text-muted">{{ v.description ?? '—' }}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="isRequired">
                             <th mat-header-cell *matHeaderCellDef>Required?</th>
                             <td mat-cell *matCellDef="let v">
-                                <span class="custom-chip">{{v.isRequired}}</span>
+                                @if (v.isRequired) {
+                                <span class="custom-chip">{{ v.isRequired }}</span>
+                                } @else {
+                                <span class="text-muted">—</span>
+                                }
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="sampleValue">
                             <th mat-header-cell *matHeaderCellDef>Sample Value</th>
                             <td mat-cell *matCellDef="let v">
-                                {{v.sampleValue}}
+                                <code>{{ v.sampleValue ?? '—' }}</code>
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="rules">
                             <th mat-header-cell *matHeaderCellDef>Validation Rules</th>
-                            <td mat-cell *matCellDef="let v">
-                                {{v.validationRules}}
-                            </td>
+                            <td mat-cell *matCellDef="let v">{{ v.validationRules ?? 'None' }}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="logic">
                             <th mat-header-cell *matHeaderCellDef>Transformation Logic</th>
-                            <td mat-cell *matCellDef="let v">
-                                {{v.transformationLogic}}
-                            </td>
+                            <td mat-cell *matCellDef="let v">{{ v.transformationLogic ?? 'Direct' }}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="defaultValue">
                             <th mat-header-cell *matHeaderCellDef>Default Value</th>
-                            <td mat-cell *matCellDef="let v">
-                                {{v.defaultValue}}
-                            </td>
+                            <td mat-cell *matCellDef="let v">{{ v.defaultValue ?? 'None' }}</td>
                         </ng-container>
-
 
                         <tr mat-header-row *matHeaderRowDef="reqBodyFields"></tr>
                         <tr mat-row *matRowDef="let row; columns: reqBodyFields;"></tr>
                     </table>
+                    } @else {
+                    <div class="empty-container">
+                        <mat-icon>warning</mat-icon>
+                        <p>No request body fields defined for this service.</p>
+                    </div>
+                    }
                 </div>
 
 
                 <div class="divider"></div>
 
                 <div class="grid-2">
-                    <div class="data-field"><label>Data in Transit Encryption</label>
-                        <p>{{WSDetails.dataInTransitEncryption}}</p>
+                    <div class="data-field">
+                        <label>Data in Transit Encryption</label>
+                        <p>{{ WSDetails?.dataInTransitEncryption ?? '—' }}</p>
                     </div>
-                    <div class="data-field"><label>Average Request Size</label>
-                        <p>{{WSDetails.aveReqSize}}</p>
+
+                    <div class="data-field">
+                        <label>Average Request Size</label>
+                        <p>{{ WSDetails?.aveReqSize ? (WSDetails.aveReqSize + ' KB') : '—' }}</p>
                     </div>
-                    <div class="data-field"><label>Max Request Size</label>
-                        <p>{{WSDetails.maxReqSize}}</p>
+
+                    <div class="data-field">
+                        <label>Max Request Size</label>
+                        <p>{{ WSDetails?.maxReqSize ? (WSDetails.maxReqSize + ' KB') : '—' }}</p>
                     </div>
                 </div>
+
             </section>
 
             <section>
                 <h3>Request Policies</h3>
                 <div class="grid-2">
-                    <div class="data-field"><label>Request Data Logged?</label>
-                        <p>{{WSDetails.reqDataLog}}</p>
+                    <div class="data-field">
+                        <label>Request Data Logged?</label>
+                        <p>{{ WSDetails?.reqDataLog ?? 'N/A' }}</p>
                     </div>
-                    <div class="data-field"><label>Request Data Cached?</label>
-                        <p>{{WSDetails.reqDataCached}}</p>
+
+                    <div class="data-field">
+                        <label>Request Data Cached?</label>
+                        <p>{{ WSDetails?.reqDataCached ?? 'N/A' }}</p>
                     </div>
-                    <div class="data-field"><label>Request Duplicate Allowed?</label>
-                        <p>{{WSDetails.reqDuplicateAllowed}}</p>
+
+                    <div class="data-field">
+                        <label>Request Duplicate Allowed?</label>
+                        <p>{{ WSDetails?.reqDuplicateAllowed ?? 'N/A' }}</p>
                     </div>
-                    <div class="data-field"><label>Request Throttling Supported?</label>
-                        <p>{{WSDetails.reqThrottlingSupported}}</p>
+
+                    <div class="data-field">
+                        <label>Request Throttling Supported?</label>
+                        <p>{{ WSDetails?.reqThrottlingSupported ?? 'N/A' }}</p>
                     </div>
                 </div>
             </section>
@@ -297,49 +441,70 @@
                     <h3>Response Configuration</h3>
                 </div>
                 <div class="data-field"><label>Response Headers</label></div>
+
                 <div class="table-container">
+                    @if (WSDetails?.responseHeaders?.length) {
                     <table mat-table [dataSource]="WSDetails.responseHeaders" class="mat-elevation-z0 border-table">
 
                         <ng-container matColumnDef="paramName">
                             <th mat-header-cell *matHeaderCellDef>Header Name</th>
-                            <td mat-cell *matCellDef="let v">{{v.headerName}}</td>
+                            <td mat-cell *matCellDef="let v">
+                                <strong>{{ v.headerName ?? '—' }}</strong>
+                            </td>
                         </ng-container>
 
                         <ng-container matColumnDef="typeAndFormat">
                             <th mat-header-cell *matHeaderCellDef>Data Type and Format</th>
-                            <td mat-cell *matCellDef="let v">{{v.typeAndFormat}}</td>
+                            <td mat-cell *matCellDef="let v">
+                                {{ v.typeAndFormat ?? '—' }}
+                            </td>
                         </ng-container>
 
                         <ng-container matColumnDef="isRequired">
                             <th mat-header-cell *matHeaderCellDef>Required?</th>
                             <td mat-cell *matCellDef="let v">
-                                <span class="custom-chip">{{v.isRequired}}</span>
+                                @if (v.isRequired) {
+                                <span class="custom-chip">{{ v.isRequired }}</span>
+                                } @else {
+                                <span class="text-muted">—</span>
+                                }
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="value">
                             <th mat-header-cell *matHeaderCellDef>Sample Value</th>
                             <td mat-cell *matCellDef="let v">
-                                {{v.sampleValue}}
+                                <code>{{ v.sampleValue ?? '—' }}</code>
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="desc">
                             <th mat-header-cell *matHeaderCellDef>Description</th>
-                            <td mat-cell *matCellDef="let v" class="text-muted">{{v.description}}</td>
+                            <td mat-cell *matCellDef="let v" class="text-muted">
+                                {{ v.description ?? 'No header description provided.' }}
+                            </td>
                         </ng-container>
 
                         <tr mat-header-row *matHeaderRowDef="genericColumn"></tr>
                         <tr mat-row *matRowDef="let row; columns: genericColumn;"></tr>
                     </table>
+                    } @else {
+                    <div class="empty-container">
+                        <mat-icon>warning</mat-icon>
+                        <p>No custom response headers documented for this service.</p>
+                    </div>
+                    }
                 </div>
 
                 <div class="grid-2">
-                    <div class="data-field"><label>Response Data Format</label>
-                        <p>{{WSDetails.responseDataFormat}}</p>
+                    <div class="data-field">
+                        <label>Response Data Format</label>
+                        <p>{{ WSDetails?.responseDataFormat ?? '—' }}</p>
                     </div>
-                    <div class="data-field"><label>Response Data Sensitivity Type</label>
-                        <p>{{WSDetails.responseDataSensitivityType}}</p>
+
+                    <div class="data-field">
+                        <label>Response Data Sensitivity Type</label>
+                        <p>{{ WSDetails?.responseDataSensitivityType ?? 'Not Classified' }}</p>
                     </div>
                 </div>
 
@@ -355,131 +520,155 @@
                 <div class="divider"> </div>
 
                 <div class="data-field"><label>Response Headers</label></div>
+
                 <div class="table-container">
+                    @if (WSDetails?.requestBodyFields?.length) {
                     <table mat-table [dataSource]="WSDetails.requestBodyFields" class="mat-elevation-z0 border-table">
 
                         <ng-container matColumnDef="name">
                             <th mat-header-cell *matHeaderCellDef>Field Name</th>
-                            <td mat-cell *matCellDef="let v">{{v.fieldName}}</td>
+                            <td mat-cell *matCellDef="let v">{{ v.fieldName ?? '—' }}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="typeAndFormat">
                             <th mat-header-cell *matHeaderCellDef>Data Type and Format</th>
-                            <td mat-cell *matCellDef="let v">{{v.typeAndFormat}}</td>
+                            <td mat-cell *matCellDef="let v">{{ v.typeAndFormat ?? '—' }}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="desc">
                             <th mat-header-cell *matHeaderCellDef>Description</th>
-                            <td mat-cell *matCellDef="let v" class="text-muted">{{v.description}}</td>
+                            <td mat-cell *matCellDef="let v" class="text-muted">{{ v.description ?? '—' }}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="isRequired">
                             <th mat-header-cell *matHeaderCellDef>Required?</th>
                             <td mat-cell *matCellDef="let v">
-                                <span class="custom-chip">{{v.isRequired}}</span>
+                                @if (v.isRequired) {
+                                <span class="custom-chip">{{ v.isRequired }}</span>
+                                } @else {
+                                <span class="text-muted">—</span>
+                                }
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="sampleValue">
                             <th mat-header-cell *matHeaderCellDef>Sample Value</th>
-                            <td mat-cell *matCellDef="let v">
-                                {{v.sampleValue}}
-                            </td>
+                            <td mat-cell *matCellDef="let v"><code>{{ v.sampleValue ?? '—' }}</code></td>
                         </ng-container>
 
                         <ng-container matColumnDef="rules">
                             <th mat-header-cell *matHeaderCellDef>Validation Rules</th>
-                            <td mat-cell *matCellDef="let v">
-                                {{v.validationRules}}
-                            </td>
+                            <td mat-cell *matCellDef="let v">{{ v.validationRules ?? 'None' }}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="logic">
                             <th mat-header-cell *matHeaderCellDef>Transformation Logic</th>
-                            <td mat-cell *matCellDef="let v">
-                                {{v.transformationLogic}}
-                            </td>
+                            <td mat-cell *matCellDef="let v">{{ v.transformationLogic ?? 'Direct' }}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="defaultValue">
                             <th mat-header-cell *matHeaderCellDef>Default Value</th>
-                            <td mat-cell *matCellDef="let v">
-                                {{v.defaultValue}}
-                            </td>
+                            <td mat-cell *matCellDef="let v">{{ v.defaultValue ?? 'None' }}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="sourceOrDomainApplication">
-                            <th mat-header-cell *matHeaderCellDef>Transformation Logic</th>
-                            <td mat-cell *matCellDef="let v">
-                                {{v.sourceOrDomainApplication}}
-                            </td>
+                            <th mat-header-cell *matHeaderCellDef>Source Application</th>
+                            <td mat-cell *matCellDef="let v">{{ v.sourceOrDomainApplication ?? '—' }}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="sourceOrDomainFieldName">
-                            <th mat-header-cell *matHeaderCellDef>Default Value</th>
-                            <td mat-cell *matCellDef="let v">
-                                {{v.sourceOrDomainFieldName}}
-                            </td>
+                            <th mat-header-cell *matHeaderCellDef>Source Field Name</th>
+                            <td mat-cell *matCellDef="let v">{{ v.sourceOrDomainFieldName ?? '—' }}</td>
                         </ng-container>
-
 
                         <tr mat-header-row *matHeaderRowDef="resBodyFields"></tr>
                         <tr mat-row *matRowDef="let row; columns: resBodyFields;"></tr>
                     </table>
+                    } @else {
+                    <div class="empty-container">
+                        <mat-icon>warning</mat-icon>
+                        <p>No response body fields documented for this service.</p>
+                    </div>
+                    }
                 </div>
 
                 <div class="divider"> </div>
 
                 <div class="data-field"><label>Response Headers</label></div>
+
                 <div class="table-container">
+                    @if (WSDetails?.responseStatusCodes?.length) {
                     <table mat-table [dataSource]="WSDetails.responseStatusCodes" class="mat-elevation-z0 border-table">
 
                         <ng-container matColumnDef="HTTPCode">
-                            <th mat-header-cell *matHeaderCellDef>Application Version</th>
-                            <td mat-cell *matCellDef="let v">{{v.HTTPCode}}</td>
+                            <th mat-header-cell *matHeaderCellDef>HTTP Code</th>
+                            <td mat-cell *matCellDef="let v">
+                                {{ v.HTTPCode ?? '—' }}
+                            </td>
                         </ng-container>
 
                         <ng-container matColumnDef="businessCode">
-                            <th mat-header-cell *matHeaderCellDef>Data Type and Format</th>
-                            <td mat-cell *matCellDef="let v">{{v.businessCode}}</td>
+                            <th mat-header-cell *matHeaderCellDef>Business Code</th>
+                            <td mat-cell *matCellDef="let v">{{ v.businessCode ?? '—' }}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="message">
-                            <th mat-header-cell *matHeaderCellDef>Required?</th>
+                            <th mat-header-cell *matHeaderCellDef>Message / Description</th>
                             <td mat-cell *matCellDef="let v">
-                                <span class="custom-chip">{{v.message}}</span>
+                                {{ v.message ?? '—' }}
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="type">
-                            <th mat-header-cell *matHeaderCellDef>Sample Value</th>
+                            <th mat-header-cell *matHeaderCellDef>Category</th>
                             <td mat-cell *matCellDef="let v">
-                                {{v.type}}
+                                @if (v.type) {
+                                <span class="custom-chip">{{ v.type }}</span>
+                                } @else {
+                                <span class="text-muted">—</span>
+                                }
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="suggestedAction">
-                            <th mat-header-cell *matHeaderCellDef>Description</th>
-                            <td mat-cell *matCellDef="let v" class="text-muted">{{v.suggestedAction}}</td>
+                            <th mat-header-cell *matHeaderCellDef>Suggested Action</th>
+                            <td mat-cell *matCellDef="let v" class="text-muted">
+                                {{ v.suggestedAction ?? 'No specific action defined.' }}
+                            </td>
                         </ng-container>
 
                         <tr mat-header-row *matHeaderRowDef="statusCodesFields"></tr>
                         <tr mat-row *matRowDef="let row; columns: statusCodesFields;"></tr>
                     </table>
+                    } @else {
+                    <div class="empty-container">
+                        <mat-icon>warning</mat-icon>
+                        <p>No specific status codes or error mappings defined for this service.</p>
+                    </div>
+                    }
                 </div>
 
 
                 <div class="divider"></div>
 
                 <div class="grid-2">
-                    <div class="data-field"><label>Response Data in Transit Encryption</label>
-                        <p>{{WSDetails.responseDataInTransitEncryption}}</p>
+                    <div class="data-field">
+                        <label>Response Data in Transit Encryption</label>
+                        <p>{{ WSDetails?.responseDataInTransitEncryption ?? 'Not Specified' }}</p>
                     </div>
-                    <div class="data-field"><label>Average Response Size</label>
-                        <p>{{WSDetails.averageResponseSize}}</p>
+
+                    <div class="data-field">
+                        <label>Average Response Size</label>
+                        <p>
+                            {{ WSDetails?.averageResponseSize ? (WSDetails.averageResponseSize + ' KB') : '—' }}
+                        </p>
                     </div>
-                    <div class="data-field"><label>Max Response Size</label>
-                        <p>{{WSDetails.maxResponseSize}}</p>
+
+                    <div class="data-field">
+                        <label>Max Response Size</label>
+                        <p>
+                            {{ WSDetails?.maxResponseSize ? (WSDetails.maxResponseSize + ' KB') : '—' }}
+                        </p>
                     </div>
                 </div>
 
@@ -488,11 +677,13 @@
             <section>
                 <h3>Response Policies</h3>
                 <div class="grid-2">
-                    <div class="data-field"><label>Response Data Logged?</label>
-                        <p>{{WSDetails.requestDataLogged}}</p>
+                    <div class="data-field">
+                        <label>Response Data Logged?</label>
+                        <p>{{ WSDetails?.requestDataLogged ?? '—' }}</p>
                     </div>
-                    <div class="data-field"><label>Response Data Cached?</label>
-                        <p>{{WSDetails.responseDataCached}}</p>
+                    <div class="data-field">
+                        <label>Response Data Cached?</label>
+                        <p>{{ WSDetails?.responseDataCached ?? '—' }}</p>
                     </div>
                 </div>
             </section>
@@ -500,11 +691,13 @@
             <section>
                 <h3>API Policies</h3>
                 <div class="grid-2">
-                    <div class="data-field"><label>Rate Limit Info</label>
-                        <p>{{WSDetails.rateLimitInfo}}</p>
+                    <div class="data-field">
+                        <label>Rate Limit Info</label>
+                        <p>{{ WSDetails?.rateLimitInfo ?? 'No rate limit defined' }}</p>
                     </div>
-                    <div class="data-field"><label>Exposure</label>
-                        <p>{{WSDetails.exposure}}</p>
+                    <div class="data-field">
+                        <label>Exposure</label>
+                        <p>{{ WSDetails?.exposure ?? '—' }}</p>
                     </div>
                 </div>
             </section>
@@ -514,103 +707,147 @@
                     <h3>Consumers & Upstream/Source Applications</h3>
                 </div>
                 <div class="data-field"><label>Consumers</label></div>
+
                 <div class="table-container">
+                    @if (WSDetails?.consumers?.length) {
                     <table mat-table [dataSource]="WSDetails.consumers" class="mat-elevation-z0 border-table">
 
                         <ng-container matColumnDef="appName">
                             <th mat-header-cell *matHeaderCellDef>Application Name</th>
-                            <td mat-cell *matCellDef="let v">{{v.appName}}</td>
+                            <td mat-cell *matCellDef="let v"><strong>{{ v.appName ?? '—' }}</strong></td>
                         </ng-container>
 
                         <ng-container matColumnDef="appOwner">
                             <th mat-header-cell *matHeaderCellDef>Application Owner</th>
-                            <td mat-cell *matCellDef="let v">{{v.appOwner}}</td>
+                            <td mat-cell *matCellDef="let v">{{ v.appOwner ?? '—' }}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="dateOnboarded">
-                            <th mat-header-cell *matHeaderCellDef>Date Onboardedt</th>
-                            <td mat-cell *matCellDef="let v">{{v.dateOnboarded}}</td>
+                            <th mat-header-cell *matHeaderCellDef>Date Onboarded</th>
+                            <td mat-cell *matCellDef="let v">{{ v.dateOnboarded ?? '—' }}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="status">
                             <th mat-header-cell *matHeaderCellDef>Status</th>
                             <td mat-cell *matCellDef="let v">
-                                {{v.status}}
+                                @if (v.status) {
+                                <span class="custom-chip">{{ v.status }}</span>
+                                } @else {
+                                <span class="text-muted">—</span>
+                                }
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="trigger">
                             <th mat-header-cell *matHeaderCellDef>Trigger</th>
-                            <td mat-cell *matCellDef="let v" class="text-muted">{{v.trigger}}</td>
+                            <td mat-cell *matCellDef="let v" class="text-muted">{{ v.trigger ?? '—' }}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="appType">
                             <th mat-header-cell *matHeaderCellDef>Application Type</th>
-                            <td mat-cell *matCellDef="let v" class="text-muted">{{v.appType}}</td>
+                            <td mat-cell *matCellDef="let v" class="text-muted">{{ v.appType ?? '—' }}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="techOwner">
                             <th mat-header-cell *matHeaderCellDef>Technical Owner</th>
-                            <td mat-cell *matCellDef="let v" class="text-muted">{{v.techOwner}}</td>
+                            <td mat-cell *matCellDef="let v" class="text-muted">{{ v.techOwner ?? '—' }}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="tokenExpiryDate">
                             <th mat-header-cell *matHeaderCellDef>Token Expiry Date</th>
-                            <td mat-cell *matCellDef="let v" class="text-muted">{{v.tokenExpiryDate}}</td>
+                            <td mat-cell *matCellDef="let v" class="text-muted">
+                                {{ v.tokenExpiryDate ?? 'No Expiry' }}
+                            </td>
                         </ng-container>
 
                         <ng-container matColumnDef="networkMode">
                             <th mat-header-cell *matHeaderCellDef>Network Mode</th>
-                            <td mat-cell *matCellDef="let v" class="text-muted">{{v.networkMode}}</td>
+                            <td mat-cell *matCellDef="let v" class="text-muted">{{ v.networkMode ?? '—' }}</td>
                         </ng-container>
 
                         <tr mat-header-row *matHeaderRowDef="consumersFields"></tr>
                         <tr mat-row *matRowDef="let row; columns: consumersFields;"></tr>
                     </table>
+                    } @else {
+                    <div class="empty-container">
+                        <mat-icon>warning</mat-icon>
+                        <p>No registered consumer applications found for this service.</p>
+                    </div>
+                    }
                 </div>
 
                 <div class="divider"> </div>
 
                 <div class="data-field"><label>Upstream/Source Applications</label></div>
+
                 <div class="table-container">
+                    @if (WSDetails?.upstreamApp?.length) {
                     <table mat-table [dataSource]="WSDetails.upstreamApp" class="mat-elevation-z0 border-table">
 
                         <ng-container matColumnDef="appName">
                             <th mat-header-cell *matHeaderCellDef>Application Name</th>
-                            <td mat-cell *matCellDef="let v">{{v.appName}}</td>
+                            <td mat-cell *matCellDef="let v">
+                                <strong>{{ v.appName ?? '—' }}</strong>
+                            </td>
                         </ng-container>
 
                         <ng-container matColumnDef="appOwner">
                             <th mat-header-cell *matHeaderCellDef>Application Owner</th>
-                            <td mat-cell *matCellDef="let v">{{v.appOwner}}</td>
+                            <td mat-cell *matCellDef="let v">{{ v.appOwner ?? '—' }}</td>
                         </ng-container>
-
 
                         <ng-container matColumnDef="tokenExpiryDate">
                             <th mat-header-cell *matHeaderCellDef>Token Expiry Date</th>
-                            <td mat-cell *matCellDef="let v" class="text-muted">{{v.tokenExpiryDate}}</td>
+                            <td mat-cell *matCellDef="let v" class="text-muted">
+                                {{ v.tokenExpiryDate ?? 'No Expiry Set' }}
+                            </td>
                         </ng-container>
 
                         <ng-container matColumnDef="techOwner">
                             <th mat-header-cell *matHeaderCellDef>Technical Owner</th>
-                            <td mat-cell *matCellDef="let v" class="text-muted">{{v.techOwner}}</td>
+                            <td mat-cell *matCellDef="let v" class="text-muted">
+                                {{ v.techOwner ?? '—' }}
+                            </td>
                         </ng-container>
 
                         <tr mat-header-row *matHeaderRowDef="upstreamAppFields"></tr>
                         <tr mat-row *matRowDef="let row; columns: upstreamAppFields;"></tr>
                     </table>
+                    } @else {
+                    <div class="empty-container">
+                        <mat-icon>warning</mat-icon>
+                        <p>No upstream application dependencies documented.</p>
+                    </div>
+                    }
                 </div>
+
             </section>
 
             <section>
                 <h3>Links & Resources</h3>
+
                 <div class="link-field">
                     <label>Swagger URL</label>
-                    <a href={{WSDetails.swaggerURL}}>{{WSDetails.swaggerURL}} <mat-icon>open_in_new</mat-icon></a>
+                    @if (WSDetails?.swaggerURL) {
+                    <a [href]="WSDetails.swaggerURL" target="_blank">
+                        {{ WSDetails.swaggerURL }}
+                        <mat-icon>open_in_new</mat-icon>
+                    </a>
+                    } @else {
+                    <span class="text-muted">No Swagger URL provided.</span>
+                    }
                 </div>
+
                 <div class="link-field">
                     <label>Documents URL</label>
-                    <a href={{WSDetails.documentsURL}}>{{WSDetails.documentsURL}} <mat-icon>open_in_new</mat-icon></a>
+                    @if (WSDetails?.documentsURL) {
+                    <a [href]="WSDetails.documentsURL" target="_blank">
+                        {{ WSDetails.documentsURL }}
+                        <mat-icon>open_in_new</mat-icon>
+                    </a>
+                    } @else {
+                    <span class="text-muted">No documentation URL provided.</span>
+                    }
                 </div>
             </section>
 

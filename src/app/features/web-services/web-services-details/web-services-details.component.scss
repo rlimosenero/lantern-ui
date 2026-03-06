@@ -194,6 +194,21 @@ $warning-text: #856404;
   gap: 2rem;
 }
 
+
+.empty-container {
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+
+  h3,
+  mat-icon {
+    font-weight: 500;
+    color: #808080;
+  }
+}
+
 .data-field {
   label {
     display: block;
@@ -208,6 +223,37 @@ $warning-text: #856404;
   p {
     margin: 0;
     font-size: 1rem;
+  }
+
+  .description-text {
+    line-height: 1.6;
+    color: #374151;
+    white-space: pre-wrap; // Maintains line breaks from the database
+  }
+
+
+  .empty-description {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.25rem;
+    background-color: #f9fafb;
+    border: 1px dashed #d1d5db;
+    border-radius: 0.5rem;
+    color: #6b7280;
+
+    mat-icon {
+      color: #9ca3af;
+      font-size: 1.25rem;
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+
+    p {
+      margin: 0;
+      font-style: italic;
+      font-size: 0.9rem;
+    }
   }
 }
 

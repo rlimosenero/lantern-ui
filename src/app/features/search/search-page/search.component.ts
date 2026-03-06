@@ -70,14 +70,14 @@ import { PaginationComponent } from '../../../shared/components/pagination/pagin
         }))
       ])
     ]),
-trigger('cardAnimation', [
-  transition(':enter', [
-    style({ opacity: 0, transform: 'translateY(20px)' }),
-    // Wait 300ms (almost the full duration of the hero exit)
-    animate('500ms 300ms cubic-bezier(0.35, 0, 0.25, 1)', 
-      style({ opacity: 1, transform: 'translateY(0)' }))
-  ])
-])
+    trigger('cardAnimation', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(20px)' }),
+        // Wait 300ms (almost the full duration of the hero exit)
+        animate('500ms 300ms cubic-bezier(0.35, 0, 0.25, 1)',
+          style({ opacity: 1, transform: 'translateY(0)' }))
+      ])
+    ])
   ],
 })
 export class SearchComponent implements OnInit {
@@ -166,10 +166,11 @@ export class SearchComponent implements OnInit {
   search() {
     this.isSearched = true;
     let filters: string = this.formatFilter(this.activeFilters)
+    this.dataRes = [];
+    this.searchList = [];
 
     this.searchService.getSearchList(this.searchQuery, filters, 0).subscribe({
       next: (data: any) => {
-        console.log(data)
         this.dataRes = data.data;
         this.searchList = data.data.results
 
@@ -195,8 +196,12 @@ export class SearchComponent implements OnInit {
     return typeMap[types[0]] || '';
   }
 
-  openDetails(data:any){
-    console.log(data)
+  openDetails(data: any) {
+    if (data.category === 'APPLICATION') {
+      this.router.navigate(['/app-details/' + data.uuid])
+    } else if (data.category === 'WEB_SERVICE') {
+      this.router.navigate(['/web-service-details/' + data.uuid])
+    }
 
   }
 

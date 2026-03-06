@@ -29,6 +29,18 @@ table,
   display: inline-block;
   line-height: calc(1rem);
   border: 1px solid #a1a1a180;
+
+  &.unknown {
+    background-color: #f3f4f6;
+    color: #6b7280;
+    border: 1px dashed #d1d5db;
+  }
+}
+
+.placeholder-cell {
+  color: #9ca3af; // Muted gray
+  font-style: italic;
+  font-size: 0.85rem;
 }
 
 
