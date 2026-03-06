@@ -13,19 +13,21 @@ import { Router } from '@angular/router';
 import { ButtonComponent } from '../../../shared/components/button/button.component';
 import { MatDialog } from '@angular/material/dialog';
 import { VersionModalComponent } from '../../../shared/components/version-modal/version-modal.component';
+import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
 
 @Component({
   selector: 'app-app-details',
   standalone: true,
   imports: [
-    CommonModule, 
-    MatCardModule, 
-    MatButtonModule, 
+    CommonModule,
+    MatCardModule,
+    MatButtonModule,
     MatChipsModule,
-    MatIconModule, 
-    MatProgressBarModule, 
-    MatDividerModule, 
-    MatTableModule
+    MatIconModule,
+    MatProgressBarModule,
+    MatDividerModule,
+    MatTableModule,
+    PaginationComponent
   ],
   templateUrl: './app-details.component.html',
   styleUrls: ['./app-details.component.scss']
@@ -36,7 +38,11 @@ export class AppDetailsComponent implements OnInit {
   appLinkAndResources: LinkAndResources | undefined = undefined;
   appTechStack: TechStack | undefined = undefined;
 
+  displayedServiceColumns: string[] = ['name', 'description', 'version', 'status', 'options'];
+  displayedVersionColumns: string[] = ['version', 'date', 'stage', 'env', 'build', 'documents', 'options'];
+
   applicationDetails: any = [];
+  wsData: any = [];
 
   constructor(
     private applicationApiService: ApplicationApiService,
@@ -46,17 +52,18 @@ export class AppDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchAppDetails();
+    this.getWebServicesList();
   }
 
-  fetchAppDetails(){
+  fetchAppDetails() {
     const appUuid = this.getIdFromUrl();
 
     this.applicationApiService.getAppDetails(appUuid).subscribe({
-      next: (data:any) => {
+      next: (data: any) => {
         console.log(data.data);
         this.applicationDetails = data.data;
       },
-      error: (err:any) => {
+      error: (err: any) => {
         console.log('Error: ' + err);
       }
     })
@@ -67,8 +74,33 @@ export class AppDetailsComponent implements OnInit {
     return this.router.url.split('/')[2];
   }
 
-  openEditPage(){
+  openEditPage() {
     console.log('Edit');
+  }
+
+  getWebServicesList() {
+    const appUuid = this.getIdFromUrl();
+
+    this.applicationApiService.getWebServicesList(appUuid, 0).subscribe({
+      next: (data: any) => {
+        this.wsData = data.data;
+      },
+      error: (err: any) => {
+        console.log('Error: ' + err);
+      }
+    })
+  }
+
+  onHandlePage(newPage: number) {
+    const appUuid = this.getIdFromUrl();
+    this.wsData = [];
+
+    this.applicationApiService.getWebServicesList(appUuid, newPage).subscribe({
+      next: (res: any) => {
+        this.wsData = res.data;
+      },
+      error: (err) => console.error(err)
+    });
   }
 
   // Mock Data for Tables
@@ -85,8 +117,6 @@ export class AppDetailsComponent implements OnInit {
     { version: '3.0.0', date: 'Oct 10, 2023, 23:00:00', stage: 'MAJOR', env: 'PROD', build: '+build.250' }
   ];
 
-  displayedServiceColumns: string[] = ['name', 'description', 'version', 'status', 'options'];
-  displayedVersionColumns: string[] = ['version', 'date', 'stage', 'env', 'build', 'documents', 'options'];
 
 
   openDialog(): void {

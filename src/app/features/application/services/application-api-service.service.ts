@@ -25,7 +25,12 @@ export class ApplicationApiService {
     return this.http.get(url);
   }
 
-  getFilterOptions(){
+  getFilterOptions() {
     return filterData;
+  }
+
+  getWebServicesList(uuid: string, pagenumber?: number) {
+    const url = `${this.config.baseUrl}/applications/web-services/${uuid}?size=5&page=${pagenumber}`;
+    return this.http.get(url);
   }
 }

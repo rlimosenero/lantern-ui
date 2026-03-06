@@ -1,20 +1,20 @@
 <div class="page-layout">
     <!-- <button mat-button class="back-link"><mat-icon>arrow_back</mat-icon> Back to Catalog</button> -->
-
+    @if (WSDetails) {
     <mat-card class="detail-container">
         <div class="header-section">
             <div class="title-block">
                 <div class="title-row">
-                    <h1>{{WSDetails?.serviceConfig[0].name}}</h1>
+                    <h1>{{ WSDetails?.serviceConfig?.[0]?.name }}</h1>
                     <div class="chip-container">
                         <span class="custom-chip header-chip">Application</span>
                         <span class="custom-chip header-chip">UI</span>
                     </div>
                 </div>
-                <p class="description">{{WSDetails?.serviceConfig[0].description}}</p>
+                <p class="description">{{WSDetails.upstreamApplications[0].description}}</p>
                 <div class="status-row">
-                    <span class="badge active">{{WSDetails?.serviceConfig[0].status}}</span>
-                    <span class="version-text">Version {{WSDetails?.serviceConfig[0].version}}</span>
+                    <span class="badge active">{{WSDetails.serviceConfig[0].status}}</span>
+                    <span class="version-text">Version {{WSDetails.serviceConfig[0].version}}</span>
                 </div>
             </div>
         </div>
@@ -27,25 +27,25 @@
                 <h3>Service Configuration</h3>
                 <div class="grid-2">
                     <div class="data-field"><label>Application</label>
-                        <p>{{WSDetails?.serviceConfig[0].application[0].name}}</p>
+                        <p>{{ WSDetails?.serviceConfig?.[0]?.name }}</p>
                     </div>
                     <div class="data-field"><label>Web Service Name</label>
-                        <p>{{WSDetails?.serviceConfig[0].name}}</p>
+                        <p>{{WSDetails.serviceConfig[0].name}}</p>
                     </div>
                     <div class="data-field"><label>Web Service Version</label>
-                        <p>{{WSDetails?.serviceConfig[0].version}}</p>
+                        <p>{{WSDetails.serviceConfig[0].version}}</p>
                     </div>
                     <div class="data-field"><label>Web Service Type</label>
-                        <p>{{WSDetails?.serviceConfig[0].type}}</p>
+                        <p>{{WSDetails.serviceConfig[0].type}}</p>
                     </div>
                     <div class="data-field"><label>HTTP Method</label>
-                        <p>{{WSDetails?.serviceConfig[0].method}}</p>
+                        <p>{{WSDetails.serviceConfig[0].method}}</p>
                     </div>
                     <div class="data-field"><label>Accessed via Gateway</label>
                         <p>Yes</p>
                     </div>
                     <div class="data-field"><label>Status</label>
-                        <p>{{WSDetails?.serviceConfig[0].status}}</p>
+                        <p>{{WSDetails.serviceConfig[0].status}}</p>
                     </div>
                 </div>
             </section>
@@ -53,7 +53,7 @@
             <section>
                 <h3>Description</h3>
                 <div class="data-field">
-                    <p>{{WSDetails?.serviceConfig[0].description}}</p>
+                    <p>{{WSDetails.serviceConfig[0].description}}</p>
                 </div>
             </section>
 
@@ -61,10 +61,10 @@
                 <h3>Security & Authentication</h3>
                 <div class="grid-2">
                     <div class="data-field"><label>Authentication Method</label>
-                        <p>{{WSDetails?.securityAndAuth[0].authMethod}}</p>
+                        <p>{{WSDetails.securityAndAuth[0].authMethod}}</p>
                     </div>
                     <div class="data-field"><label>Authorization</label>
-                        <p>{{WSDetails?.securityAndAuth[0].authorization}}</p>
+                        <p>{{WSDetails.securityAndAuth[0].authorization}}</p>
                     </div>
                 </div>
             </section>
@@ -72,7 +72,7 @@
             <section>
                 <h3>Request Configuration</h3>
                 <div class="data-field">
-                    <p>{{WSDetails?.serviceConfig[0].description}}</p>
+                    <p>{{WSDetails.serviceConfig[0].description}}</p>
                 </div>
             </section>
 
@@ -80,19 +80,19 @@
                 <h3>Environment URLs</h3>
                 <div class="link-field">
                     <label>Production URL</label>
-                    <a href="#">{{WSDetails?.enviURL[0].prodURL}} <mat-icon>open_in_new</mat-icon></a>
+                    <a href="#">{{WSDetails.environmentUrls[0].prodURL}} <mat-icon>open_in_new</mat-icon></a>
                 </div>
                 <div class="link-field">
                     <label>DR URL</label>
-                    <a href="#">{{WSDetails?.enviURL[0].drURL}} <mat-icon>open_in_new</mat-icon></a>
+                    <a href="#">{{WSDetails.environmentUrls[0].drURL}} <mat-icon>open_in_new</mat-icon></a>
                 </div>
                 <div class="link-field">
                     <label>UAT URL</label>
-                    <a href="#">{{WSDetails?.enviURL[0].uatURL}} <mat-icon>open_in_new</mat-icon></a>
+                    <a href="#">{{WSDetails.environmentUrls[0].uatURL}} <mat-icon>open_in_new</mat-icon></a>
                 </div>
                 <div class="link-field">
                     <label>SIT URL</label>
-                    <a href="#">{{WSDetails?.enviURL[0].sitURL}} <mat-icon>open_in_new</mat-icon></a>
+                    <a href="#">{{WSDetails.environmentUrls[0].sitURL}} <mat-icon>open_in_new</mat-icon></a>
                 </div>
             </section>
 
@@ -102,7 +102,7 @@
                 </div>
                 <div class="data-field"><label>URL Path Parameters</label></div>
                 <div class="table-container">
-                    <table mat-table [dataSource]="WSDetails?.urlPathParameters" class="mat-elevation-z0 border-table">
+                    <table mat-table [dataSource]="WSDetails.urlPathParameters" class="mat-elevation-z0 border-table">
 
                         <ng-container matColumnDef="paramName">
                             <th mat-header-cell *matHeaderCellDef>Parameter Name</th>
@@ -140,7 +140,7 @@
 
                 <div class="data-field"><label>Request Headers</label></div>
                 <div class="table-container">
-                    <table mat-table [dataSource]="WSDetails?.requestHeaders" class="mat-elevation-z0 border-table">
+                    <table mat-table [dataSource]="WSDetails.requestHeaders" class="mat-elevation-z0 border-table">
 
                         <ng-container matColumnDef="paramName">
                             <th mat-header-cell *matHeaderCellDef>Header Name</th>
@@ -179,10 +179,10 @@
 
                 <div class="grid-2">
                     <div class="data-field"><label>Request Data Format</label>
-                        <p>{{WSDetails?.requestDataFormat}}</p>
+                        <p>{{WSDetails.requestDataFormat}}</p>
                     </div>
                     <div class="data-field"><label>Web Service Name</label>
-                        <p>{{WSDetails?.dataSensitiveType}}</p>
+                        <p>{{WSDetails.dataSensitiveType}}</p>
                     </div>
 
                 </div>
@@ -200,7 +200,7 @@
 
                 <div class="data-field"><label>Request Body Fields</label></div>
                 <div class="table-container">
-                    <table mat-table [dataSource]="WSDetails?.requestBodyFields" class="mat-elevation-z0 border-table">
+                    <table mat-table [dataSource]="WSDetails.requestBodyFields" class="mat-elevation-z0 border-table">
 
                         <ng-container matColumnDef="name">
                             <th mat-header-cell *matHeaderCellDef>Field Name</th>
@@ -263,13 +263,13 @@
 
                 <div class="grid-2">
                     <div class="data-field"><label>Data in Transit Encryption</label>
-                        <p>{{WSDetails?.dataInTransitEncryption}}</p>
+                        <p>{{WSDetails.dataInTransitEncryption}}</p>
                     </div>
                     <div class="data-field"><label>Average Request Size</label>
-                        <p>{{WSDetails?.aveReqSize}}</p>
+                        <p>{{WSDetails.aveReqSize}}</p>
                     </div>
                     <div class="data-field"><label>Max Request Size</label>
-                        <p>{{WSDetails?.maxReqSize}}</p>
+                        <p>{{WSDetails.maxReqSize}}</p>
                     </div>
                 </div>
             </section>
@@ -278,16 +278,16 @@
                 <h3>Request Policies</h3>
                 <div class="grid-2">
                     <div class="data-field"><label>Request Data Logged?</label>
-                        <p>{{WSDetails?.reqDataLog}}</p>
+                        <p>{{WSDetails.reqDataLog}}</p>
                     </div>
                     <div class="data-field"><label>Request Data Cached?</label>
-                        <p>{{WSDetails?.reqDataCached}}</p>
+                        <p>{{WSDetails.reqDataCached}}</p>
                     </div>
                     <div class="data-field"><label>Request Duplicate Allowed?</label>
-                        <p>{{WSDetails?.reqDuplicateAllowed}}</p>
+                        <p>{{WSDetails.reqDuplicateAllowed}}</p>
                     </div>
                     <div class="data-field"><label>Request Throttling Supported?</label>
-                        <p>{{WSDetails?.reqThrottlingSupported}}</p>
+                        <p>{{WSDetails.reqThrottlingSupported}}</p>
                     </div>
                 </div>
             </section>
@@ -298,7 +298,7 @@
                 </div>
                 <div class="data-field"><label>Response Headers</label></div>
                 <div class="table-container">
-                    <table mat-table [dataSource]="WSDetails?.responseHeaders" class="mat-elevation-z0 border-table">
+                    <table mat-table [dataSource]="WSDetails.responseHeaders" class="mat-elevation-z0 border-table">
 
                         <ng-container matColumnDef="paramName">
                             <th mat-header-cell *matHeaderCellDef>Header Name</th>
@@ -336,10 +336,10 @@
 
                 <div class="grid-2">
                     <div class="data-field"><label>Response Data Format</label>
-                        <p>{{WSDetails?.responseDataFormat}}</p>
+                        <p>{{WSDetails.responseDataFormat}}</p>
                     </div>
                     <div class="data-field"><label>Response Data Sensitivity Type</label>
-                        <p>{{WSDetails?.responseDataSensitivityType}}</p>
+                        <p>{{WSDetails.responseDataSensitivityType}}</p>
                     </div>
                 </div>
 
@@ -356,7 +356,7 @@
 
                 <div class="data-field"><label>Response Headers</label></div>
                 <div class="table-container">
-                    <table mat-table [dataSource]="WSDetails?.requestBodyFields" class="mat-elevation-z0 border-table">
+                    <table mat-table [dataSource]="WSDetails.requestBodyFields" class="mat-elevation-z0 border-table">
 
                         <ng-container matColumnDef="name">
                             <th mat-header-cell *matHeaderCellDef>Field Name</th>
@@ -432,8 +432,7 @@
 
                 <div class="data-field"><label>Response Headers</label></div>
                 <div class="table-container">
-                    <table mat-table [dataSource]="WSDetails?.responseStatusCodes"
-                        class="mat-elevation-z0 border-table">
+                    <table mat-table [dataSource]="WSDetails.responseStatusCodes" class="mat-elevation-z0 border-table">
 
                         <ng-container matColumnDef="HTTPCode">
                             <th mat-header-cell *matHeaderCellDef>Application Version</th>
@@ -474,13 +473,13 @@
 
                 <div class="grid-2">
                     <div class="data-field"><label>Response Data in Transit Encryption</label>
-                        <p>{{WSDetails?.responseDataInTransitEncryption}}</p>
+                        <p>{{WSDetails.responseDataInTransitEncryption}}</p>
                     </div>
                     <div class="data-field"><label>Average Response Size</label>
-                        <p>{{WSDetails?.averageResponseSize}}</p>
+                        <p>{{WSDetails.averageResponseSize}}</p>
                     </div>
                     <div class="data-field"><label>Max Response Size</label>
-                        <p>{{WSDetails?.maxResponseSize}}</p>
+                        <p>{{WSDetails.maxResponseSize}}</p>
                     </div>
                 </div>
 
@@ -490,10 +489,10 @@
                 <h3>Response Policies</h3>
                 <div class="grid-2">
                     <div class="data-field"><label>Response Data Logged?</label>
-                        <p>{{WSDetails?.requestDataLogged}}</p>
+                        <p>{{WSDetails.requestDataLogged}}</p>
                     </div>
                     <div class="data-field"><label>Response Data Cached?</label>
-                        <p>{{WSDetails?.responseDataCached}}</p>
+                        <p>{{WSDetails.responseDataCached}}</p>
                     </div>
                 </div>
             </section>
@@ -502,10 +501,10 @@
                 <h3>API Policies</h3>
                 <div class="grid-2">
                     <div class="data-field"><label>Rate Limit Info</label>
-                        <p>{{WSDetails?.rateLimitInfo}}</p>
+                        <p>{{WSDetails.rateLimitInfo}}</p>
                     </div>
                     <div class="data-field"><label>Exposure</label>
-                        <p>{{WSDetails?.exposure}}</p>
+                        <p>{{WSDetails.exposure}}</p>
                     </div>
                 </div>
             </section>
@@ -516,7 +515,7 @@
                 </div>
                 <div class="data-field"><label>Consumers</label></div>
                 <div class="table-container">
-                    <table mat-table [dataSource]="WSDetails?.consumers" class="mat-elevation-z0 border-table">
+                    <table mat-table [dataSource]="WSDetails.consumers" class="mat-elevation-z0 border-table">
 
                         <ng-container matColumnDef="appName">
                             <th mat-header-cell *matHeaderCellDef>Application Name</th>
@@ -574,7 +573,7 @@
 
                 <div class="data-field"><label>Upstream/Source Applications</label></div>
                 <div class="table-container">
-                    <table mat-table [dataSource]="WSDetails?.upstreamApp" class="mat-elevation-z0 border-table">
+                    <table mat-table [dataSource]="WSDetails.upstreamApp" class="mat-elevation-z0 border-table">
 
                         <ng-container matColumnDef="appName">
                             <th mat-header-cell *matHeaderCellDef>Application Name</th>
@@ -607,11 +606,11 @@
                 <h3>Links & Resources</h3>
                 <div class="link-field">
                     <label>Swagger URL</label>
-                    <a href={{WSDetails?.swaggerURL}}>{{WSDetails?.swaggerURL}} <mat-icon>open_in_new</mat-icon></a>
+                    <a href={{WSDetails.swaggerURL}}>{{WSDetails.swaggerURL}} <mat-icon>open_in_new</mat-icon></a>
                 </div>
                 <div class="link-field">
                     <label>Documents URL</label>
-                    <a href={{WSDetails?.documentsURL}}>{{WSDetails?.documentsURL}} <mat-icon>open_in_new</mat-icon></a>
+                    <a href={{WSDetails.documentsURL}}>{{WSDetails.documentsURL}} <mat-icon>open_in_new</mat-icon></a>
                 </div>
             </section>
 
@@ -699,4 +698,11 @@
             </section> -->
         </div>
     </mat-card>
+    } @else {
+    <div class="loading-container">
+        <p>Loading API Details...</p>
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </div>
+    }
+
 </div>

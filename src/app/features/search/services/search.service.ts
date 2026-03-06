@@ -11,7 +11,7 @@ export class SearchService {
   private config = inject(APP_CONFIG);
 
   getSearchList(keyword: string, category: string, page?: number){
-    const url = `${this.config.baseUrl}/catalog/search?keyword=${keyword}&categories=${category}&page=${page}`;
+    const url = `${this.config.baseUrl}/catalog/search?keyword=${keyword}&categories=${category}&page=${page}&size=10`;
     return this.http.get<SearchResponse>(url);
   }
 }

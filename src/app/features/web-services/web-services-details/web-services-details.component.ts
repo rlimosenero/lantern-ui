@@ -51,18 +51,17 @@ export class WebServicesDetailsComponent implements OnInit {
 
   fetchWebServiceDetails() {
     const WSId = this.getIdFromUrl();
+    console.log('WSID:' + WSId)
     this.webServiceApiService.getWebServicesDetails(WSId).subscribe({
       next: (res: any) => {
-        console.log(res)
-        this.WSDetails = res;
+        this.WSDetails = res.data;
+        // console.log(this.WSDetails)
+        // console.log(this.WSDetails.serviceConfig[0].name)
         this.requestBodySampleString = JSON.stringify(this.WSDetails.requestBodySampleString, null, 2);
         this.responseBodySampleString = JSON.stringify(this.WSDetails.responseBodySample, null, 2);
       },
       error: (err: any) => console.error(err)
     });
-    // this.WSDetails = this.webServiceApiService.getWebServicesDetails(WSId);
-    // this.requestBodySampleString = JSON.stringify(this.WSDetails?.requestBodySampleString, null, 2);
-    // this.responseBodySampleString = JSON.stringify(this.WSDetails?.responseBodySample, null, 2);
   }
 
   getIdFromUrl() {
