@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Application, SearchResponse } from '../../../core/models/interface';
-import { applicationData, appListTable } from '../../../core/models/static';
+import { applicationData, filterData } from '../../../core/models/static';
 import { HttpClient } from '@angular/common/http';
 import { APP_CONFIG } from '../../../core/models/app.config.model';
 
@@ -11,17 +11,21 @@ export class ApplicationApiService {
   private http = inject(HttpClient);
   private config = inject(APP_CONFIG);
 
-  // getAppList() {
-  //   return appListTable;
-  // }
-
-  getAppList(pageNumber: number){
+  getAppList(pageNumber: number) {
     const url = `${this.config.baseUrl}/applications?page=${pageNumber}`;
     return this.http.get<SearchResponse>(url);
   }
 
-  getAppDetails(uuid: string): Application | undefined {
-    return applicationData.find(app => app.uuid === uuid);
+  // getAppDetails(uuid: string): Application | undefined {
+  //   return applicationData.find(app => app.uuid === uuid);
+  // }
+
+  getAppDetails(uuid: string) {
+    const url = `${this.config.baseUrl}/applications/${uuid}`;
+    return this.http.get(url);
   }
 
+  getFilterOptions(){
+    return filterData;
+  }
 }

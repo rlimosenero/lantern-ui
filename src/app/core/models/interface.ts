@@ -68,7 +68,7 @@ export interface User {
 // start of backend interface
 export interface SearchResponse {
   [x: string]: any;
-  data: PaginatedData;
+  data: any;
   flag: string;
   message: string;
   tranRefNo: string;
@@ -87,7 +87,14 @@ export interface ApplicationSummary {
   appUuid: string;
   appName: string;
   appDesc: string;
-  lifecycleStatus: string; // Added common statuses
+  lifecycleStatus: string; 
   stableProdVersion: string | null;
   betaUatVersion: string | null;
+}
+
+export interface FilterOption {
+  label: string;
+  key: string;
+  options: string[];
+  isOpen?: boolean;
 }

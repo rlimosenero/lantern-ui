@@ -9,7 +9,10 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { TableListComponent } from '../../../shared/components/table-list/table-list.component';
-import { TableItem } from '../../../core/models/interface';
+import { ApplicationSummary, FilterOption, TableItem } from '../../../core/models/interface';
+import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
+import { ButtonComponent } from '../../../shared/components/button/button.component';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-web-services-dashboard',
@@ -20,14 +23,41 @@ import { TableItem } from '../../../core/models/interface';
     MatIconModule,
     MatChipsModule,
     MatCardModule,
-    TableListComponent
+    TableListComponent,
+    PaginationComponent,
+    ButtonComponent
   ],
   templateUrl: './web-services-dashboard.component.html',
   styleUrl: './web-services-dashboard.component.scss',
+
+    animations: [
+    trigger('expandCollapse', [
+      state('collapsed', style({ height: '0px', opacity: 0, overflow: 'hidden', margin: '0' })),
+      state('expanded', style({ height: '*', opacity: 1, margin: '8px 0 0 0' })),
+      transition('collapsed <=> expanded', [
+        animate('300ms ease-in-out')
+      ]),
+    ]),
+    trigger('tagAnimation', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(-10px)' }),
+        animate('200ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+      ]),
+      transition(':leave', [
+        animate('150ms ease-in', style({ opacity: 0, transform: 'scale(0.95)' }))
+      ])
+    ])
+  ],
 })
 export class WebServicesDashboardComponent {
-  webServicesList: TableItem[] | [] = [];
+  webServicesList: ApplicationSummary[] | [] = [];
   displayedColumns: string[] = ['name', 'desc', 'version', 'status', 'options'];
+
+  isFilterExpanded = false;
+  activeFilters: { [key: string]: string[] } = {};
+  filterData: FilterOption[] = [];
+
+  dataRes: any | [] = [];
 
   constructor(
     private webServicesApiService: WebServicesApiServiceService,
@@ -37,20 +67,96 @@ export class WebServicesDashboardComponent {
 
   ngOnInit(): void {
     this.getWebServicesList();
+    this.fetchFilterOptions();
   }
 
   getWebServicesList() {
-    this.webServicesList = this.webServicesApiService.getWebServicesList()[0].data.results;
-    console.log(this.webServicesList)
+    // this.webServicesList = this.webServicesApiService.getWebServicesList()[0].data.results;
+    // console.log(this.webServicesList)
+    this.webServicesApiService.getWebServicesList(0).subscribe({
+      next: (data: any) => {
+        this.dataRes = data.data;
+        this.webServicesList = data.data.results;
+      },
+      error: (err: any) => {
+        console.log('Error: ' + err);
+      }
+    })
+  }
+
+  onHandlePage(newPage: number) {
+    this.webServicesList = [];
+
+    this.webServicesApiService.getWebServicesList(newPage).subscribe({
+      next: (data: any) => {
+        this.dataRes = data.data;
+        this.webServicesList = data.data.results;
+      },
+      error: (err: any) => {
+        console.log('Error: ' + err);
+      }
+    })
   }
 
 
 
-  private monitoringService = inject(MonitoringService);
-  // displayedColumns: string[] = ['name', 'status', 'lastDeployment', 'actions'];
-  dataSource = this.monitoringService.services;
+  // private monitoringService = inject(MonitoringService);
+  // // displayedColumns: string[] = ['name', 'status', 'lastDeployment', 'actions'];
+  // dataSource = this.monitoringService.services;
 
-  toggleService(name: string) {
-    this.monitoringService.toggleStatus(name);
+  // toggleService(name: string) {
+  //   this.monitoringService.toggleStatus(name);
+  // }
+
+  toggleFilters() {
+    this.isFilterExpanded = !this.isFilterExpanded;
   }
+
+  toggleFilter(key: string, option: string) {
+    if (!this.activeFilters[key]) {
+      this.activeFilters[key] = [];
+    }
+
+
+    const index = this.activeFilters[key].indexOf(option);
+    if (index > -1) {
+      this.activeFilters[key].splice(index, 1);
+    } else {
+      this.activeFilters[key].push(option);
+    }
+
+    if (this.activeFilters[key].length === 0) {
+      delete this.activeFilters[key];
+    }
+  }
+
+  isSelected(key: string, option: string): boolean {
+    return this.activeFilters[key]?.includes(option) ?? false;
+  }
+
+  get allSelectedTags() {
+    const tags: { key: string, value: string }[] = [];
+    Object.keys(this.activeFilters).forEach(key => {
+      this.activeFilters[key].forEach(value => {
+        tags.push({ key, value });
+      });
+    });
+    return tags;
+  }
+
+  clearAll() {
+    this.activeFilters = {};
+  }
+
+  fetchFilterOptions() {
+    this.webServicesApiService.getFilterOptions().subscribe({
+      next: (res:any) => {
+        console.log(res);
+        this.filterData = res.data;
+        
+      },
+      error: (err) => console.error(err)
+    });
+  }
+
 }

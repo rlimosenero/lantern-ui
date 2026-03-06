@@ -33,10 +33,7 @@ export class TableListComponent implements OnChanges, OnInit {
   ) { }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log('changes: ' + changes);
-    console.log(changes);
     this.mapList(changes['dataSource'].currentValue)
-
   }
 
   ngOnInit(): void {
@@ -46,16 +43,23 @@ export class TableListComponent implements OnChanges, OnInit {
   mapList(data: any[]) {
     for (let index = 0; index < data.length; index++) {
 
-      const element = data[index];
-
-      // this.tableList.push(this.mapToList(element))
       this.tableList = data.map(element => this.mapToList(element));
-
     }
   }
 
   mapToList(data: any): TableItem {
-    console.log(data)
+    if (this.type == 'WEBSERVICE') {
+      return {
+        id: data.id,
+        appUuid: data.appApiUuid,
+        name: data.apiName,
+        description: data.apiDesc,
+        status: data.lifecycleStatus,
+        stableVersion: data.stableProdVersion,
+        betaVersion: data.betaUatVersion
+      }
+    }
+
     return {
       id: data.id,
       appUuid: data.appUuid,
@@ -65,6 +69,7 @@ export class TableListComponent implements OnChanges, OnInit {
       stableVersion: data.stableProdVersion,
       betaVersion: data.betaUatVersion
     }
+
   }
 
   openDetails(rowData: any) {

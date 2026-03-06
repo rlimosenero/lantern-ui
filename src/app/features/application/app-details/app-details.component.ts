@@ -25,8 +25,7 @@ import { VersionModalComponent } from '../../../shared/components/version-modal/
     MatIconModule, 
     MatProgressBarModule, 
     MatDividerModule, 
-    MatTableModule,
-    ButtonComponent
+    MatTableModule
   ],
   templateUrl: './app-details.component.html',
   styleUrls: ['./app-details.component.scss']
@@ -37,6 +36,8 @@ export class AppDetailsComponent implements OnInit {
   appLinkAndResources: LinkAndResources | undefined = undefined;
   appTechStack: TechStack | undefined = undefined;
 
+  applicationDetails: any = [];
+
   constructor(
     private applicationApiService: ApplicationApiService,
     private router: Router,
@@ -45,17 +46,31 @@ export class AppDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchAppDetails();
-
+    // this.fetchAppDetailsBE();
   }
 
-  fetchAppDetails() {
+  // fetchAppDetails() {
+  //   const appUuid = this.getIdFromUrl();
+
+  //   // get app details by id
+  //   this.appDetails = this.applicationApiService.getAppDetails(appUuid);
+  //   this.appBasicInfo = this.appDetails?.basicInfo[0];
+  //   this.appTechStack = this.appDetails?.techStack[0];
+  //   this.appLinkAndResources = this.appDetails?.linkAndResources[0];
+  // }
+
+  fetchAppDetails(){
     const appUuid = this.getIdFromUrl();
 
-    // get app details by id
-    this.appDetails = this.applicationApiService.getAppDetails(appUuid);
-    this.appBasicInfo = this.appDetails?.basicInfo[0];
-    this.appTechStack = this.appDetails?.techStack[0];
-    this.appLinkAndResources = this.appDetails?.linkAndResources[0];
+    this.applicationApiService.getAppDetails(appUuid).subscribe({
+      next: (data:any) => {
+        console.log(data.data);
+        this.applicationDetails = data.data;
+      },
+      error: (err:any) => {
+        console.log('Error: ' + err);
+      }
+    })
   }
 
   // get id from url

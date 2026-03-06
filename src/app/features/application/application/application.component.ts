@@ -11,7 +11,7 @@ import { ApplicationApiService } from '../services/application-api-service.servi
 import { TableListComponent } from '../../../shared/components/table-list/table-list.component';
 import { AuthService } from '../../../core/auth/auth.service';
 import { ButtonComponent } from '../../../shared/components/button/button.component';
-import { ApplicationSummary, PaginatedData, SearchResponse } from '../../../core/models/interface';
+import { ApplicationSummary, FilterOption, PaginatedData, SearchResponse } from '../../../core/models/interface';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
 
 @Component({
@@ -33,7 +33,7 @@ import { PaginationComponent } from '../../../shared/components/pagination/pagin
   animations: [
     trigger('expandCollapse', [
       state('collapsed', style({ height: '0px', opacity: 0, overflow: 'hidden', margin: '0' })),
-      state('expanded', style({ height: '*', opacity: 1, margin: '16px 0 0 0' })),
+      state('expanded', style({ height: '*', opacity: 1, margin: '8px 0 0 0' })),
       transition('collapsed <=> expanded', [
         animate('300ms ease-in-out')
       ]),
@@ -52,7 +52,8 @@ import { PaginationComponent } from '../../../shared/components/pagination/pagin
 export class ApplicationComponent implements OnInit {
   public auth = inject(AuthService);
   isFilterExpanded = false;
-  isStatusDropdownOpen = false;
+  activeFilters: { [key: string]: string[] } = {};
+  filterData: FilterOption[] = [];
 
   // table columns
   displayedColumns: string[] = ['name', 'desc', 'version', 'status', 'options'];
@@ -71,6 +72,7 @@ export class ApplicationComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchAppDetails();
+    this.fetchFilterOptions();
   }
 
   fetchAppDetails() {
@@ -85,36 +87,60 @@ export class ApplicationComponent implements OnInit {
     })
   }
 
-onHandlePage(newPage: number) {
-  this.appList = []; 
-  
-  this.applicationApiService.getAppList(newPage).subscribe({
-    next: (res) => {
-      this.dataRes = res.data;
-      this.appList = res.data.results;
-    },
-    error: (err) => console.error(err)
-  });
-}
+  onHandlePage(newPage: number) {
+    this.appList = [];
 
-  // fetchAppDetails() {
-  //   this.appList = this.applicationApiService.getAppList()[0].data.results;
-  // }
+    this.applicationApiService.getAppList(newPage).subscribe({
+      next: (res) => {
+        this.dataRes = res.data;
+        this.appList = res.data.results;
+      },
+      error: (err) => console.error(err)
+    });
+  }
 
   toggleFilters() {
     this.isFilterExpanded = !this.isFilterExpanded;
   }
 
-  toggleStatus(status: string) {
-    const index = this.selectedStatuses.indexOf(status);
+  toggleFilter(key: string, option: string) {
+    if (!this.activeFilters[key]) {
+      this.activeFilters[key] = [];
+    }
+
+
+    const index = this.activeFilters[key].indexOf(option);
     if (index > -1) {
-      this.selectedStatuses.splice(index, 1); // Remove if exists
+      this.activeFilters[key].splice(index, 1);
     } else {
-      this.selectedStatuses.push(status); // Add if new
+      this.activeFilters[key].push(option);
+    }
+
+    if (this.activeFilters[key].length === 0) {
+      delete this.activeFilters[key];
     }
   }
 
-  removeStatus(status: string) {
-    this.selectedStatuses = this.selectedStatuses.filter(s => s !== status);
+  isSelected(key: string, option: string): boolean {
+    return this.activeFilters[key]?.includes(option) ?? false;
+  }
+
+  get allSelectedTags() {
+    const tags: { key: string, value: string }[] = [];
+    Object.keys(this.activeFilters).forEach(key => {
+      this.activeFilters[key].forEach(value => {
+        tags.push({ key, value });
+      });
+    });
+    return tags;
+  }
+
+  clearAll() {
+    this.activeFilters = {};
+  }
+
+  fetchFilterOptions() {
+    this.filterData = this.applicationApiService.getFilterOptions();
+    console.log(this.filterData);
   }
 }

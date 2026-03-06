@@ -23,7 +23,7 @@ import { ButtonComponent } from '../../../shared/components/button/button.compon
     MatProgressBarModule,
     MatDividerModule,
     MatTableModule,
-    ButtonComponent
+    // ButtonComponent
   ],
   templateUrl: './web-services-details.component.html',
   styleUrl: './web-services-details.component.scss',
@@ -51,9 +51,18 @@ export class WebServicesDetailsComponent implements OnInit {
 
   fetchWebServiceDetails() {
     const WSId = this.getIdFromUrl();
-    this.WSDetails = this.webServiceApiService.getWebServicesDetails(WSId);
-    this.requestBodySampleString = JSON.stringify(this.WSDetails?.requestBodySampleString, null, 2);
-    this.responseBodySampleString = JSON.stringify(this.WSDetails?.responseBodySample, null, 2);
+    this.webServiceApiService.getWebServicesDetails(WSId).subscribe({
+      next: (res: any) => {
+        console.log(res)
+        this.WSDetails = res;
+        this.requestBodySampleString = JSON.stringify(this.WSDetails.requestBodySampleString, null, 2);
+        this.responseBodySampleString = JSON.stringify(this.WSDetails.responseBodySample, null, 2);
+      },
+      error: (err: any) => console.error(err)
+    });
+    // this.WSDetails = this.webServiceApiService.getWebServicesDetails(WSId);
+    // this.requestBodySampleString = JSON.stringify(this.WSDetails?.requestBodySampleString, null, 2);
+    // this.responseBodySampleString = JSON.stringify(this.WSDetails?.responseBodySample, null, 2);
   }
 
   getIdFromUrl() {

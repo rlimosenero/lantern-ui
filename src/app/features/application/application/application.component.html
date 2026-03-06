@@ -6,46 +6,43 @@
         <input type="text" placeholder="Search applications...">
       </div>
 
-      <button mat-icon-button (click)="toggleFilters()" [class.active-filter]="isFilterExpanded">
+      <button mat-icon-button (click)="toggleFilters()" [class.active-filter]="isFilterExpanded"
+        class="filter-toggle-btn">
         <mat-icon>filter_list</mat-icon>
       </button>
 
       <app-button [name]="'Search'" />
     </div>
 
-    @if (selectedStatuses.length > 0) {
+    @if (allSelectedTags.length > 0) {
     <div class="selected-tags" @tagAnimation>
-      <span class="tags-title">Tags:</span>
-      @for (status of selectedStatuses; track status) {
-      <span class="tag" [ngClass]="{
-          'active': status === 'Active',
-          'for-deprecation': status === 'For Deprecation',
-          'deprecated': status === 'Deprecated',
-          'for-retirement': status === 'For Retirement'
-        }">
-        {{ status }}
-        <mat-icon (click)="removeStatus(status)">close</mat-icon>
+      <span class="tags-title">Active Filters:</span>
+      @for (tag of allSelectedTags; track tag.value) {
+      <span class="tag" [ngClass]="tag.value.toLowerCase().replace('_', '-')">
+        {{ tag.value }}
+        <mat-icon (click)="toggleFilter(tag.key, tag.value)">close</mat-icon>
       </span>
       }
-      <button class="clear-all" (click)="selectedStatuses = []">Clear all</button>
+      <button class="clear-all" (click)="clearAll()">Clear all</button>
     </div>
     }
 
     <div class="filter-section" [@expandCollapse]="isFilterExpanded ? 'expanded' : 'collapsed'">
-      <div class="filter-content">
+      <div class="filter-content-grid">
+        @for (filter of filterData; track filter.label) {
         <div class="custom-dropdown">
-          <div class="dropdown-trigger" (click)="isStatusDropdownOpen = !isStatusDropdownOpen">
-            <span>Filter by Status</span>
-            <mat-icon [class.rotated]="isStatusDropdownOpen">expand_more</mat-icon>
+          <div class="dropdown-trigger" (click)="filter.isOpen = !filter.isOpen">
+            <span>{{ filter.label }}</span>
+            <mat-icon [class.rotated]="filter.isOpen">expand_more</mat-icon>
           </div>
 
-          @if (isStatusDropdownOpen) {
+          @if (filter.isOpen) {
           <div class="options-grid">
-            @for (option of statusOptions; track option) {
-            <div class="option-item" [class.selected]="selectedStatuses.includes(option)"
-              (click)="toggleStatus(option)">
+            @for (option of filter.options; track option) {
+            <div class="option-item" [class.selected]="isSelected(filter.key, option)"
+              (click)="toggleFilter(filter.key, option)">
               <div class="checkbox">
-                @if (selectedStatuses.includes(option)) { <mat-icon>done</mat-icon> }
+                @if (isSelected(filter.key, option)) { <mat-icon>done</mat-icon> }
               </div>
               {{ option }}
             </div>
@@ -53,6 +50,7 @@
           </div>
           }
         </div>
+        }
       </div>
     </div>
   </div>
@@ -62,7 +60,6 @@
     <div class="header-container">
       <div class="title-group">
         <h2 class="table-header">Applications</h2>
-        <!-- <p class="app-count">Showing {{ appList.length }} items</p> -->
       </div>
 
       <span class="spacer"></span>

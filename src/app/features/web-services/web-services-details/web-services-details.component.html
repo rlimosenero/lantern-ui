@@ -101,76 +101,81 @@
                     <h3>Request Configuration</h3>
                 </div>
                 <div class="data-field"><label>URL Path Parameters</label></div>
-                <table mat-table [dataSource]="WSDetails?.urlPathParameters" class="mat-elevation-z0 border-table">
+                <div class="table-container">
+                    <table mat-table [dataSource]="WSDetails?.urlPathParameters" class="mat-elevation-z0 border-table">
 
-                    <ng-container matColumnDef="paramName">
-                        <th mat-header-cell *matHeaderCellDef>Parameter Name</th>
-                        <td mat-cell *matCellDef="let v">{{v.parameterName}}</td>
-                    </ng-container>
+                        <ng-container matColumnDef="paramName">
+                            <th mat-header-cell *matHeaderCellDef>Parameter Name</th>
+                            <td mat-cell *matCellDef="let v">{{v.parameterName}}</td>
+                        </ng-container>
 
-                    <ng-container matColumnDef="typeAndFormat">
-                        <th mat-header-cell *matHeaderCellDef>Data Type and Format</th>
-                        <td mat-cell *matCellDef="let v">{{v.typeAndFormat}}</td>
-                    </ng-container>
+                        <ng-container matColumnDef="typeAndFormat">
+                            <th mat-header-cell *matHeaderCellDef>Data Type and Format</th>
+                            <td mat-cell *matCellDef="let v">{{v.typeAndFormat}}</td>
+                        </ng-container>
 
-                    <ng-container matColumnDef="isRequired">
-                        <th mat-header-cell *matHeaderCellDef>Required?</th>
-                        <td mat-cell *matCellDef="let v">
-                            <span class="custom-chip">{{v.isRequired}}</span>
-                        </td>
-                    </ng-container>
+                        <ng-container matColumnDef="isRequired">
+                            <th mat-header-cell *matHeaderCellDef>Required?</th>
+                            <td mat-cell *matCellDef="let v">
+                                <span class="custom-chip">{{v.isRequired}}</span>
+                            </td>
+                        </ng-container>
 
-                    <ng-container matColumnDef="value">
-                        <th mat-header-cell *matHeaderCellDef>Sample Value</th>
-                        <td mat-cell *matCellDef="let v">
-                            {{v.sampleValue}}
-                        </td>
-                    </ng-container>
+                        <ng-container matColumnDef="value">
+                            <th mat-header-cell *matHeaderCellDef>Sample Value</th>
+                            <td mat-cell *matCellDef="let v">
+                                {{v.sampleValue}}
+                            </td>
+                        </ng-container>
 
-                    <ng-container matColumnDef="desc">
-                        <th mat-header-cell *matHeaderCellDef>Description</th>
-                        <td mat-cell *matCellDef="let v" class="text-muted">{{v.description}}</td>
-                    </ng-container>
+                        <ng-container matColumnDef="desc">
+                            <th mat-header-cell *matHeaderCellDef>Description</th>
+                            <td mat-cell *matCellDef="let v" class="text-muted">{{v.description}}</td>
+                        </ng-container>
 
-                    <tr mat-header-row *matHeaderRowDef="genericColumn"></tr>
-                    <tr mat-row *matRowDef="let row; columns: genericColumn;"></tr>
-                </table>
+                        <tr mat-header-row *matHeaderRowDef="genericColumn"></tr>
+                        <tr mat-row *matRowDef="let row; columns: genericColumn;"></tr>
+                    </table>
+                </div>
 
                 <div class="data-field"><label>Request Headers</label></div>
-                <table mat-table [dataSource]="WSDetails?.requestHeaders" class="mat-elevation-z0 border-table">
+                <div class="table-container">
+                    <table mat-table [dataSource]="WSDetails?.requestHeaders" class="mat-elevation-z0 border-table">
 
-                    <ng-container matColumnDef="paramName">
-                        <th mat-header-cell *matHeaderCellDef>Header Name</th>
-                        <td mat-cell *matCellDef="let v">{{v.parameterName}}</td>
-                    </ng-container>
+                        <ng-container matColumnDef="paramName">
+                            <th mat-header-cell *matHeaderCellDef>Header Name</th>
+                            <td mat-cell *matCellDef="let v">{{v.parameterName}}</td>
+                        </ng-container>
 
-                    <ng-container matColumnDef="typeAndFormat">
-                        <th mat-header-cell *matHeaderCellDef>Data Type and Format</th>
-                        <td mat-cell *matCellDef="let v">{{v.typeAndFormat}}</td>
-                    </ng-container>
+                        <ng-container matColumnDef="typeAndFormat">
+                            <th mat-header-cell *matHeaderCellDef>Data Type and Format</th>
+                            <td mat-cell *matCellDef="let v">{{v.typeAndFormat}}</td>
+                        </ng-container>
 
-                    <ng-container matColumnDef="isRequired">
-                        <th mat-header-cell *matHeaderCellDef>Required?</th>
-                        <td mat-cell *matCellDef="let v">
-                            <span class="custom-chip">{{v.isRequired}}</span>
-                        </td>
-                    </ng-container>
+                        <ng-container matColumnDef="isRequired">
+                            <th mat-header-cell *matHeaderCellDef>Required?</th>
+                            <td mat-cell *matCellDef="let v">
+                                <span class="custom-chip">{{v.isRequired}}</span>
+                            </td>
+                        </ng-container>
 
-                    <ng-container matColumnDef="value">
-                        <th mat-header-cell *matHeaderCellDef>Sample Value</th>
-                        <td mat-cell *matCellDef="let v">
-                            {{v.sampleValue}}
-                        </td>
-                    </ng-container>
+                        <ng-container matColumnDef="value">
+                            <th mat-header-cell *matHeaderCellDef>Sample Value</th>
+                            <td mat-cell *matCellDef="let v">
+                                {{v.sampleValue}}
+                            </td>
+                        </ng-container>
 
-                    <ng-container matColumnDef="desc">
-                        <th mat-header-cell *matHeaderCellDef>Description</th>
-                        <td mat-cell *matCellDef="let v" class="text-muted">{{v.description}}</td>
-                    </ng-container>
+                        <ng-container matColumnDef="desc">
+                            <th mat-header-cell *matHeaderCellDef>Description</th>
+                            <td mat-cell *matCellDef="let v" class="text-muted">{{v.description}}</td>
+                        </ng-container>
 
-                    <tr mat-header-row *matHeaderRowDef="genericColumn"></tr>
-                    <tr mat-row *matRowDef="let row; columns: genericColumn;"></tr>
-                </table>
+                        <tr mat-header-row *matHeaderRowDef="genericColumn"></tr>
+                        <tr mat-row *matRowDef="let row; columns: genericColumn;"></tr>
+                    </table>
+                </div>
+
 
                 <div class="grid-2">
                     <div class="data-field"><label>Request Data Format</label>
@@ -194,62 +199,65 @@
                 <div class="divider"></div>
 
                 <div class="data-field"><label>Request Body Fields</label></div>
-                <table mat-table [dataSource]="WSDetails?.requestBodyFields" class="mat-elevation-z0 border-table">
+                <div class="table-container">
+                    <table mat-table [dataSource]="WSDetails?.requestBodyFields" class="mat-elevation-z0 border-table">
 
-                    <ng-container matColumnDef="name">
-                        <th mat-header-cell *matHeaderCellDef>Field Name</th>
-                        <td mat-cell *matCellDef="let v">{{v.fieldName}}</td>
-                    </ng-container>
+                        <ng-container matColumnDef="name">
+                            <th mat-header-cell *matHeaderCellDef>Field Name</th>
+                            <td mat-cell *matCellDef="let v">{{v.fieldName}}</td>
+                        </ng-container>
 
-                    <ng-container matColumnDef="typeAndFormat">
-                        <th mat-header-cell *matHeaderCellDef>Data Type and Format</th>
-                        <td mat-cell *matCellDef="let v">{{v.typeAndFormat}}</td>
-                    </ng-container>
+                        <ng-container matColumnDef="typeAndFormat">
+                            <th mat-header-cell *matHeaderCellDef>Data Type and Format</th>
+                            <td mat-cell *matCellDef="let v">{{v.typeAndFormat}}</td>
+                        </ng-container>
 
-                    <ng-container matColumnDef="desc">
-                        <th mat-header-cell *matHeaderCellDef>Description</th>
-                        <td mat-cell *matCellDef="let v" class="text-muted">{{v.description}}</td>
-                    </ng-container>
+                        <ng-container matColumnDef="desc">
+                            <th mat-header-cell *matHeaderCellDef>Description</th>
+                            <td mat-cell *matCellDef="let v" class="text-muted">{{v.description}}</td>
+                        </ng-container>
 
-                    <ng-container matColumnDef="isRequired">
-                        <th mat-header-cell *matHeaderCellDef>Required?</th>
-                        <td mat-cell *matCellDef="let v">
-                            <span class="custom-chip">{{v.isRequired}}</span>
-                        </td>
-                    </ng-container>
+                        <ng-container matColumnDef="isRequired">
+                            <th mat-header-cell *matHeaderCellDef>Required?</th>
+                            <td mat-cell *matCellDef="let v">
+                                <span class="custom-chip">{{v.isRequired}}</span>
+                            </td>
+                        </ng-container>
 
-                    <ng-container matColumnDef="sampleValue">
-                        <th mat-header-cell *matHeaderCellDef>Sample Value</th>
-                        <td mat-cell *matCellDef="let v">
-                            {{v.sampleValue}}
-                        </td>
-                    </ng-container>
+                        <ng-container matColumnDef="sampleValue">
+                            <th mat-header-cell *matHeaderCellDef>Sample Value</th>
+                            <td mat-cell *matCellDef="let v">
+                                {{v.sampleValue}}
+                            </td>
+                        </ng-container>
 
-                    <ng-container matColumnDef="rules">
-                        <th mat-header-cell *matHeaderCellDef>Validation Rules</th>
-                        <td mat-cell *matCellDef="let v">
-                            {{v.validationRules}}
-                        </td>
-                    </ng-container>
+                        <ng-container matColumnDef="rules">
+                            <th mat-header-cell *matHeaderCellDef>Validation Rules</th>
+                            <td mat-cell *matCellDef="let v">
+                                {{v.validationRules}}
+                            </td>
+                        </ng-container>
 
-                    <ng-container matColumnDef="logic">
-                        <th mat-header-cell *matHeaderCellDef>Transformation Logic</th>
-                        <td mat-cell *matCellDef="let v">
-                            {{v.transformationLogic}}
-                        </td>
-                    </ng-container>
+                        <ng-container matColumnDef="logic">
+                            <th mat-header-cell *matHeaderCellDef>Transformation Logic</th>
+                            <td mat-cell *matCellDef="let v">
+                                {{v.transformationLogic}}
+                            </td>
+                        </ng-container>
 
-                    <ng-container matColumnDef="defaultValue">
-                        <th mat-header-cell *matHeaderCellDef>Default Value</th>
-                        <td mat-cell *matCellDef="let v">
-                            {{v.defaultValue}}
-                        </td>
-                    </ng-container>
+                        <ng-container matColumnDef="defaultValue">
+                            <th mat-header-cell *matHeaderCellDef>Default Value</th>
+                            <td mat-cell *matCellDef="let v">
+                                {{v.defaultValue}}
+                            </td>
+                        </ng-container>
 
 
-                    <tr mat-header-row *matHeaderRowDef="reqBodyFields"></tr>
-                    <tr mat-row *matRowDef="let row; columns: reqBodyFields;"></tr>
-                </table>
+                        <tr mat-header-row *matHeaderRowDef="reqBodyFields"></tr>
+                        <tr mat-row *matRowDef="let row; columns: reqBodyFields;"></tr>
+                    </table>
+                </div>
+
 
                 <div class="divider"></div>
 
@@ -289,40 +297,42 @@
                     <h3>Response Configuration</h3>
                 </div>
                 <div class="data-field"><label>Response Headers</label></div>
-                <table mat-table [dataSource]="WSDetails?.responseHeaders" class="mat-elevation-z0 border-table">
+                <div class="table-container">
+                    <table mat-table [dataSource]="WSDetails?.responseHeaders" class="mat-elevation-z0 border-table">
 
-                    <ng-container matColumnDef="paramName">
-                        <th mat-header-cell *matHeaderCellDef>Header Name</th>
-                        <td mat-cell *matCellDef="let v">{{v.headerName}}</td>
-                    </ng-container>
+                        <ng-container matColumnDef="paramName">
+                            <th mat-header-cell *matHeaderCellDef>Header Name</th>
+                            <td mat-cell *matCellDef="let v">{{v.headerName}}</td>
+                        </ng-container>
 
-                    <ng-container matColumnDef="typeAndFormat">
-                        <th mat-header-cell *matHeaderCellDef>Data Type and Format</th>
-                        <td mat-cell *matCellDef="let v">{{v.typeAndFormat}}</td>
-                    </ng-container>
+                        <ng-container matColumnDef="typeAndFormat">
+                            <th mat-header-cell *matHeaderCellDef>Data Type and Format</th>
+                            <td mat-cell *matCellDef="let v">{{v.typeAndFormat}}</td>
+                        </ng-container>
 
-                    <ng-container matColumnDef="isRequired">
-                        <th mat-header-cell *matHeaderCellDef>Required?</th>
-                        <td mat-cell *matCellDef="let v">
-                            <span class="custom-chip">{{v.isRequired}}</span>
-                        </td>
-                    </ng-container>
+                        <ng-container matColumnDef="isRequired">
+                            <th mat-header-cell *matHeaderCellDef>Required?</th>
+                            <td mat-cell *matCellDef="let v">
+                                <span class="custom-chip">{{v.isRequired}}</span>
+                            </td>
+                        </ng-container>
 
-                    <ng-container matColumnDef="value">
-                        <th mat-header-cell *matHeaderCellDef>Sample Value</th>
-                        <td mat-cell *matCellDef="let v">
-                            {{v.sampleValue}}
-                        </td>
-                    </ng-container>
+                        <ng-container matColumnDef="value">
+                            <th mat-header-cell *matHeaderCellDef>Sample Value</th>
+                            <td mat-cell *matCellDef="let v">
+                                {{v.sampleValue}}
+                            </td>
+                        </ng-container>
 
-                    <ng-container matColumnDef="desc">
-                        <th mat-header-cell *matHeaderCellDef>Description</th>
-                        <td mat-cell *matCellDef="let v" class="text-muted">{{v.description}}</td>
-                    </ng-container>
+                        <ng-container matColumnDef="desc">
+                            <th mat-header-cell *matHeaderCellDef>Description</th>
+                            <td mat-cell *matCellDef="let v" class="text-muted">{{v.description}}</td>
+                        </ng-container>
 
-                    <tr mat-header-row *matHeaderRowDef="genericColumn"></tr>
-                    <tr mat-row *matRowDef="let row; columns: genericColumn;"></tr>
-                </table>
+                        <tr mat-header-row *matHeaderRowDef="genericColumn"></tr>
+                        <tr mat-row *matRowDef="let row; columns: genericColumn;"></tr>
+                    </table>
+                </div>
 
                 <div class="grid-2">
                     <div class="data-field"><label>Response Data Format</label>
@@ -345,116 +355,120 @@
                 <div class="divider"> </div>
 
                 <div class="data-field"><label>Response Headers</label></div>
+                <div class="table-container">
+                    <table mat-table [dataSource]="WSDetails?.requestBodyFields" class="mat-elevation-z0 border-table">
 
-                <table mat-table [dataSource]="WSDetails?.requestBodyFields" class="mat-elevation-z0 border-table">
+                        <ng-container matColumnDef="name">
+                            <th mat-header-cell *matHeaderCellDef>Field Name</th>
+                            <td mat-cell *matCellDef="let v">{{v.fieldName}}</td>
+                        </ng-container>
 
-                    <ng-container matColumnDef="name">
-                        <th mat-header-cell *matHeaderCellDef>Field Name</th>
-                        <td mat-cell *matCellDef="let v">{{v.fieldName}}</td>
-                    </ng-container>
+                        <ng-container matColumnDef="typeAndFormat">
+                            <th mat-header-cell *matHeaderCellDef>Data Type and Format</th>
+                            <td mat-cell *matCellDef="let v">{{v.typeAndFormat}}</td>
+                        </ng-container>
 
-                    <ng-container matColumnDef="typeAndFormat">
-                        <th mat-header-cell *matHeaderCellDef>Data Type and Format</th>
-                        <td mat-cell *matCellDef="let v">{{v.typeAndFormat}}</td>
-                    </ng-container>
+                        <ng-container matColumnDef="desc">
+                            <th mat-header-cell *matHeaderCellDef>Description</th>
+                            <td mat-cell *matCellDef="let v" class="text-muted">{{v.description}}</td>
+                        </ng-container>
 
-                    <ng-container matColumnDef="desc">
-                        <th mat-header-cell *matHeaderCellDef>Description</th>
-                        <td mat-cell *matCellDef="let v" class="text-muted">{{v.description}}</td>
-                    </ng-container>
+                        <ng-container matColumnDef="isRequired">
+                            <th mat-header-cell *matHeaderCellDef>Required?</th>
+                            <td mat-cell *matCellDef="let v">
+                                <span class="custom-chip">{{v.isRequired}}</span>
+                            </td>
+                        </ng-container>
 
-                    <ng-container matColumnDef="isRequired">
-                        <th mat-header-cell *matHeaderCellDef>Required?</th>
-                        <td mat-cell *matCellDef="let v">
-                            <span class="custom-chip">{{v.isRequired}}</span>
-                        </td>
-                    </ng-container>
+                        <ng-container matColumnDef="sampleValue">
+                            <th mat-header-cell *matHeaderCellDef>Sample Value</th>
+                            <td mat-cell *matCellDef="let v">
+                                {{v.sampleValue}}
+                            </td>
+                        </ng-container>
 
-                    <ng-container matColumnDef="sampleValue">
-                        <th mat-header-cell *matHeaderCellDef>Sample Value</th>
-                        <td mat-cell *matCellDef="let v">
-                            {{v.sampleValue}}
-                        </td>
-                    </ng-container>
+                        <ng-container matColumnDef="rules">
+                            <th mat-header-cell *matHeaderCellDef>Validation Rules</th>
+                            <td mat-cell *matCellDef="let v">
+                                {{v.validationRules}}
+                            </td>
+                        </ng-container>
 
-                    <ng-container matColumnDef="rules">
-                        <th mat-header-cell *matHeaderCellDef>Validation Rules</th>
-                        <td mat-cell *matCellDef="let v">
-                            {{v.validationRules}}
-                        </td>
-                    </ng-container>
+                        <ng-container matColumnDef="logic">
+                            <th mat-header-cell *matHeaderCellDef>Transformation Logic</th>
+                            <td mat-cell *matCellDef="let v">
+                                {{v.transformationLogic}}
+                            </td>
+                        </ng-container>
 
-                    <ng-container matColumnDef="logic">
-                        <th mat-header-cell *matHeaderCellDef>Transformation Logic</th>
-                        <td mat-cell *matCellDef="let v">
-                            {{v.transformationLogic}}
-                        </td>
-                    </ng-container>
+                        <ng-container matColumnDef="defaultValue">
+                            <th mat-header-cell *matHeaderCellDef>Default Value</th>
+                            <td mat-cell *matCellDef="let v">
+                                {{v.defaultValue}}
+                            </td>
+                        </ng-container>
 
-                    <ng-container matColumnDef="defaultValue">
-                        <th mat-header-cell *matHeaderCellDef>Default Value</th>
-                        <td mat-cell *matCellDef="let v">
-                            {{v.defaultValue}}
-                        </td>
-                    </ng-container>
+                        <ng-container matColumnDef="sourceOrDomainApplication">
+                            <th mat-header-cell *matHeaderCellDef>Transformation Logic</th>
+                            <td mat-cell *matCellDef="let v">
+                                {{v.sourceOrDomainApplication}}
+                            </td>
+                        </ng-container>
 
-                    <ng-container matColumnDef="sourceOrDomainApplication">
-                        <th mat-header-cell *matHeaderCellDef>Transformation Logic</th>
-                        <td mat-cell *matCellDef="let v">
-                            {{v.sourceOrDomainApplication}}
-                        </td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="sourceOrDomainFieldName">
-                        <th mat-header-cell *matHeaderCellDef>Default Value</th>
-                        <td mat-cell *matCellDef="let v">
-                            {{v.sourceOrDomainFieldName}}
-                        </td>
-                    </ng-container>
+                        <ng-container matColumnDef="sourceOrDomainFieldName">
+                            <th mat-header-cell *matHeaderCellDef>Default Value</th>
+                            <td mat-cell *matCellDef="let v">
+                                {{v.sourceOrDomainFieldName}}
+                            </td>
+                        </ng-container>
 
 
-                    <tr mat-header-row *matHeaderRowDef="resBodyFields"></tr>
-                    <tr mat-row *matRowDef="let row; columns: resBodyFields;"></tr>
-                </table>
+                        <tr mat-header-row *matHeaderRowDef="resBodyFields"></tr>
+                        <tr mat-row *matRowDef="let row; columns: resBodyFields;"></tr>
+                    </table>
+                </div>
 
                 <div class="divider"> </div>
 
                 <div class="data-field"><label>Response Headers</label></div>
+                <div class="table-container">
+                    <table mat-table [dataSource]="WSDetails?.responseStatusCodes"
+                        class="mat-elevation-z0 border-table">
 
-                <table mat-table [dataSource]="WSDetails?.responseStatusCodes" class="mat-elevation-z0 border-table">
+                        <ng-container matColumnDef="HTTPCode">
+                            <th mat-header-cell *matHeaderCellDef>Application Version</th>
+                            <td mat-cell *matCellDef="let v">{{v.HTTPCode}}</td>
+                        </ng-container>
 
-                    <ng-container matColumnDef="HTTPCode">
-                        <th mat-header-cell *matHeaderCellDef>Application Version</th>
-                        <td mat-cell *matCellDef="let v">{{v.HTTPCode}}</td>
-                    </ng-container>
+                        <ng-container matColumnDef="businessCode">
+                            <th mat-header-cell *matHeaderCellDef>Data Type and Format</th>
+                            <td mat-cell *matCellDef="let v">{{v.businessCode}}</td>
+                        </ng-container>
 
-                    <ng-container matColumnDef="businessCode">
-                        <th mat-header-cell *matHeaderCellDef>Data Type and Format</th>
-                        <td mat-cell *matCellDef="let v">{{v.businessCode}}</td>
-                    </ng-container>
+                        <ng-container matColumnDef="message">
+                            <th mat-header-cell *matHeaderCellDef>Required?</th>
+                            <td mat-cell *matCellDef="let v">
+                                <span class="custom-chip">{{v.message}}</span>
+                            </td>
+                        </ng-container>
 
-                    <ng-container matColumnDef="message">
-                        <th mat-header-cell *matHeaderCellDef>Required?</th>
-                        <td mat-cell *matCellDef="let v">
-                            <span class="custom-chip">{{v.message}}</span>
-                        </td>
-                    </ng-container>
+                        <ng-container matColumnDef="type">
+                            <th mat-header-cell *matHeaderCellDef>Sample Value</th>
+                            <td mat-cell *matCellDef="let v">
+                                {{v.type}}
+                            </td>
+                        </ng-container>
 
-                    <ng-container matColumnDef="type">
-                        <th mat-header-cell *matHeaderCellDef>Sample Value</th>
-                        <td mat-cell *matCellDef="let v">
-                            {{v.type}}
-                        </td>
-                    </ng-container>
+                        <ng-container matColumnDef="suggestedAction">
+                            <th mat-header-cell *matHeaderCellDef>Description</th>
+                            <td mat-cell *matCellDef="let v" class="text-muted">{{v.suggestedAction}}</td>
+                        </ng-container>
 
-                    <ng-container matColumnDef="suggestedAction">
-                        <th mat-header-cell *matHeaderCellDef>Description</th>
-                        <td mat-cell *matCellDef="let v" class="text-muted">{{v.suggestedAction}}</td>
-                    </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="statusCodesFields"></tr>
+                        <tr mat-row *matRowDef="let row; columns: statusCodesFields;"></tr>
+                    </table>
+                </div>
 
-                    <tr mat-header-row *matHeaderRowDef="statusCodesFields"></tr>
-                    <tr mat-row *matRowDef="let row; columns: statusCodesFields;"></tr>
-                </table>
 
                 <div class="divider"></div>
 
@@ -501,95 +515,107 @@
                     <h3>Consumers & Upstream/Source Applications</h3>
                 </div>
                 <div class="data-field"><label>Consumers</label></div>
-                <table mat-table [dataSource]="WSDetails?.consumers" class="mat-elevation-z0 border-table">
+                <div class="table-container">
+                    <table mat-table [dataSource]="WSDetails?.consumers" class="mat-elevation-z0 border-table">
 
-                    <ng-container matColumnDef="appName">
-                        <th mat-header-cell *matHeaderCellDef>Application Name</th>
-                        <td mat-cell *matCellDef="let v">{{v.appName}}</td>
-                    </ng-container>
+                        <ng-container matColumnDef="appName">
+                            <th mat-header-cell *matHeaderCellDef>Application Name</th>
+                            <td mat-cell *matCellDef="let v">{{v.appName}}</td>
+                        </ng-container>
 
-                    <ng-container matColumnDef="appOwner">
-                        <th mat-header-cell *matHeaderCellDef>Application Owner</th>
-                        <td mat-cell *matCellDef="let v">{{v.appOwner}}</td>
-                    </ng-container>
+                        <ng-container matColumnDef="appOwner">
+                            <th mat-header-cell *matHeaderCellDef>Application Owner</th>
+                            <td mat-cell *matCellDef="let v">{{v.appOwner}}</td>
+                        </ng-container>
 
-                    <ng-container matColumnDef="dateOnboarded">
-                        <th mat-header-cell *matHeaderCellDef>Date Onboardedt</th>
-                        <td mat-cell *matCellDef="let v">{{v.dateOnboarded}}</td>
-                    </ng-container>
+                        <ng-container matColumnDef="dateOnboarded">
+                            <th mat-header-cell *matHeaderCellDef>Date Onboardedt</th>
+                            <td mat-cell *matCellDef="let v">{{v.dateOnboarded}}</td>
+                        </ng-container>
 
-                    <ng-container matColumnDef="status">
-                        <th mat-header-cell *matHeaderCellDef>Status</th>
-                        <td mat-cell *matCellDef="let v">
-                            {{v.status}}
-                        </td>
-                    </ng-container>
+                        <ng-container matColumnDef="status">
+                            <th mat-header-cell *matHeaderCellDef>Status</th>
+                            <td mat-cell *matCellDef="let v">
+                                {{v.status}}
+                            </td>
+                        </ng-container>
 
-                    <ng-container matColumnDef="trigger">
-                        <th mat-header-cell *matHeaderCellDef>Trigger</th>
-                        <td mat-cell *matCellDef="let v" class="text-muted">{{v.trigger}}</td>
-                    </ng-container>
+                        <ng-container matColumnDef="trigger">
+                            <th mat-header-cell *matHeaderCellDef>Trigger</th>
+                            <td mat-cell *matCellDef="let v" class="text-muted">{{v.trigger}}</td>
+                        </ng-container>
 
-                    <ng-container matColumnDef="appType">
-                        <th mat-header-cell *matHeaderCellDef>Application Type</th>
-                        <td mat-cell *matCellDef="let v" class="text-muted">{{v.appType}}</td>
-                    </ng-container>
+                        <ng-container matColumnDef="appType">
+                            <th mat-header-cell *matHeaderCellDef>Application Type</th>
+                            <td mat-cell *matCellDef="let v" class="text-muted">{{v.appType}}</td>
+                        </ng-container>
 
-                    <ng-container matColumnDef="techOwner">
-                        <th mat-header-cell *matHeaderCellDef>Technical Owner</th>
-                        <td mat-cell *matCellDef="let v" class="text-muted">{{v.techOwner}}</td>
-                    </ng-container>
+                        <ng-container matColumnDef="techOwner">
+                            <th mat-header-cell *matHeaderCellDef>Technical Owner</th>
+                            <td mat-cell *matCellDef="let v" class="text-muted">{{v.techOwner}}</td>
+                        </ng-container>
 
-                    <ng-container matColumnDef="tokenExpiryDate">
-                        <th mat-header-cell *matHeaderCellDef>Token Expiry Date</th>
-                        <td mat-cell *matCellDef="let v" class="text-muted">{{v.tokenExpiryDate}}</td>
-                    </ng-container>
+                        <ng-container matColumnDef="tokenExpiryDate">
+                            <th mat-header-cell *matHeaderCellDef>Token Expiry Date</th>
+                            <td mat-cell *matCellDef="let v" class="text-muted">{{v.tokenExpiryDate}}</td>
+                        </ng-container>
 
-                    <ng-container matColumnDef="networkMode">
-                        <th mat-header-cell *matHeaderCellDef>Network Mode</th>
-                        <td mat-cell *matCellDef="let v" class="text-muted">{{v.networkMode}}</td>
-                    </ng-container>
+                        <ng-container matColumnDef="networkMode">
+                            <th mat-header-cell *matHeaderCellDef>Network Mode</th>
+                            <td mat-cell *matCellDef="let v" class="text-muted">{{v.networkMode}}</td>
+                        </ng-container>
 
-                    <tr mat-header-row *matHeaderRowDef="consumersFields"></tr>
-                    <tr mat-row *matRowDef="let row; columns: consumersFields;"></tr>
-                </table>
-
+                        <tr mat-header-row *matHeaderRowDef="consumersFields"></tr>
+                        <tr mat-row *matRowDef="let row; columns: consumersFields;"></tr>
+                    </table>
+                </div>
 
                 <div class="divider"> </div>
 
                 <div class="data-field"><label>Upstream/Source Applications</label></div>
-                <table mat-table [dataSource]="WSDetails?.upstreamApp" class="mat-elevation-z0 border-table">
+                <div class="table-container">
+                    <table mat-table [dataSource]="WSDetails?.upstreamApp" class="mat-elevation-z0 border-table">
 
-                    <ng-container matColumnDef="appName">
-                        <th mat-header-cell *matHeaderCellDef>Application Name</th>
-                        <td mat-cell *matCellDef="let v">{{v.appName}}</td>
-                    </ng-container>
+                        <ng-container matColumnDef="appName">
+                            <th mat-header-cell *matHeaderCellDef>Application Name</th>
+                            <td mat-cell *matCellDef="let v">{{v.appName}}</td>
+                        </ng-container>
 
-                    <ng-container matColumnDef="appOwner">
-                        <th mat-header-cell *matHeaderCellDef>Application Owner</th>
-                        <td mat-cell *matCellDef="let v">{{v.appOwner}}</td>
-                    </ng-container>
-
-
-                    <ng-container matColumnDef="tokenExpiryDate">
-                        <th mat-header-cell *matHeaderCellDef>Token Expiry Date</th>
-                        <td mat-cell *matCellDef="let v" class="text-muted">{{v.tokenExpiryDate}}</td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="techOwner">
-                        <th mat-header-cell *matHeaderCellDef>Technical Owner</th>
-                        <td mat-cell *matCellDef="let v" class="text-muted">{{v.techOwner}}</td>
-                    </ng-container>
-
-                    <tr mat-header-row *matHeaderRowDef="upstreamAppFields"></tr>
-                    <tr mat-row *matRowDef="let row; columns: upstreamAppFields;"></tr>
-                </table>
+                        <ng-container matColumnDef="appOwner">
+                            <th mat-header-cell *matHeaderCellDef>Application Owner</th>
+                            <td mat-cell *matCellDef="let v">{{v.appOwner}}</td>
+                        </ng-container>
 
 
+                        <ng-container matColumnDef="tokenExpiryDate">
+                            <th mat-header-cell *matHeaderCellDef>Token Expiry Date</th>
+                            <td mat-cell *matCellDef="let v" class="text-muted">{{v.tokenExpiryDate}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="techOwner">
+                            <th mat-header-cell *matHeaderCellDef>Technical Owner</th>
+                            <td mat-cell *matCellDef="let v" class="text-muted">{{v.techOwner}}</td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="upstreamAppFields"></tr>
+                        <tr mat-row *matRowDef="let row; columns: upstreamAppFields;"></tr>
+                    </table>
+                </div>
             </section>
 
+            <section>
+                <h3>Links & Resources</h3>
+                <div class="link-field">
+                    <label>Swagger URL</label>
+                    <a href={{WSDetails?.swaggerURL}}>{{WSDetails?.swaggerURL}} <mat-icon>open_in_new</mat-icon></a>
+                </div>
+                <div class="link-field">
+                    <label>Documents URL</label>
+                    <a href={{WSDetails?.documentsURL}}>{{WSDetails?.documentsURL}} <mat-icon>open_in_new</mat-icon></a>
+                </div>
+            </section>
 
-            <section class="analytics-section">
+            <!-- <section class="analytics-section">
                 <div class="section-header">
                     <h3 class="analytics-header">Analytics Metrics</h3>
                     <app-button [name]="'Refresh'" />
@@ -670,7 +696,7 @@
 
                 </div>
 
-            </section>
+            </section> -->
         </div>
     </mat-card>
 </div>

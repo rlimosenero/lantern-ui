@@ -931,3 +931,15 @@ export const resultListTable = [
         "tranRefNo": "d2ba3fd00d2843eaafa4e12fa4da9ae2"
     }
 ]
+
+export const filterData = [
+    {
+        label: "Type",
+        key: "type",
+        options: [
+            
+                "Application",
+                "Web Service"
+        ]
+    },
+]

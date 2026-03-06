@@ -5,13 +5,12 @@
     <div class="header-section">
       <div class="title-block">
         <div class="title-row">
-          <h1>{{appBasicInfo?.name}}</h1>
+          <h1>{{applicationDetails.appName}}</h1>
           <div class="chip-container">
-            <span class="custom-chip header-chip">Application</span>
-            <span class="custom-chip header-chip">UI</span>
+            <span class="custom-chip header-chip">{{applicationDetails.serviceType}}</span>
           </div>
         </div>
-        <p class="description">{{appBasicInfo?.description}}</p>
+        <p class="description">{{applicationDetails.appDesc}}</p>
         <div class="status-row">
           <span class="badge active">{{appBasicInfo?.status}}</span>
           <span class="version-text">Version {{appBasicInfo?.version}}</span>
@@ -109,7 +108,7 @@
         </div>
       </section>
 
-      <section class="analytics-section">
+      <!-- <section class="analytics-section">
         <div class="section-header">
           <h3>Analytics Metrics</h3>
           <app-button [name]="'Refresh'" (click)="openEditPage()" />
@@ -190,110 +189,117 @@
 
         </div>
 
-      </section>
+      </section> -->
 
       <section>
         <div class="section-header">
           <h3>Web Services</h3>
-          <app-button [name]="'Add Web Service'" (click)="openEditPage()" />
+          <!-- <app-button [name]="'Add Web Service'" (click)="openEditPage()" /> -->
         </div>
 
-        <table mat-table [dataSource]="webServices" class="mat-elevation-z0 border-table">
-          <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef>Name</th>
-            <td mat-cell *matCellDef="let s" class="app-name">{{s.name}}</td>
-          </ng-container>
-          <ng-container matColumnDef="description">
-            <th mat-header-cell *matHeaderCellDef>Description</th>
-            <td mat-cell *matCellDef="let s">{{s.desc}}</td>
-          </ng-container>
-          <ng-container matColumnDef="version">
-            <th mat-header-cell *matHeaderCellDef>Version</th>
-            <td mat-cell *matCellDef="let s">{{s.version}}</td>
-          </ng-container>
-          <ng-container matColumnDef="status">
-            <th mat-header-cell *matHeaderCellDef>Status</th>
-            <td mat-cell *matCellDef="let s">
-              <span class="custom-chip" [ngClass]="{
+        <div class="table-container">
+          <table mat-table [dataSource]="webServices" class="mat-elevation-z0 border-table">
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef>Name</th>
+              <td mat-cell *matCellDef="let s" class="app-name">{{s.name}}</td>
+            </ng-container>
+            <ng-container matColumnDef="description">
+              <th mat-header-cell *matHeaderCellDef>Description</th>
+              <td mat-cell *matCellDef="let s">{{s.desc}}</td>
+            </ng-container>
+            <ng-container matColumnDef="version">
+              <th mat-header-cell *matHeaderCellDef>Version</th>
+              <td mat-cell *matCellDef="let s">{{s.version}}</td>
+            </ng-container>
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef>Status</th>
+              <td mat-cell *matCellDef="let s">
+                <span class="custom-chip" [ngClass]="{
                 'active': s.status === 'Active',
                 'for-deprecation': s.status === 'FOR DEPRECATION',
                 'deprecated': s.status === 'DEPRECATED',
                 'for-retirement': s.status === 'FOR RETIREMENT'
               }">
-                {{s.status}}
-              </span>
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="options">
-            <th mat-header-cell *matHeaderCellDef>Options</th>
-            <td mat-cell *matCellDef="let s"><mat-icon>visibility</mat-icon></td>
-          </ng-container>
-          <tr mat-header-row *matHeaderRowDef="displayedServiceColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedServiceColumns;"></tr>
-        </table>
+                  {{s.status}}
+                </span>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="options">
+              <th mat-header-cell *matHeaderCellDef>Options</th>
+              <td mat-cell *matCellDef="let s"><mat-icon>visibility</mat-icon></td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedServiceColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedServiceColumns;"></tr>
+          </table>
+        </div>
+
+
       </section>
 
       <section class="audit-section">
         <div class="section-header">
           <h3>Version History / Change Log</h3>
-          <app-button [name]="'Add Version'" (click)="openEditPage()" />
+          <!-- <app-button [name]="'Add Version'" (click)="openEditPage()" /> -->
         </div>
 
-        <table mat-table [dataSource]="versionHistory" class="mat-elevation-z0 border-table">
+        <div class="table-container">
+          <table mat-table [dataSource]="versionHistory" class="mat-elevation-z0 border-table">
 
-          <ng-container matColumnDef="version">
-            <th mat-header-cell *matHeaderCellDef>Application Version</th>
-            <td mat-cell *matCellDef="let v">{{v.version}}</td>
-          </ng-container>
+            <ng-container matColumnDef="version">
+              <th mat-header-cell *matHeaderCellDef>Application Version</th>
+              <td mat-cell *matCellDef="let v">{{v.version}}</td>
+            </ng-container>
 
-          <ng-container matColumnDef="date">
-            <th mat-header-cell *matHeaderCellDef>Modified Date&Time</th>
-            <td mat-cell *matCellDef="let v">{{v.date}}</td>
-          </ng-container>
+            <ng-container matColumnDef="date">
+              <th mat-header-cell *matHeaderCellDef>Modified Date&Time</th>
+              <td mat-cell *matCellDef="let v">{{v.date}}</td>
+            </ng-container>
 
-          <ng-container matColumnDef="stage">
-            <th mat-header-cell *matHeaderCellDef>Release Stage</th>
-            <td mat-cell *matCellDef="let v">
-              <span class="custom-chip">{{v.stage}}</span>
-            </td>
-          </ng-container>
+            <ng-container matColumnDef="stage">
+              <th mat-header-cell *matHeaderCellDef>Release Stage</th>
+              <td mat-cell *matCellDef="let v">
+                <span class="custom-chip">{{v.stage}}</span>
+              </td>
+            </ng-container>
 
-          <ng-container matColumnDef="env">
-            <th mat-header-cell *matHeaderCellDef>Environment</th>
-            <td mat-cell *matCellDef="let v">
-              <span class="custom-chip" [ngClass]="{
+            <ng-container matColumnDef="env">
+              <th mat-header-cell *matHeaderCellDef>Environment</th>
+              <td mat-cell *matCellDef="let v">
+                <span class="custom-chip" [ngClass]="{
                 'prod': v.env === 'PROD',
                 'uat': v.env === 'UAT',
                 'sit': v.env === 'SIT'
               }">
-                {{v.env}}
-              </span>
-            </td>
-          </ng-container>
+                  {{v.env}}
+                </span>
+              </td>
+            </ng-container>
 
-          <ng-container matColumnDef="build">
-            <th mat-header-cell *matHeaderCellDef>Build Version</th>
-            <td mat-cell *matCellDef="let v" class="text-muted">{{v.build}}</td>
-          </ng-container>
+            <ng-container matColumnDef="build">
+              <th mat-header-cell *matHeaderCellDef>Build Version</th>
+              <td mat-cell *matCellDef="let v" class="text-muted">{{v.build}}</td>
+            </ng-container>
 
-          <ng-container matColumnDef="documents">
-            <th mat-header-cell *matHeaderCellDef>Documents</th>
-            <td mat-cell *matCellDef="let v">
-              <button mat-icon-button class="btn-custom-blue"><mat-icon>open_in_new</mat-icon></button>
-            </td>
-          </ng-container>
+            <ng-container matColumnDef="documents">
+              <th mat-header-cell *matHeaderCellDef>Documents</th>
+              <td mat-cell *matCellDef="let v">
+                <button mat-icon-button class="btn-custom-blue"><mat-icon>open_in_new</mat-icon></button>
+              </td>
+            </ng-container>
 
-          <ng-container matColumnDef="options">
-            <th mat-header-cell *matHeaderCellDef>Options</th>
-            <td mat-cell *matCellDef="let v">
-              <button (click)="openDialog()"><mat-icon class="action-icon">visibility</mat-icon></button>
-              <mat-icon class="action-icon">edit</mat-icon>
-            </td>
-          </ng-container>
+            <ng-container matColumnDef="options">
+              <th mat-header-cell *matHeaderCellDef>Options</th>
+              <td mat-cell *matCellDef="let v">
+                <button (click)="openDialog()"><mat-icon class="action-icon">visibility</mat-icon></button>
+                <!-- <mat-icon class="action-icon">edit</mat-icon> -->
+              </td>
+            </ng-container>
 
-          <tr mat-header-row *matHeaderRowDef="displayedVersionColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedVersionColumns;"></tr>
-        </table>
+            <tr mat-header-row *matHeaderRowDef="displayedVersionColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedVersionColumns;"></tr>
+          </table>
+        </div>
+
       </section>
 
     </div>

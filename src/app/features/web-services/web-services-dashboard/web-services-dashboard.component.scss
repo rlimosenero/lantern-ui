@@ -111,6 +111,14 @@
     gap: 16px;
     flex-wrap: wrap;
   }
+
+  .filter-content-grid {
+    display: flex;
+    /* flex-direction: row; */
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
+}
 }
 
 .selected-tags {
@@ -165,8 +173,7 @@
 }
 
 .custom-dropdown {
-  width: 100%;
-  max-width: 168px;
+
 
   .dropdown-trigger {
     display: flex;
@@ -202,7 +209,7 @@
     padding: 8px;
     position: absolute;
     z-index: 10;
-    width: 168px;
+    // width: 168px;
     display: flex;
     flex-direction: column;
     gap: 4px;
