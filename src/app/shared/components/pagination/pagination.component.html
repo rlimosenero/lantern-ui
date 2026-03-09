@@ -1,15 +1,19 @@
 <div class="pagination-container">
   <div class="pagination-info">
-    Showing {{ (currentPage * pageSize) + 1 }} to 
-    {{ Math.min((currentPage + 1) * pageSize, totalElements) }} 
-    of {{ totalElements }} entries
+    @if (totalElements() > 0) {
+      Showing {{ (currentPage() * pageSize()) + 1 }} to 
+      {{ Math.min((currentPage() + 1) * pageSize(), totalElements()) }} 
+      of {{ totalElements() }} entries
+    } @else {
+      No entries to show
+    }
   </div>
 
   <div class="pagination-controls">
     <button 
       class="pag-btn" 
-      [disabled]="currentPage === 0" 
-      (click)="onPageClick(currentPage - 1)">
+      [disabled]="currentPage() === 0" 
+      (click)="onPageClick(currentPage() - 1)">
       &laquo; Prev
     </button>
 
@@ -19,7 +23,7 @@
       } @else {
         <button 
           class="pag-btn" 
-          [class.active]="page === currentPage"
+          [class.active]="page === currentPage()"
           (click)="onPageClick(page)">
           {{ page + 1 }}
         </button>
@@ -28,8 +32,8 @@
 
     <button 
       class="pag-btn" 
-      [disabled]="currentPage >= totalPages() - 1" 
-      (click)="onPageClick(currentPage + 1)">
+      [disabled]="currentPage() >= totalPages() - 1" 
+      (click)="onPageClick(currentPage() + 1)">
       Next &raquo;
     </button>
   </div>

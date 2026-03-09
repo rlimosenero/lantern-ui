@@ -32,7 +32,7 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './web-services-dashboard.component.html',
   styleUrl: './web-services-dashboard.component.scss',
 
-    animations: [
+  animations: [
     trigger('expandCollapse', [
       state('collapsed', style({ height: '0px', opacity: 0, overflow: 'hidden', margin: '0' })),
       state('expanded', style({ height: '*', opacity: 1, margin: '8px 0 0 0' })),
@@ -69,34 +69,13 @@ export class WebServicesDashboardComponent {
 
 
   ngOnInit(): void {
-    this.getWebServicesList();
+    this.loadData(0)
     this.fetchFilterOptions();
-  }
-
-  getWebServicesList() {
-    this.webServicesApiService.getWebServicesList(0).subscribe({
-      next: (data: any) => {
-        this.dataRes = data.data;
-        this.webServicesList = data.data.results;
-      },
-      error: (err: any) => {
-        console.log('Error: ' + err);
-      }
-    })
   }
 
   onHandlePage(newPage: number) {
     this.webServicesList = [];
-
-    this.webServicesApiService.getWebServicesList(newPage).subscribe({
-      next: (data: any) => {
-        this.dataRes = data.data;
-        this.webServicesList = data.data.results;
-      },
-      error: (err: any) => {
-        console.log('Error: ' + err);
-      }
-    })
+    this.loadData(newPage)
   }
 
 
@@ -136,43 +115,43 @@ export class WebServicesDashboardComponent {
   }
 
   applyFilters() {
-  this.loadData(0);
-}
+    this.loadData(0);
+  }
 
-loadData(page: number = 0) {
-  const formattedFilters = this.allSelectedTags.map(tag => ({
-    key: tag.key,
-    value: tag.value
-  }));
-
-
-  const payload = {
-    search: this.searchQuery,
-    filters: formattedFilters
-  };
+  loadData(page: number = 0) {
+    const formattedFilters = this.allSelectedTags.map(tag => ({
+      key: tag.key,
+      value: tag.value
+    }));
 
 
-  this.webServicesApiService.getWebServicesList(page, payload).subscribe({
-    next: (data: any) => {
-      this.dataRes = data.data;
-      this.webServicesList = data.data.results;
-    },
-    error: (err: any) => console.error('Error fetching data:', err)
-  });
-}
+    const payload = {
+      search: this.searchQuery,
+      filters: formattedFilters
+    };
 
-clearAll() {
-  this.activeFilters = {};
-  this.searchQuery = '';
-  this.applyFilters();
-}
+
+    this.webServicesApiService.getWebServicesList(page, payload).subscribe({
+      next: (data: any) => {
+        this.dataRes = data.data;
+        this.webServicesList = data.data.results;
+      },
+      error: (err: any) => console.error('Error fetching data:', err)
+    });
+  }
+
+  clearAll() {
+    this.activeFilters = {};
+    this.searchQuery = '';
+    this.applyFilters();
+  }
 
   fetchFilterOptions() {
     this.webServicesApiService.getFilterOptions().subscribe({
-      next: (res:any) => {
+      next: (res: any) => {
         console.log(res);
         this.filterData = res.data;
-        
+
       },
       error: (err) => console.error(err)
     });
