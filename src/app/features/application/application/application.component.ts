@@ -13,6 +13,7 @@ import { AuthService } from '../../../core/auth/auth.service';
 import { ButtonComponent } from '../../../shared/components/button/button.component';
 import { ApplicationSummary, FilterOption, PaginatedData, SearchResponse } from '../../../core/models/interface';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-application',
@@ -25,7 +26,8 @@ import { PaginationComponent } from '../../../shared/components/pagination/pagin
     MatCardModule,
     TableListComponent,
     ButtonComponent,
-    PaginationComponent
+    PaginationComponent,
+    FormsModule
   ],
   templateUrl: './application.component.html',
   styleUrl: './application.component.scss',
@@ -51,6 +53,7 @@ import { PaginationComponent } from '../../../shared/components/pagination/pagin
 })
 export class ApplicationComponent implements OnInit {
   public auth = inject(AuthService);
+  searchQuery: string = '';
   isFilterExpanded = false;
   activeFilters: { [key: string]: string[] } = {};
   filterData: FilterOption[] = [];
@@ -71,20 +74,32 @@ export class ApplicationComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.fetchAppDetails();
+    this.loadData(0);
     this.fetchFilterOptions();
   }
 
-  fetchAppDetails() {
-    this.applicationApiService.getAppList(0).subscribe({
+  loadData(page: number = 0) {
+    const formattedFilters = this.allSelectedTags.map(tag => ({
+      key: tag.key,
+      value: tag.value
+    }));
+
+    const payload = {
+      search: this.searchQuery,
+      filters: formattedFilters
+    };
+
+    this.applicationApiService.getAppList(page, payload).subscribe({
       next: (data) => {
         this.dataRes = data.data;
         this.appList = data.data.results;
       },
-      error: (err) => {
-        console.log('Error: ' + err);
-      }
-    })
+      error: (err) => console.error('Error: ' + err)
+    });
+  }
+
+  applyFilters() {
+    this.loadData(0);
   }
 
   onHandlePage(newPage: number) {
@@ -119,6 +134,8 @@ export class ApplicationComponent implements OnInit {
     if (this.activeFilters[key].length === 0) {
       delete this.activeFilters[key];
     }
+
+    this.applyFilters();
   }
 
   isSelected(key: string, option: string): boolean {
@@ -137,6 +154,8 @@ export class ApplicationComponent implements OnInit {
 
   clearAll() {
     this.activeFilters = {};
+    this.searchQuery = '';
+    this.applyFilters();
   }
 
   fetchFilterOptions() {

@@ -75,43 +75,6 @@
         </div>
       </section>
 
-      <section>
-        <h3>Links & Resources</h3>
-
-        <div class="link-field">
-          <label>Git Repository</label>
-          @if (applicationDetails?.repoUrl) {
-          <a [href]="applicationDetails.repoUrl" target="_blank">
-            {{ applicationDetails.repoUrl }} <mat-icon>open_in_new</mat-icon>
-          </a>
-          } @else {
-          <span class="no-link">No repository link provided</span>
-          }
-        </div>
-
-        <div class="link-field">
-          <label>Swagger/API Documentation</label>
-          @if (applicationDetails?.swaggerUrl) {
-          <a [href]="applicationDetails.swaggerUrl" target="_blank">
-            {{ applicationDetails.swaggerUrl }} <mat-icon>open_in_new</mat-icon>
-          </a>
-          } @else {
-          <span class="no-link">Documentation not available</span>
-          }
-        </div>
-
-        <div class="link-field">
-          <label>SharePoint Documents</label>
-          @if (applicationDetails?.docsUrl) {
-          <a [href]="applicationDetails.docsUrl" target="_blank">
-            {{ applicationDetails.docsUrl }} <mat-icon>open_in_new</mat-icon>
-          </a>
-          } @else {
-          <span class="no-link">No documents attached</span>
-          }
-        </div>
-      </section>
-
       <section class="tech-stack-section">
         <h3>Technology Stack</h3>
 
@@ -157,6 +120,43 @@
             <span class="no-data">No security protocols listed</span>
             }
           </div>
+        </div>
+      </section>
+
+      <section>
+        <h3>Links & Resources</h3>
+
+        <div class="link-field">
+          <label>Git Repository</label>
+          @if (applicationDetails?.repoUrl) {
+          <a [href]="applicationDetails.repoUrl" target="_blank">
+            {{ applicationDetails.repoUrl }} <mat-icon>open_in_new</mat-icon>
+          </a>
+          } @else {
+          <span class="no-link">No repository link provided</span>
+          }
+        </div>
+
+        <div class="link-field">
+          <label>Swagger/API Documentation</label>
+          @if (applicationDetails?.swaggerUrl) {
+          <a [href]="applicationDetails.swaggerUrl" target="_blank">
+            {{ applicationDetails.swaggerUrl }} <mat-icon>open_in_new</mat-icon>
+          </a>
+          } @else {
+          <span class="no-link">Documentation not available</span>
+          }
+        </div>
+
+        <div class="link-field">
+          <label>SharePoint Documents</label>
+          @if (applicationDetails?.docsUrl) {
+          <a [href]="applicationDetails.docsUrl" target="_blank">
+            {{ applicationDetails.docsUrl }} <mat-icon>open_in_new</mat-icon>
+          </a>
+          } @else {
+          <span class="no-link">No documents attached</span>
+          }
         </div>
       </section>
 

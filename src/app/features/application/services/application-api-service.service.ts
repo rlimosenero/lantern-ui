@@ -11,14 +11,16 @@ export class ApplicationApiService {
   private http = inject(HttpClient);
   private config = inject(APP_CONFIG);
 
-  getAppList(pageNumber: number) {
-    const url = `${this.config.baseUrl}/applications?page=${pageNumber}`;
-    return this.http.get<SearchResponse>(url);
-  }
-
-  // getAppDetails(uuid: string): Application | undefined {
-  //   return applicationData.find(app => app.uuid === uuid);
+  // getAppList(pageNumber: number) {
+  //   const url = `${this.config.baseUrl}/applications?page=${pageNumber}`;
+  //   return this.http.get<SearchResponse>(url);
   // }
+
+    getAppList(pageNumber: number, requestFilters: any = { search: '', filters: [] }) {
+    const url = `${this.config.baseUrl}/applications?page=${pageNumber}`;
+
+    return this.http.post<SearchResponse>(url, requestFilters);
+  }
 
   getAppDetails(uuid: string) {
     const url = `${this.config.baseUrl}/applications/${uuid}`;
