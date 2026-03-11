@@ -18,7 +18,7 @@
     <div class="selected-tags" @tagAnimation>
       <span class="tags-title">Active Filters:</span>
       @for (tag of allSelectedTags; track tag.value) {
-      <span class="tag" [ngClass]="tag.value.toLowerCase().replace('_', '-')">
+      <span class="tag" [ngClass]="String(tag.value).toLowerCase().replace('_', '-')">
         {{ tag.value }}
         <mat-icon (click)="toggleFilter(tag.key, tag.value)">close</mat-icon>
       </span>
@@ -31,20 +31,20 @@
       <div class="filter-content-grid">
         @for (filter of filterData; track filter.label) {
         <div class="custom-dropdown">
-          <div class="dropdown-trigger" (click)="filter.isOpen = !filter.isOpen">
+          <div class="dropdown-trigger" (click)="toggleDropdown(filter)">
             <span>{{ filter.label }}</span>
             <mat-icon [class.rotated]="filter.isOpen">expand_more</mat-icon>
           </div>
 
           @if (filter.isOpen) {
           <div class="options-grid">
-            @for (option of filter.options; track option) {
+            @for (option of filter.options[0]; track option) {
             <div class="option-item" [class.selected]="isSelected(filter.key, option)"
               (click)="toggleFilter(filter.key, option)">
               <div class="checkbox">
                 @if (isSelected(filter.key, option)) { <mat-icon>done</mat-icon> }
               </div>
-              {{ option }}
+              {{ option | replaceUnderscore | titlecase }}
             </div>
             }
           </div>

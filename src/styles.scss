@@ -40,3 +40,16 @@ html {
 .prod { background-color: #dcfce7; color: #016630; }
 .sit { background-color: #f3e8ff; color: #6e11b0; }
 .uat { background-color: #dbeafe; color: #193cb8; }
+.dr { background-color: #fef9c2; color: #894b00; }
+.dr { background-color: #fef3c7;   color: #92400e; }
+.dev { background-color: #f1f5f9; color: #475569; }
+
+
+.pre-alpha { background-color: #f8fafc; color: #64748b; border: 1px dashed #cbd5e1; } /* Ghostly/Dashed */
+.alpha     { background-color: #fff1f2; color: #be123c; } /* Rose */
+.beta      { background-color: #fff7ed; color: #c2410c; } /* Orange */
+.rc        { background-color: #ecfeff; color: #0e7490; } /* Cyan */
+.stable    { background-color: #f0fdf4; color: #15803d; font-weight: 600; } /* Emerald */
+.patch     { background-color: #f0f9ff; color: #0369a1; } /* Sky Blue */
+.minor     { background-color: #faf5ff; color: #7e22ce; } /* Purple */
+.major     { background-color: #eef2ff; color: #4338ca; border: 1px solid #c7d2fe; } /* Indigo */

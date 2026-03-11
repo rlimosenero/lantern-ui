@@ -31,7 +31,7 @@
       <div class="filter-content-grid">
         @for (filter of filterData; track filter.label) {
         <div class="custom-dropdown">
-          <div class="dropdown-trigger" (click)="filter.isOpen = !filter.isOpen">
+          <div class="dropdown-trigger" (click)="toggleDropdown(filter)">
             <span>{{ filter.label }}</span>
             <mat-icon [class.rotated]="filter.isOpen">expand_more</mat-icon>
           </div>

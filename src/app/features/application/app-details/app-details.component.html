@@ -21,7 +21,12 @@
         </p>
 
         <div class="status-row">
-          <span class="badge" [class.active]="applicationDetails?.lifecycleStatus === 'ACTIVE'">
+          <span class="badge" [ngClass]="{
+            'active': applicationDetails?.lifecycleStatus == 'ACTIVE',
+            'for-deprecation': applicationDetails?.lifecycleStatus == 'FOR_DEPRECATION',
+            'deprecated': applicationDetails?.lifecycleStatus == 'DEPRECATED',
+            'for-retirement': applicationDetails?.lifecycleStatus == 'FOR_RETIREMENT'
+          }">
             {{ applicationDetails?.lifecycleStatus ?? 'UNKNOWN' }}
           </span>
 
@@ -81,7 +86,9 @@
         <div class="stack-group">
           <label>Platform</label>
           <div>
-            @for (item of appTechStack?.platform; track item) {
+            @let techStackPlatform = (applicationDetails?.techStackPlatform | split);
+
+            @for (item of techStackPlatform; track item) {
             <span class="custom-chip">{{ item }}</span>
             } @empty {
             <span class="no-data">No platform information available</span>
@@ -92,7 +99,9 @@
         <div class="stack-group">
           <label>Application Technologies</label>
           <div>
-            @for (item of appTechStack?.appTech; track item) {
+            @let techStackApp = (applicationDetails?.techStackApp | split);
+
+            @for (item of techStackApp; track item) {
             <span class="custom-chip">{{ item }}</span>
             } @empty {
             <span class="no-data">No technology data available</span>
@@ -103,7 +112,9 @@
         <div class="stack-group">
           <label>Storage & Data</label>
           <div>
-            @for (item of appTechStack?.storageAndData; track item) {
+            @let techStackStorage = (applicationDetails?.techStackStorage | split);
+
+            @for (item of techStackStorage; track item) {
             <span class="custom-chip">{{ item }}</span>
             } @empty {
             <span class="no-data">No storage information available</span>
@@ -114,7 +125,9 @@
         <div class="stack-group">
           <label>Security</label>
           <div>
-            @for (item of appTechStack?.security; track item) {
+            @let techStackSecurity = (applicationDetails?.techStackSecurity | split);
+
+            @for (item of techStackSecurity; track item) {
             <span class="custom-chip">{{ item }}</span>
             } @empty {
             <span class="no-data">No security protocols listed</span>
@@ -261,7 +274,7 @@
             </ng-container>
             <ng-container matColumnDef="version">
               <th mat-header-cell *matHeaderCellDef>Version</th>
-              <td mat-cell *matCellDef="let s">{{s.stableProdVersion}}</td>
+              <td mat-cell *matCellDef="let s">{{s.stableProdVersion || '-'}}</td>
             </ng-container>
             <ng-container matColumnDef="status">
               <th mat-header-cell *matHeaderCellDef>Status</th>
@@ -278,7 +291,12 @@
             </ng-container>
             <ng-container matColumnDef="options">
               <th mat-header-cell *matHeaderCellDef>Options</th>
-              <td mat-cell *matCellDef="let s"><mat-icon>visibility</mat-icon></td>
+              <td mat-cell *matCellDef="let s">
+                <button (click)="openDetails(s.appApiUuid)">
+                  <mat-icon>visibility</mat-icon>
+
+                </button>
+              </td>
             </ng-container>
             <tr mat-header-row *matHeaderRowDef="displayedServiceColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedServiceColumns;"></tr>
@@ -286,39 +304,51 @@
 
         </div>
         <app-pagination [totalElements]="wsData.totalElements" [pageSize]="wsData.pageSize"
-          [currentPage]="wsData.currentPage" (pageChange)="onHandlePage($event)">
+          [currentPage]="wsData.currentPage" (pageChange)="onHandleWSPage($event)">
         </app-pagination>
         } @else {
-        <div class="empty-state">
-          <mat-icon>cloud_off</mat-icon>
-          <h4>No Web Services Found</h4>
-          <p>This application doesn't have any registered APIs yet.</p>
+        <div class="table-container">
+          <div class="empty-container">
+            <mat-icon>cloud_off</mat-icon>
+            <p>This application doesn't have any registered APIs yet.</p>
+          </div>
         </div>
         }
       </section>
 
-      <!-- <section class="audit-section">
+      <section class="audit-section">
         <div class="section-header">
           <h3>Version History / Change Log</h3>
         </div>
+        @if (versionData?.results?.length) {
 
         <div class="table-container">
-          <table mat-table [dataSource]="versionHistory" class="mat-elevation-z0 border-table">
-
+          <table mat-table [dataSource]="versionData.results" class="mat-elevation-z0 border-table">
             <ng-container matColumnDef="version">
               <th mat-header-cell *matHeaderCellDef>Application Version</th>
-              <td mat-cell *matCellDef="let v">{{v.version}}</td>
+              <td mat-cell *matCellDef="let v">{{v.appVersion || '-'}}</td>
             </ng-container>
 
             <ng-container matColumnDef="date">
               <th mat-header-cell *matHeaderCellDef>Modified Date&Time</th>
-              <td mat-cell *matCellDef="let v">{{v.date}}</td>
+              <td mat-cell *matCellDef="let v">{{v.createdAt | date:'MMM dd, yyyy, HH:mm:ss'}}</td>
             </ng-container>
 
             <ng-container matColumnDef="stage">
               <th mat-header-cell *matHeaderCellDef>Release Stage</th>
               <td mat-cell *matCellDef="let v">
-                <span class="custom-chip">{{v.stage}}</span>
+                <span class="custom-chip" [ngClass]="{
+                    'pre-alpha': v.releaseStage === 'PRE_ALPHA',
+                    'alpha': v.releaseStage === 'ALPHA',
+                    'beta': v.releaseStage === 'BETA',
+                    'rc': v.releaseStage === 'RC',
+                    'stable': v.releaseStage === 'STABLE',
+                    'patch': v.releaseStage === 'PATCH',
+                    'minor': v.releaseStage === 'MINOR',
+                    'major': v.releaseStage === 'MAJOR'
+                }">
+                  {{v.releaseStage || '-'}}
+                </span>
               </td>
             </ng-container>
 
@@ -326,41 +356,58 @@
               <th mat-header-cell *matHeaderCellDef>Environment</th>
               <td mat-cell *matCellDef="let v">
                 <span class="custom-chip" [ngClass]="{
-                'prod': v.env === 'PROD',
-                'uat': v.env === 'UAT',
-                'sit': v.env === 'SIT'
+                'prod': v.environment === 'PROD',
+                'uat': v.environment === 'UAT',
+                'sit': v.environment === 'SIT',
+                'dr' : v.environment === 'DR',
+                'dev' : v.environment === 'DEV'
               }">
-                  {{v.env}}
+                  {{v.environment || '-'}}
                 </span>
               </td>
             </ng-container>
 
             <ng-container matColumnDef="build">
               <th mat-header-cell *matHeaderCellDef>Build Version</th>
-              <td mat-cell *matCellDef="let v" class="text-muted">{{v.build}}</td>
+              <td mat-cell *matCellDef="let v" class="text-muted">{{v.buildVersion || '-'}}</td>
             </ng-container>
 
             <ng-container matColumnDef="documents">
               <th mat-header-cell *matHeaderCellDef>Documents</th>
               <td mat-cell *matCellDef="let v">
-                <button mat-icon-button class="btn-custom-blue"><mat-icon>open_in_new</mat-icon></button>
+                <button mat-icon-button class="btn-custom-blue" (click)="openUrl(v.docsUrl)" [disabled]="!v.docs_url">
+                  <mat-icon>open_in_new</mat-icon>
+                </button>
               </td>
             </ng-container>
 
             <ng-container matColumnDef="options">
               <th mat-header-cell *matHeaderCellDef>Options</th>
               <td mat-cell *matCellDef="let v">
-                <button (click)="openDialog()"><mat-icon class="action-icon">visibility</mat-icon></button>
-                <mat-icon class="action-icon">edit</mat-icon>
+                <button (click)="openDialog(v.appVersionUuid)"><mat-icon
+                    class="action-icon">visibility</mat-icon></button>
+                <!-- <mat-icon class="action-icon">edit</mat-icon> -->
               </td>
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedVersionColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedVersionColumns;"></tr>
           </table>
-        </div>
 
-      </section> -->
+        </div>
+        <app-pagination [totalElements]="versionData.totalElements" [pageSize]="versionData.pageSize"
+          [currentPage]="versionData.currentPage" (pageChange)="onHandleVersionPage($event)">
+        </app-pagination>
+        } @else {
+        <div class="table-container">
+          <div class="empty-container">
+            <mat-icon>warning</mat-icon>
+            <p>No Version History Found</p>
+          </div>
+        </div>
+        }
+
+      </section>
 
     </div>
 

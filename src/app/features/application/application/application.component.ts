@@ -14,6 +14,7 @@ import { ButtonComponent } from '../../../shared/components/button/button.compon
 import { ApplicationSummary, FilterOption, PaginatedData, SearchResponse } from '../../../core/models/interface';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
 import { FormsModule } from '@angular/forms';
+import { ReplaceUnderscorePipe } from '../../../shared/pipes/replace-underscore/replace-underscore.pipe';
 
 @Component({
   selector: 'app-application',
@@ -27,7 +28,8 @@ import { FormsModule } from '@angular/forms';
     TableListComponent,
     ButtonComponent,
     PaginationComponent,
-    FormsModule
+    FormsModule,
+    ReplaceUnderscorePipe
   ],
   templateUrl: './application.component.html',
   styleUrl: './application.component.scss',
@@ -57,6 +59,7 @@ export class ApplicationComponent implements OnInit {
   isFilterExpanded = false;
   activeFilters: { [key: string]: string[] } = {};
   filterData: FilterOption[] = [];
+  protected readonly String = String;
 
   // table columns
   displayedColumns: string[] = ['name', 'desc', 'version', 'status', 'options'];
@@ -104,25 +107,23 @@ export class ApplicationComponent implements OnInit {
 
   onHandlePage(newPage: number) {
     this.appList = [];
-
-    this.applicationApiService.getAppList(newPage).subscribe({
-      next: (res) => {
-        this.dataRes = res.data;
-        this.appList = res.data.results;
-      },
-      error: (err) => console.error(err)
-    });
+    this.loadData(newPage);
   }
 
   toggleFilters() {
     this.isFilterExpanded = !this.isFilterExpanded;
   }
 
+  toggleDropdown(selectedFilter: any) {
+    const willOpen = !selectedFilter.isOpen;
+    this.filterData.forEach(f => f.isOpen = false);
+    selectedFilter.isOpen = willOpen;
+  }
+
   toggleFilter(key: string, option: string) {
     if (!this.activeFilters[key]) {
       this.activeFilters[key] = [];
     }
-
 
     const index = this.activeFilters[key].indexOf(option);
     if (index > -1) {
@@ -135,7 +136,7 @@ export class ApplicationComponent implements OnInit {
       delete this.activeFilters[key];
     }
 
-    this.applyFilters();
+    // this.applyFilters();
   }
 
   isSelected(key: string, option: string): boolean {
@@ -159,7 +160,14 @@ export class ApplicationComponent implements OnInit {
   }
 
   fetchFilterOptions() {
-    this.filterData = this.applicationApiService.getFilterOptions();
-    console.log(this.filterData);
+    this.applicationApiService.getFilterOptions().subscribe({
+      next: (res: any) => {
+        this.filterData = res.data.map((filter: any) => ({
+          ...filter,
+          isOpen: false
+        }));
+      },
+      error: (err) => console.error(err)
+    });
   }
 }

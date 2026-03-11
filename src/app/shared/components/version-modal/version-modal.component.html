@@ -1,34 +1,72 @@
 <div class="content-body">
+  @if (details) {
     <section>
-        <h3>Version Details</h3>
-        <p>Complete information about this version release</p>
-        <div class="grid-2">
-            <div class="data-field"><label>Application Version</label>
-                <p>1.4.0</p>
-            </div>
-            <div class="data-field"><label>Build Version</label>
-                <p>+build.180</p>
-            </div>
-            <div class="data-field"><label>Release Stage</label>
-                <span class="custom-chip">STABLE</span>
-            </div>
-            <div class="data-field"><label>Environment</label>
-                <span class="custom-chip sit">SIT</span>
-            </div>
+      <h3>Version Details</h3>
+      <p>Complete information about this version release</p>
+      
+      <div class="grid-2">
+        <div class="data-field">
+          <label>Application Version</label>
+          <p>{{ details.appVersion || '—' }}</p>
         </div>
-        <div class="flex-col">
-            <div class="data-field"><label>Features & Changes</label>
-                <p>Added support for social login providers (Google, Facebook, LinkedIn). Implemented remember me functionality with secure cookie management. Added password strength meter and policy enforcement. Enhanced error messages for better user experience.</p>
-            </div>
-            <div class="data-field"><label>Developers</label>
-                <p>Sarah Chen (Lead), Michael Torres (Backend), David Kim (DevOps)</p>
-            </div>
-            <div class="data-field"><label>Squad Name</label>
-                <p>Security Squad Alpha</p>
-            </div>
-            <div class="data-field"><label>SharePoint Documents</label>
-                <p>https://company.sharepoint.com/sites/docs/auth-api/v1.4.0</p>
-            </div>
+        <div class="data-field">
+          <label>Build Version</label>
+          <p>{{ details.buildVersion || '—' }}</p>
         </div>
+        <div class="data-field">
+          <label>Release Stage</label>
+          @if (details.releaseStage) {
+            <span class="custom-chip">{{ details.releaseStage }}</span>
+          } @else {
+            <span class="text-muted">N/A</span>
+          }
+        </div>
+        <div class="data-field">
+          <label>Environment</label>
+          <span class="custom-chip sit">{{ details.environment || 'UNKNOWN' }}</span>
+        </div>
+      </div>
+
+      <div class="flex-col">
+        <div class="data-field">
+          <label>Features & Changes</label>
+          <p [class.placeholder-text]="!details.features">
+            {{ details.features ?? 'No features documented for this release.' }}
+          </p>
+        </div>
+        
+        <div class="data-field">
+          <label>Developers</label>
+          <div>
+            @for (dev of (details.developers | split); track dev) {
+              <p>{{ dev }}</p>
+            } @empty {
+              <span class="text-muted">No developers listed</span>
+            }
+          </div>
+        </div>
+
+        <div class="data-field">
+          <label>Squad Name</label>
+          <p>{{ details.squadName ?? 'Unassigned' }}</p>
+        </div>
+
+        <div class="data-field">
+          <label>SharePoint Documents</label>
+          @if (details.docsUrl) {
+            <a [href]="details.docsUrl" target="_blank" class="link-text">
+              {{details.docsUrl}}
+            </a>
+          } @else {
+            <span class="no-link">No documents attached</span>
+          }
+        </div>
+      </div>
     </section>
+  } @else {
+    <div class="empty-state">
+      <mat-icon>info_outline</mat-icon>
+      <p>No version details found for this selection.</p>
+    </div>
+  }
 </div>

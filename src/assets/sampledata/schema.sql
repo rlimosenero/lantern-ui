@@ -1,3 +1,4 @@
+-- WORKING
 BEGIN;
 
 -- ==========================================
@@ -243,80 +244,177 @@ CREATE TABLE tbl_application_versions_audit (
     data TEXT NOT NULL
 );
 
+BEGIN;
+
 -- ==========================================
 -- 3. DATA INJECTION (Production Variety)
 -- ==========================================
-DO $$ 
-DECLARE 
+
+DO $$
+DECLARE
     v_app_uuid UUID;
     v_api_uuid UUID;
-    a_idx INTEGER;
-    w_idx INTEGER;
-    v_formats TEXT[] := ARRAY['APPLICATION_JSON', 'APPLICATION_XML', 'TEXT_PLAIN'];
-    v_sensitivity TEXT[] := ARRAY['INTERNAL', 'CONFIDENTIAL', 'PII', 'PCI', 'PUBLIC'];
+    v_app_version_uuid UUID;
+    app_idx INT;
+    api_idx INT;
+    ver_idx INT;
+    num_apis INT;
+    num_versions INT;
+
+    -- realistic arrays
+    v_app_names TEXT[] := ARRAY[
+        'Payment Gateway','Customer Portal','Analytics Engine','Mobile Banking','Loyalty Platform',
+        'Inventory System','Fraud Detection','HR Management','Document Storage','Notification Service'
+    ];
+    v_app_desc TEXT[] := ARRAY[
+        'Handles online payments securely','Customer self-service portal','Data analytics for business insights',
+        'Mobile app for banking','Platform for customer loyalty programs',
+        'Tracks and manages inventory','Detects fraudulent transactions','Manages human resources processes',
+        'Stores and organizes documents','Centralized notification delivery system'
+    ];
+    v_owner_names TEXT[] := ARRAY[
+        'Alice Wong','Bob Smith','Charlie Johnson','Diana Prince','Ethan Hunt','Fiona Li','George King'
+    ];
+    v_owner_depts TEXT[] := ARRAY[
+        'Finance','IT','Operations','Customer Success','R&D','HR','Security'
+    ];
+    v_bau_support TEXT[] := ARRAY['John Doe','Jane Roe','Mike Lee','Sara Kim','Tom Hardy'];
+    v_bau_depts TEXT[] := ARRAY['Operations','Support','Finance','IT','Customer Service'];
+    v_lifecycle_status TEXT[] := ARRAY['ACTIVE','FOR_DEPRECATION','DEPRECATED','FOR_RETIREMENT'];
+    v_api_names TEXT[] := ARRAY[
+        'Create Payment','Get Account Info','Update Profile','Fetch Transactions','Validate Token','Send Notification',
+        'Generate Report','Upload Document','Check Balance','Authorize Transaction'
+    ];
+    v_features TEXT[] := ARRAY[
+        'User authentication','Transaction logging','Multi-currency support','Reporting module','Third-party API integration',
+        'Real-time alerts','Document versioning','Data analytics','Fraud detection','Automated notifications'
+    ];
+    v_http_method TEXT[] := ARRAY['GET','POST','PUT','PATCH','DELETE'];
+    v_auth_method TEXT[] := ARRAY['API_KEY','BASIC_AUTH','BEARER_TOKEN','JWT','OAUTH2','OIDC','MTLS','HMAC','SESSION_COOKIES','CUSTOM_TOKENS'];
+    v_payload_format TEXT[] := ARRAY['APPLICATION_JSON','APPLICATION_XML','TEXT_XML','TEXT_PLAIN','MULTIPART_FORM_DATA'];
+    v_sensitivity TEXT[] := ARRAY['PUBLIC','INTERNAL','CONFIDENTIAL','FINANCIAL_DATA','PII','SPI','PHI','PCI','SECURITY_SENSITIVE','CUSTOMER_DATA_NON_PII'];
+    v_release_stage TEXT[] := ARRAY['PRE_ALPHA','ALPHA','BETA','RC','STABLE','PATCH','MINOR','MAJOR'];
+    v_env TEXT[] := ARRAY['DEV','SIT','UAT','PROD','DR'];
 BEGIN
-    FOR a_idx IN 1..20 LOOP
-        -- Generate 20 Core Applications
+    FOR app_idx IN 1..10 LOOP
+        -- Insert Application
         INSERT INTO tbl_applications (
-            app_name, app_desc, service_type, lifecycle_status, owner_name, techstack_platform
+            app_name, app_desc, service_type, lifecycle_status, owner_name, owner_dept,
+            bau_support_name, bau_support_dept, repo_url, swagger_url, docs_url,
+            techstack_platform, techstack_app, techstack_storage, techstack_security, techstack_message,
+            created_by, updated_by, is_deleted, row_version
         ) VALUES (
-            'Enterprise-Platform-' || a_idx, 'Core business logic platform ' || a_idx, 
-            'MICROSERVICE', 'ACTIVE', 'Engineering-Squad-' || a_idx, 'Kubernetes'
+            v_app_names[ floor(random()*array_length(v_app_names,1)+1) ],
+            v_app_desc[ floor(random()*array_length(v_app_desc,1)+1) ],
+            'MICROSERVICE',
+            v_lifecycle_status[ floor(random()*array_length(v_lifecycle_status,1)+1) ],
+            v_owner_names[ floor(random()*array_length(v_owner_names,1)+1) ],
+            v_owner_depts[ floor(random()*array_length(v_owner_depts,1)+1) ],
+            v_bau_support[ floor(random()*array_length(v_bau_support,1)+1) ],
+            v_bau_depts[ floor(random()*array_length(v_bau_depts,1)+1) ],
+            'https://repo.company.com/' || app_idx,
+            'https://swagger.company.com/' || app_idx,
+            'https://docs.company.com/' || app_idx,
+            'Kubernetes','SpringBoot','PostgreSQL','OAuth2','Kafka messaging',
+            'system','system','N',1
         ) RETURNING app_uuid INTO v_app_uuid;
 
-        -- Generate 15 APIs for each Application (300 total)
-        FOR w_idx IN 1..15 LOOP
-            -- Preservation of your exact manual UUID for testing
-            IF a_idx = 1 AND w_idx = 1 THEN v_api_uuid := '37c30f90-ad4d-493d-b4e2-a501834a0c50';
-            ELSE v_api_uuid := gen_random_uuid();
-            END IF;
-
-            -- Populate the main HTTP APIs table mapping exactly to your DTOs
+        -- Random APIs per app
+        num_apis := floor(random()*4 + 2); -- 2–5 APIs
+        FOR api_idx IN 1..num_apis LOOP
             INSERT INTO tbl_application_http_apis (
-                app_api_uuid, app_uuid, category, api_name, description, webservice_type, 
-                http_method, accessed_via_gateway, authentication_method, authorization_name, 
-                lifecycle_status, swagger_url, docs_url, api_version, 
-                url_prod, url_dr, url_uat, url_sit,
-                request_body_sample, request_data_format, request_data_sensitivity_type, 
-                request_data_in_transit_enc, request_ave_size, request_max_size, 
-                request_data_logged, request_data_cached, request_duplicate_allowed, request_throttling_supported,
-                response_body_sample, response_data_format, response_data_sensitivity_type, 
-                response_data_in_transit_enc, response_ave_size, response_max_size, 
-                response_data_logged, response_data_cached, rate_limit_info, exposure
+                app_uuid, category, api_name, description, webservice_type, http_method, accessed_via_gateway,
+                authentication_method, authorization_name, lifecycle_status, swagger_url, docs_url, api_version,
+                url_prod, url_dr, url_uat, url_sit, request_body_sample, request_data_format, request_data_sensitivity_type,
+                request_data_in_transit_enc, request_ave_size, request_max_size, request_data_logged, request_data_cached,
+                request_duplicate_allowed, request_throttling_supported, response_body_sample, response_data_format,
+                response_data_sensitivity_type, response_data_in_transit_enc, response_ave_size, response_max_size,
+                response_data_logged, response_data_cached, rate_limit_info, exposure, created_by, updated_by, is_deleted, row_version
             ) VALUES (
-                v_api_uuid, v_app_uuid, 'TRANSACTIONAL', 'Service-Endpoint-' || w_idx, 'Handles robust operations for module ' || w_idx, 'REST', 
-                CASE WHEN w_idx % 2 = 0 THEN 'GET' ELSE 'POST' END, true, 'OAUTH2', 'Role_Admin', 
-                'ACTIVE', 'https://api.internal/swagger', 'https://api.internal/docs', 'v1',
-                'https://api.prod.com/v1/' || w_idx, 'https://api.dr.com/v1/' || w_idx, 'https://api.uat.com/v1/' || w_idx, 'https://api.sit.com/v1/' || w_idx,
-                '{"account": "12345"}', v_formats[(w_idx % 3) + 1], v_sensitivity[(w_idx % 5) + 1], 
-                'TLS_1_3', '5KB', '15KB', 
-                true, false, false, true,
-                '{"status": "success"}', 'APPLICATION_JSON', v_sensitivity[(w_idx % 5) + 1], 
-                'TLS_1_3', '2KB', '10KB', 
-                true, true, '5000rpm', 'INTERNAL'
-            );
+                v_app_uuid,'TRANSACTIONAL',
+                v_api_names[ floor(random()*array_length(v_api_names,1)+1) ],
+                'Handles operations related to ' || v_api_names[ floor(random()*array_length(v_api_names,1)+1) ],
+                'REST',
+                v_http_method[ floor(random()*array_length(v_http_method,1)+1) ],
+                true,
+                v_auth_method[ floor(random()*array_length(v_auth_method,1)+1) ],
+                'Role_Admin',
+                'ACTIVE',
+                'https://swagger.company.com/api/' || app_idx || '/' || api_idx,
+                'https://docs.company.com/api/' || app_idx || '/' || api_idx,
+                'v1',
+                'https://prod.company.com/api/' || app_idx || '/' || api_idx,
+                'https://dr.company.com/api/' || app_idx || '/' || api_idx,
+                'https://uat.company.com/api/' || app_idx || '/' || api_idx,
+                'https://sit.company.com/api/' || app_idx || '/' || api_idx,
+                '{"sample":"data"}',
+                v_payload_format[ floor(random()*array_length(v_payload_format,1)+1) ],
+                v_sensitivity[ floor(random()*array_length(v_sensitivity,1)+1) ],
+                'TLS_1_3','5KB','15KB',true,false,false,true,
+                '{"status":"success"}','APPLICATION_JSON',
+                v_sensitivity[ floor(random()*array_length(v_sensitivity,1)+1) ],
+                'TLS_1_3','2KB','10KB',true,true,
+                '5000rpm','INTERNAL',
+                'system','system','N',1
+            ) RETURNING app_api_uuid INTO v_api_uuid;
 
-            -- Population for DataFields: Fills requestHeaders, requestBodyFields, responseHeaders, responseBodyFields, urlPathParameters
-            INSERT INTO tbl_data_fields (app_api_uuid, payload_type, field_name, data_type_format, description, is_required, sample_value)
-            VALUES 
-            (v_api_uuid, 'REQUEST', 'accountNo', 'STRING', 'Primary account identifier', true, '1234567890'),
-            (v_api_uuid, 'RESPONSE', 'transactionId', 'UUID', 'Unique transaction ref', true, 'abc-123-xyz'),
-            (v_api_uuid, 'REQUEST_HEADER', 'X-Correlation-ID', 'STRING', 'Tracing ID', true, 'req-001'),
-            (v_api_uuid, 'RESPONSE_HEADER', 'X-Rate-Limit', 'INTEGER', 'Remaining quota', false, '4999'),
-            (v_api_uuid, 'URL_PATH_PARAMETER', 'id', 'LONG', 'Resource ID', true, '100');
+            -- Insert Data Fields
+            INSERT INTO tbl_data_fields (app_api_uuid, payload_type, field_name, data_type_format, description, is_required, sample_value, created_by, updated_by, is_deleted, row_version)
+            VALUES
+                (v_api_uuid,'Request','accountNo','STRING','Primary account identifier',true,'1234567890','system','system','N',1),
+                (v_api_uuid,'Response','transactionId','UUID','Unique transaction ref',true,'abc-123-xyz','system','system','N',1),
+                (v_api_uuid,'Request-Header','X-Correlation-ID','STRING','Tracing ID',true,'req-001','system','system','N',1),
+                (v_api_uuid,'Response-Header','X-Rate-Limit','INTEGER','Remaining quota',false,'4999','system','system','N',1),
+                (v_api_uuid,'URL-Path-Parameter','id','LONG','Resource ID',true,'100','system','system','N',1);
 
-            -- Population for responseStatusCodes
-            INSERT INTO tbl_response_codes (app_api_uuid, business_code, http_code, message, type, suggested_action)
-            VALUES (v_api_uuid, 'ERR-000', '200', 'Operation Successful', 'SUCCESS', 'None required');
+            -- Insert Response Codes
+            INSERT INTO tbl_response_codes (app_api_uuid, business_code, http_code, message, type, suggested_action, created_by, updated_by, is_deleted, row_version)
+            VALUES (v_api_uuid,'ERR-000','200','Operation Successful','SUCCESS','None','system','system','N',1);
 
-            -- Population for consumerApplications
-            INSERT INTO tbl_consumer_applications (app_api_uuid, app_name, description, relationship, business_owner, technical_owner, trigger, app_type, network_mode, status, date_onboarded)
-            VALUES (v_api_uuid, 'Mobile-Banking-App', 'Consumer mobile frontend', 'CONSUMER', 'Jane Doe', 'John Smith', 'USER_ACTION', 'MOBILE', 'INTERNET', 'ACTIVE', CURRENT_DATE);
+            -- Insert Consumer Applications
+            INSERT INTO tbl_consumer_applications (app_api_uuid, app_name, description, relationship, business_owner, technical_owner, trigger, app_type, network_mode, date_onboarded, status, created_by, updated_by, is_deleted, row_version)
+            VALUES (v_api_uuid,'MobileBanking','Consumer mobile frontend','CONSUMER','Jane Doe','John Smith','USER_ACTION','MOBILE','INTERNET',CURRENT_DATE,'ACTIVE','system','system','N',1);
 
-            -- Population for upstreamApplications
-            INSERT INTO tbl_upstream_applications (app_api_uuid, app_uuid, app_name, description, relationship, business_owner, technical_owner, network_mode)
-            VALUES (v_api_uuid, v_app_uuid, 'Legacy-Mainframe', 'Core banking system', 'UPSTREAM', 'Finance Dept', 'Ops Team', 'INTRANET');
+            -- Insert Upstream Applications
+            INSERT INTO tbl_upstream_applications (app_api_uuid, app_uuid, app_name, description, relationship, business_owner, technical_owner, network_mode, created_by, updated_by, is_deleted, row_version)
+            VALUES (v_api_uuid,v_app_uuid,'LegacySystem','Core banking system','UPSTREAM','Finance Dept','Ops Team','INTRANET','system','system','N',1);
 
+            -- Insert Versions
+            num_versions := floor(random()*3 + 1); -- 1–3 versions per API
+            FOR ver_idx IN 1..num_versions LOOP
+                INSERT INTO tbl_application_versions (
+                    app_uuid, release_stage, environment, app_version, build_version, features, developers, dev_squad, docs_url,
+                    created_by, updated_by, is_deleted, row_version
+                ) VALUES (
+                    v_app_uuid,
+                    v_release_stage[ floor(random()*array_length(v_release_stage,1)+1) ],
+                    v_env[ floor(random()*array_length(v_env,1)+1) ],
+                    'v' || ver_idx || '.0.' || api_idx,
+                    'build-' || ver_idx || '-' || api_idx,
+                    v_features[ floor(random()*array_length(v_features,1)+1) ],
+                    'Dev Team ' || ver_idx,
+                    'Squad ' || ver_idx,
+                    'https://docs.company.com/version/' || app_idx || '/' || api_idx || '/' || ver_idx,
+                    'system','system','N',1
+                ) RETURNING app_version_uuid INTO v_app_version_uuid;
+
+                -- Also insert HTTP API version mapping
+                INSERT INTO tbl_http_apis_versions (
+                    app_version_uuid, app_api_uuid, release_stage, environment, app_version, build_version, features, developers, dev_squad, docs_url,
+                    created_by, updated_by, is_deleted, row_version
+                ) VALUES (
+                    v_app_version_uuid, v_api_uuid,
+                    v_release_stage[ floor(random()*array_length(v_release_stage,1)+1) ],
+                    v_env[ floor(random()*array_length(v_env,1)+1) ],
+                    'v' || ver_idx || '.0.' || api_idx,
+                    'build-' || ver_idx || '-' || api_idx,
+                    v_features[ floor(random()*array_length(v_features,1)+1) ],
+                    'Dev Team ' || ver_idx,
+                    'Squad ' || ver_idx,
+                    'https://docs.company.com/api-version/' || app_idx || '/' || api_idx || '/' || ver_idx,
+                    'system','system','N',1
+                );
+            END LOOP;
         END LOOP;
     END LOOP;
 END $$;

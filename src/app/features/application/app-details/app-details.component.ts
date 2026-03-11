@@ -14,6 +14,7 @@ import { ButtonComponent } from '../../../shared/components/button/button.compon
 import { MatDialog } from '@angular/material/dialog';
 import { VersionModalComponent } from '../../../shared/components/version-modal/version-modal.component';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
+import { SplitPipe } from '../../../shared/pipes/split/split.pipe';
 
 @Component({
   selector: 'app-app-details',
@@ -27,7 +28,8 @@ import { PaginationComponent } from '../../../shared/components/pagination/pagin
     MatProgressBarModule,
     MatDividerModule,
     MatTableModule,
-    PaginationComponent
+    PaginationComponent,
+    SplitPipe
   ],
   templateUrl: './app-details.component.html',
   styleUrls: ['./app-details.component.scss']
@@ -44,6 +46,8 @@ export class AppDetailsComponent implements OnInit {
   applicationDetails: any = [];
   wsData: any = [];
 
+  versionData: any = [];
+
   constructor(
     private applicationApiService: ApplicationApiService,
     private router: Router,
@@ -53,6 +57,7 @@ export class AppDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.fetchAppDetails();
     this.getWebServicesList();
+    this.fetchAppVersions();
   }
 
   fetchAppDetails() {
@@ -60,7 +65,7 @@ export class AppDetailsComponent implements OnInit {
 
     this.applicationApiService.getAppDetails(appUuid).subscribe({
       next: (data: any) => {
-        console.log(data.data);
+        // console.log(data.data);
         this.applicationDetails = data.data;
       },
       error: (err: any) => {
@@ -83,6 +88,7 @@ export class AppDetailsComponent implements OnInit {
 
     this.applicationApiService.getWebServicesList(appUuid, 0).subscribe({
       next: (data: any) => {
+        console.log(data)
         this.wsData = data.data;
       },
       error: (err: any) => {
@@ -91,7 +97,7 @@ export class AppDetailsComponent implements OnInit {
     })
   }
 
-  onHandlePage(newPage: number) {
+  onHandleWSPage(newPage: number) {
     const appUuid = this.getIdFromUrl();
     this.wsData = [];
 
@@ -103,30 +109,51 @@ export class AppDetailsComponent implements OnInit {
     });
   }
 
-  // Mock Data for Tables
-  webServices = [
-    { name: 'User Authentication API', desc: 'OAuth 2.0 authentication and authorization service', version: '1.5.0', status: 'Active' },
-    { name: 'Payment Gateway', desc: 'Payment processing and transaction management', version: '2.3.1', status: 'Active' },
-    { name: 'Notification Service', desc: 'Push notifications and SMS delivery service', version: '2.0.0', status: 'Active' }
-  ];
+  onHandleVersionPage(newPage: number) {
+    const appUuid = this.getIdFromUrl();
+    this.versionData = [];
 
-  versionHistory = [
-    { version: '3.2.1', date: 'Jan 25, 2024, 17:20:00', stage: 'STABLE', env: 'PROD', build: '+build.312' },
-    { version: '3.2.0', date: 'Dec 15, 2023, 21:45:00', stage: 'MINOR', env: 'UAT', build: '+build.298' },
-    { version: '3.2.0-beta.1', date: 'Dec 1, 2023, 16:30:00', stage: 'BETA', env: 'SIT', build: '+build.285' },
-    { version: '3.0.0', date: 'Oct 10, 2023, 23:00:00', stage: 'MAJOR', env: 'PROD', build: '+build.250' }
-  ];
-
+    this.applicationApiService.getVersionHistoryList(appUuid, newPage).subscribe({
+      next: (res: any) => {
+        // console.log(res)
+        this.versionData = res.data;
+      },
+      error: (err) => console.error(err)
+    });
+  }
 
 
-  openDialog(): void {
+  openDialog(uuid: string): void {
     const dialogRef = this.dialog.open(VersionModalComponent, {
       width: '1000px',
-      data: { name: 'App Detail' } // Optional: pass data to the dialog
+      data: { uuid: uuid, type: 'application'  }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed', result);
     });
+  }
+
+  fetchAppVersions() {
+    const appUuid = this.getIdFromUrl();
+    this.applicationApiService.getVersionHistoryList(appUuid, 0).subscribe({
+      next: (res: any) => {
+        // console.log(res)
+        this.versionData = res.data;
+      },
+      error: (err) => console.error(err)
+    });
+  }
+
+  openUrl(url: string | null | undefined): void {
+    if (url) {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    } else {
+      console.warn('No URL provided for this record.');
+    }
+  }
+
+  openDetails(uuid: any) {
+    this.router.navigate(['/web-service-details/' + uuid])
   }
 }

@@ -19,8 +19,12 @@
                 </p>
 
                 <div class="status-row">
-                    <span class="badge" [class.active]="WSDetails?.serviceConfig?.[0]?.status === 'ACTIVE'"
-                        [class.unknown]="!WSDetails?.serviceConfig?.[0]?.status">
+                    <span class="badge" [ngClass]="{
+                            'active': WSDetails?.serviceConfig?.[0]?.status == 'ACTIVE',
+                            'for-deprecation': WSDetails?.serviceConfig?.[0]?.status == 'FOR_DEPRECATION',
+                            'deprecated': WSDetails?.serviceConfig?.[0]?.status == 'DEPRECATED',
+                            'for-retirement': WSDetails?.serviceConfig?.[0]?.status == 'FOR_RETIREMENT'
+                        }" [class.unknown]="!WSDetails?.serviceConfig?.[0]?.status">
                         {{ WSDetails?.serviceConfig?.[0]?.status ?? 'UNKNOWN' }}
                     </span>
 
@@ -40,17 +44,17 @@
                 <div class="grid-2">
                     <div class="data-field">
                         <label>Application</label>
-                        <p>{{ WSDetails?.serviceConfig?.[0]?.name ?? '—' }}</p>
+                        <button (click)="openLink(WSDetails?.serviceConfig?.[0]?.appUuid)">{{ WSDetails?.serviceConfig?.[0]?.appName ?? '—' }}</button>
                     </div>
 
                     <div class="data-field">
                         <label>Web Service Name</label>
-                        <p>{{ WSDetails?.serviceConfig?.[0]?.name ?? '—' }}</p>
+                        <p  class="highlight">{{ WSDetails?.serviceConfig?.[0]?.name ?? '—' }}</p>
                     </div>
 
                     <div class="data-field">
                         <label>Web Service Version</label>
-                        <p>{{ WSDetails?.serviceConfig?.[0]?.version ?? '—' }}</p>
+                        <p class="mono">{{ WSDetails?.serviceConfig?.[0]?.version ?? '—' }}</p>
                     </div>
 
                     <div class="data-field">
@@ -71,12 +75,20 @@
 
                     <div class="data-field">
                         <label>Accessed via Gateway</label>
-                        <p>Yes</p>
+                        <p [class.text-success]="WSDetails.serviceConfig[0].accessedViaGateway"
+                            [class.text-danger]="!WSDetails.serviceConfig[0].accessedViaGateway">
+                            {{ WSDetails.serviceConfig[0].accessedViaGateway ? '✓ Yes' : '✘ No' }}
+                        </p>
                     </div>
 
                     <div class="data-field">
                         <label>Status</label>
-                        <span class="badge" [class.active]="WSDetails?.serviceConfig?.[0]?.status === 'ACTIVE'">
+                        <span class="badge" [ngClass]="{
+                            'active': WSDetails?.serviceConfig?.[0]?.status == 'ACTIVE',
+                            'for-deprecation': WSDetails?.serviceConfig?.[0]?.status == 'FOR_DEPRECATION',
+                            'deprecated': WSDetails?.serviceConfig?.[0]?.status == 'DEPRECATED',
+                            'for-retirement': WSDetails?.serviceConfig?.[0]?.status == 'FOR_RETIREMENT'
+                        }">
                             {{ WSDetails?.serviceConfig?.[0]?.status ?? 'Unknown' }}
                         </span>
                     </div>
@@ -105,9 +117,9 @@
                     <div class="data-field">
                         <label>Authentication Method</label>
                         @if (WSDetails?.securityAndAuth?.[0]?.authMethod) {
-                        <p class="security-value">
+                        <span class="custom-chip header-chip">
                             {{ WSDetails.securityAndAuth[0].authMethod }}
-                        </p>
+                        </span>
                         } @else {
                         <p class="no-security">No authentication method defined</p>
                         }
@@ -116,22 +128,11 @@
                     <div class="data-field">
                         <label>Authorization</label>
                         @if (WSDetails?.securityAndAuth?.[0]?.authorization) {
-                        <p class="security-value">{{ WSDetails.securityAndAuth[0].authorization }}</p>
+                        <p class="mono">{{ WSDetails.securityAndAuth[0].authorization }}</p>
                         } @else {
                         <p class="no-security">None (Open Access)</p>
                         }
                     </div>
-                </div>
-            </section>
-
-            <section>
-                <h3>Request Configuration</h3>
-                <div class="data-field">
-                    @if (WSDetails?.serviceConfig?.[0]?.description) {
-                    <p>{{ WSDetails.serviceConfig[0].description }}</p>
-                    } @else {
-                    <p>No request configuration details provided.</p>
-                    }
                 </div>
             </section>
 
@@ -195,14 +196,14 @@
                         <ng-container matColumnDef="paramName">
                             <th mat-header-cell *matHeaderCellDef>Parameter Name</th>
                             <td mat-cell *matCellDef="let v">
-                                {{ v.parameterName ?? '—' }}
+                                <p class="mono">{{ v.parameterName ?? '—' }}</p>
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="typeAndFormat">
                             <th mat-header-cell *matHeaderCellDef>Data Type and Format</th>
                             <td mat-cell *matCellDef="let v">
-                                {{ v.typeAndFormat ?? '—' }}
+                                <p class="mono">{{ v.typeAndFormat ?? '—' }}</p>
                             </td>
                         </ng-container>
 
@@ -210,7 +211,7 @@
                             <th mat-header-cell *matHeaderCellDef>Required?</th>
                             <td mat-cell *matCellDef="let v">
                                 @if (v.isRequired !== null && v.isRequired !== undefined) {
-                                <span class="custom-chip"
+                                <span class="custom-chip alpha"
                                     [class.req-yes]="v.isRequired === 'Y' || v.isRequired === true">
                                     {{ v.isRequired }}
                                 </span>
@@ -223,7 +224,7 @@
                         <ng-container matColumnDef="value">
                             <th mat-header-cell *matHeaderCellDef>Sample Value</th>
                             <td mat-cell *matCellDef="let v">
-                                <code>{{ v.sampleValue ?? 'n/a' }}</code>
+                                <p class="mono">{{ v.sampleValue ?? 'n/a' }}</p>
                             </td>
                         </ng-container>
 
@@ -254,22 +255,24 @@
                         <ng-container matColumnDef="paramName">
                             <th mat-header-cell *matHeaderCellDef>Header Name</th>
                             <td mat-cell *matCellDef="let v">
-                                <strong>{{ v.parameterName ?? '—' }}</strong>
+                                <p class="mono">{{ v.parameterName ?? '—' }}</p>
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="typeAndFormat">
                             <th mat-header-cell *matHeaderCellDef>Data Type and Format</th>
                             <td mat-cell *matCellDef="let v">
-                                {{ v.typeAndFormat ?? 'string' }}
+                                <p class="mono">{{ v.typeAndFormat ?? 'string' }}</p>
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="isRequired">
                             <th mat-header-cell *matHeaderCellDef>Required?</th>
                             <td mat-cell *matCellDef="let v">
-                                @if (v.isRequired) {
-                                <span class="custom-chip">{{ v.isRequired }}</span>
+                                @if (v.isRequired !== null && v.isRequired !== undefined) {
+                                <span class="custom-chip alpha">
+                                    {{ v.isRequired ? 'Yes' : 'No' }}
+                                </span>
                                 } @else {
                                 <span class="text-muted">—</span>
                                 }
@@ -279,7 +282,7 @@
                         <ng-container matColumnDef="value">
                             <th mat-header-cell *matHeaderCellDef>Sample Value</th>
                             <td mat-cell *matCellDef="let v">
-                                <code>{{ v.sampleValue ?? '—' }}</code>
+                                <p class="mono">{{ v.sampleValue ?? '—' }}</p>
                             </td>
                         </ng-container>
 
@@ -305,18 +308,18 @@
                 <div class="grid-2">
                     <div class="data-field">
                         <label>Request Data Format</label>
-                        <p>{{ WSDetails?.requestDataFormat ?? '—' }}</p>
+                        <p class="mono">{{ WSDetails?.requestDataFormat ?? '—' }}</p>
                     </div>
 
                     <div class="data-field">
-                        <label>Web Service Name</label>
-                        <p>{{ WSDetails?.dataSensitiveType ?? '—' }}</p>
+                        <label>Data Sensitivity Type</label>
+                        <span class="custom-chip alpha">{{ WSDetails?.dataSensitiveType ?? '—' }}</span>
                     </div>
                 </div>
 
                 <div class="divider"></div>
 
-                <div class="data-field"><label>URL Path Parameters</label></div>
+                <div class="data-field"><label>Request Body Sample</label></div>
                 <div class="code-container">
                     <code>
                         <pre>{{requestBodySampleString}}</pre>
@@ -328,16 +331,17 @@
                 <div class="data-field"><label>Request Body Fields</label></div>
                 <div class="table-container">
                     @if (WSDetails?.requestBodyFields?.length) {
-                    <table mat-table [dataSource]="WSDetails.requestBodyFields" class="mat-elevation-z0 border-table">
+                    <table mat-table [dataSource]="WSDetails.requestBodyFields"
+                        class="mat-elevation-z0 border-table  req-body-field">
 
                         <ng-container matColumnDef="name">
                             <th mat-header-cell *matHeaderCellDef>Field Name</th>
-                            <td mat-cell *matCellDef="let v"><strong>{{ v.fieldName ?? '—' }}</strong></td>
+                            <td mat-cell *matCellDef="let v"><p class="mono">{{ v.fieldName ?? '—' }}</p></td>
                         </ng-container>
 
                         <ng-container matColumnDef="typeAndFormat">
                             <th mat-header-cell *matHeaderCellDef>Data Type and Format</th>
-                            <td mat-cell *matCellDef="let v">{{ v.typeAndFormat ?? '—' }}</td>
+                            <td mat-cell *matCellDef="let v"><p class="mono">{{ v.typeAndFormat ?? '—' }}</p></td>
                         </ng-container>
 
                         <ng-container matColumnDef="desc">
@@ -348,8 +352,10 @@
                         <ng-container matColumnDef="isRequired">
                             <th mat-header-cell *matHeaderCellDef>Required?</th>
                             <td mat-cell *matCellDef="let v">
-                                @if (v.isRequired) {
-                                <span class="custom-chip">{{ v.isRequired }}</span>
+                                @if (v.isRequired !== null && v.isRequired !== undefined) {
+                                <span class="custom-chip alpha">
+                                    {{ v.isRequired ? 'Yes' : 'No' }}
+                                </span>
                                 } @else {
                                 <span class="text-muted">—</span>
                                 }
@@ -359,7 +365,7 @@
                         <ng-container matColumnDef="sampleValue">
                             <th mat-header-cell *matHeaderCellDef>Sample Value</th>
                             <td mat-cell *matCellDef="let v">
-                                <code>{{ v.sampleValue ?? '—' }}</code>
+                                <p class="mono">{{ v.sampleValue ?? '—' }}</p>
                             </td>
                         </ng-container>
 
@@ -400,12 +406,12 @@
 
                     <div class="data-field">
                         <label>Average Request Size</label>
-                        <p>{{ WSDetails?.aveReqSize ? (WSDetails.aveReqSize + ' KB') : '—' }}</p>
+                        <p>{{ WSDetails?.aveReqSize ? (WSDetails.aveReqSize) : '—' }}</p>
                     </div>
 
                     <div class="data-field">
                         <label>Max Request Size</label>
-                        <p>{{ WSDetails?.maxReqSize ? (WSDetails.maxReqSize + ' KB') : '—' }}</p>
+                        <p>{{ WSDetails?.maxReqSize ? (WSDetails.maxReqSize) : '—' }}</p>
                     </div>
                 </div>
 
@@ -416,22 +422,33 @@
                 <div class="grid-2">
                     <div class="data-field">
                         <label>Request Data Logged?</label>
-                        <p>{{ WSDetails?.reqDataLog ?? 'N/A' }}</p>
+                        <p [class.text-success]="WSDetails?.reqDataLog" [class.text-danger]="!WSDetails?.reqDataLog">
+                            {{ WSDetails?.reqDataLog ? '✓ Yes' : '✘ No' }}
+                        </p>
                     </div>
 
                     <div class="data-field">
                         <label>Request Data Cached?</label>
-                        <p>{{ WSDetails?.reqDataCached ?? 'N/A' }}</p>
+                        <p [class.text-success]="WSDetails?.reqDataCached"
+                            [class.text-danger]="!WSDetails?.reqDataCached">
+                            {{ WSDetails?.reqDataCached ? '✓ Yes' : '✘ No' }}
+                        </p>
                     </div>
 
                     <div class="data-field">
                         <label>Request Duplicate Allowed?</label>
-                        <p>{{ WSDetails?.reqDuplicateAllowed ?? 'N/A' }}</p>
+                        <p [class.text-success]="WSDetails?.reqDuplicateAllowed"
+                            [class.text-danger]="!WSDetails?.reqDuplicateAllowed">
+                            {{ WSDetails?.reqDuplicateAllowed ? '✓ Yes' : '✘ No' }}
+                        </p>
                     </div>
 
                     <div class="data-field">
                         <label>Request Throttling Supported?</label>
-                        <p>{{ WSDetails?.reqThrottlingSupported ?? 'N/A' }}</p>
+                        <p [class.text-success]="WSDetails?.reqThrottlingSupported"
+                            [class.text-danger]="!WSDetails?.reqThrottlingSupported">
+                            {{ WSDetails?.reqThrottlingSupported ? '✓ Yes' : '✘ No' }}
+                        </p>
                     </div>
                 </div>
             </section>
@@ -449,22 +466,24 @@
                         <ng-container matColumnDef="paramName">
                             <th mat-header-cell *matHeaderCellDef>Header Name</th>
                             <td mat-cell *matCellDef="let v">
-                                <strong>{{ v.headerName ?? '—' }}</strong>
+                                <p class="mono">{{ v.headerName ?? '—' }}</p>
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="typeAndFormat">
                             <th mat-header-cell *matHeaderCellDef>Data Type and Format</th>
                             <td mat-cell *matCellDef="let v">
-                                {{ v.typeAndFormat ?? '—' }}
+                                <p class="mono">{{ v.typeAndFormat ?? '—' }}</p>
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="isRequired">
                             <th mat-header-cell *matHeaderCellDef>Required?</th>
                             <td mat-cell *matCellDef="let v">
-                                @if (v.isRequired) {
-                                <span class="custom-chip">{{ v.isRequired }}</span>
+                                @if (v.isRequired !== null && v.isRequired !== undefined) {
+                                <span class="custom-chip alpha">
+                                    {{ v.isRequired ? 'Yes' : 'No' }}
+                                </span>
                                 } @else {
                                 <span class="text-muted">—</span>
                                 }
@@ -474,7 +493,7 @@
                         <ng-container matColumnDef="value">
                             <th mat-header-cell *matHeaderCellDef>Sample Value</th>
                             <td mat-cell *matCellDef="let v">
-                                <code>{{ v.sampleValue ?? '—' }}</code>
+                                <p class="mono">{{ v.sampleValue ?? '—' }}</p>
                             </td>
                         </ng-container>
 
@@ -499,12 +518,13 @@
                 <div class="grid-2">
                     <div class="data-field">
                         <label>Response Data Format</label>
-                        <p>{{ WSDetails?.responseDataFormat ?? '—' }}</p>
+                        <p class="mono">{{ WSDetails?.responseDataFormat ?? '—' }}</p>
                     </div>
 
                     <div class="data-field">
                         <label>Response Data Sensitivity Type</label>
-                        <p>{{ WSDetails?.responseDataSensitivityType ?? 'Not Classified' }}</p>
+                        <span class="custom-chip alpha">{{ WSDetails?.responseDataSensitivityType ?? 'Not Classified'
+                            }}</span>
                     </div>
                 </div>
 
@@ -519,20 +539,21 @@
 
                 <div class="divider"> </div>
 
-                <div class="data-field"><label>Response Headers</label></div>
+                <div class="data-field"><label>Response Body Fields</label></div>
 
                 <div class="table-container">
                     @if (WSDetails?.requestBodyFields?.length) {
-                    <table mat-table [dataSource]="WSDetails.requestBodyFields" class="mat-elevation-z0 border-table">
+                    <table mat-table [dataSource]="WSDetails.responseBodyFields"
+                        class="mat-elevation-z0 border-table res-body-field">
 
                         <ng-container matColumnDef="name">
                             <th mat-header-cell *matHeaderCellDef>Field Name</th>
-                            <td mat-cell *matCellDef="let v">{{ v.fieldName ?? '—' }}</td>
+                            <td mat-cell *matCellDef="let v"><p class="mono">{{ v.fieldName ?? '—' }}</p></td>
                         </ng-container>
 
                         <ng-container matColumnDef="typeAndFormat">
                             <th mat-header-cell *matHeaderCellDef>Data Type and Format</th>
-                            <td mat-cell *matCellDef="let v">{{ v.typeAndFormat ?? '—' }}</td>
+                            <td mat-cell *matCellDef="let v"><p class="mono">{{ v.typeAndFormat ?? '—' }}</p></td>
                         </ng-container>
 
                         <ng-container matColumnDef="desc">
@@ -543,8 +564,10 @@
                         <ng-container matColumnDef="isRequired">
                             <th mat-header-cell *matHeaderCellDef>Required?</th>
                             <td mat-cell *matCellDef="let v">
-                                @if (v.isRequired) {
-                                <span class="custom-chip">{{ v.isRequired }}</span>
+                                @if (v.isRequired !== null && v.isRequired !== undefined) {
+                                <span class="custom-chip alpha">
+                                    {{ v.isRequired ? 'Yes' : 'No' }}
+                                </span>
                                 } @else {
                                 <span class="text-muted">—</span>
                                 }
@@ -553,7 +576,7 @@
 
                         <ng-container matColumnDef="sampleValue">
                             <th mat-header-cell *matHeaderCellDef>Sample Value</th>
-                            <td mat-cell *matCellDef="let v"><code>{{ v.sampleValue ?? '—' }}</code></td>
+                            <td mat-cell *matCellDef="let v"><p class="mono">{{ v.sampleValue ?? '—' }}</p></td>
                         </ng-container>
 
                         <ng-container matColumnDef="rules">
@@ -568,17 +591,17 @@
 
                         <ng-container matColumnDef="defaultValue">
                             <th mat-header-cell *matHeaderCellDef>Default Value</th>
-                            <td mat-cell *matCellDef="let v">{{ v.defaultValue ?? 'None' }}</td>
+                            <td mat-cell *matCellDef="let v"><p class="mono">{{ v.defaultValue ?? 'None' }}</p></td>
                         </ng-container>
 
                         <ng-container matColumnDef="sourceOrDomainApplication">
-                            <th mat-header-cell *matHeaderCellDef>Source Application</th>
-                            <td mat-cell *matCellDef="let v">{{ v.sourceOrDomainApplication ?? '—' }}</td>
+                            <th mat-header-cell *matHeaderCellDef>Source/Domain Application</th>
+                            <td mat-cell *matCellDef="let v"><p class="mono">{{ v.sourceOrDomainApplication ?? '—' }}</p></td>
                         </ng-container>
 
                         <ng-container matColumnDef="sourceOrDomainFieldName">
-                            <th mat-header-cell *matHeaderCellDef>Source Field Name</th>
-                            <td mat-cell *matCellDef="let v">{{ v.sourceOrDomainFieldName ?? '—' }}</td>
+                            <th mat-header-cell *matHeaderCellDef>Source/Domain Field Name</th>
+                            <td mat-cell *matCellDef="let v"><p class="mono">{{ v.sourceOrDomainFieldName ?? '—' }}</p></td>
                         </ng-container>
 
                         <tr mat-header-row *matHeaderRowDef="resBodyFields"></tr>
@@ -594,7 +617,7 @@
 
                 <div class="divider"> </div>
 
-                <div class="data-field"><label>Response Headers</label></div>
+                <div class="data-field"><label>Response Status Codes</label></div>
 
                 <div class="table-container">
                     @if (WSDetails?.responseStatusCodes?.length) {
@@ -603,13 +626,13 @@
                         <ng-container matColumnDef="HTTPCode">
                             <th mat-header-cell *matHeaderCellDef>HTTP Code</th>
                             <td mat-cell *matCellDef="let v">
-                                {{ v.HTTPCode ?? '—' }}
+                                <p class="mono">{{ v.httpcode ?? '—' }}</p>
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="businessCode">
                             <th mat-header-cell *matHeaderCellDef>Business Code</th>
-                            <td mat-cell *matCellDef="let v">{{ v.businessCode ?? '—' }}</td>
+                            <td mat-cell *matCellDef="let v"><p class="mono">{{ v.businessCode ?? '—' }}</p></td>
                         </ng-container>
 
                         <ng-container matColumnDef="message">
@@ -660,14 +683,14 @@
                     <div class="data-field">
                         <label>Average Response Size</label>
                         <p>
-                            {{ WSDetails?.averageResponseSize ? (WSDetails.averageResponseSize + ' KB') : '—' }}
+                            {{ WSDetails?.averageResponseSize ? (WSDetails.averageResponseSize) : '—' }}
                         </p>
                     </div>
 
                     <div class="data-field">
                         <label>Max Response Size</label>
                         <p>
-                            {{ WSDetails?.maxResponseSize ? (WSDetails.maxResponseSize + ' KB') : '—' }}
+                            {{ WSDetails?.maxResponseSize ? (WSDetails.maxResponseSize) : '—' }}
                         </p>
                     </div>
                 </div>
@@ -679,11 +702,17 @@
                 <div class="grid-2">
                     <div class="data-field">
                         <label>Response Data Logged?</label>
-                        <p>{{ WSDetails?.requestDataLogged ?? '—' }}</p>
+                        <p [class.text-success]="WSDetails.serviceConfig[0].requestDataLogged"
+                            [class.text-danger]="!WSDetails.serviceConfig[0].requestDataLogged">
+                            {{ WSDetails.serviceConfig[0].requestDataLogged ? '✓ Yes' : '✘ No' }}
+                        </p>
                     </div>
                     <div class="data-field">
                         <label>Response Data Cached?</label>
-                        <p>{{ WSDetails?.responseDataCached ?? '—' }}</p>
+                        <p [class.text-success]="WSDetails.serviceConfig[0].responseDataCached"
+                            [class.text-danger]="!WSDetails.serviceConfig[0].responseDataCached">
+                            {{ WSDetails.serviceConfig[0].responseDataCached ? '✓ Yes' : '✘ No' }}
+                        </p>
                     </div>
                 </div>
             </section>
@@ -709,8 +738,9 @@
                 <div class="data-field"><label>Consumers</label></div>
 
                 <div class="table-container">
-                    @if (WSDetails?.consumers?.length) {
-                    <table mat-table [dataSource]="WSDetails.consumers" class="mat-elevation-z0 border-table">
+                    @if (WSDetails?.consumerApplications?.length) {
+                    <table mat-table [dataSource]="WSDetails.consumerApplications"
+                        class="mat-elevation-z0 border-table consumer-table">
 
                         <ng-container matColumnDef="appName">
                             <th mat-header-cell *matHeaderCellDef>Application Name</th>
@@ -731,7 +761,14 @@
                             <th mat-header-cell *matHeaderCellDef>Status</th>
                             <td mat-cell *matCellDef="let v">
                                 @if (v.status) {
-                                <span class="custom-chip">{{ v.status }}</span>
+                                <span class="custom-chip" [ngClass]="{
+                                    'active': v.status == 'ACTIVE',
+                                    'for-deprecation': v.status == 'FOR_DEPRECATION',
+                                    'deprecated': v.status == 'DEPRECATED',
+                                    'for-retirement': v.status == 'FOR_RETIREMENT'
+                                }">
+                                    {{ v.status }}
+                                </span>
                                 } @else {
                                 <span class="text-muted">—</span>
                                 }
@@ -781,8 +818,9 @@
                 <div class="data-field"><label>Upstream/Source Applications</label></div>
 
                 <div class="table-container">
-                    @if (WSDetails?.upstreamApp?.length) {
-                    <table mat-table [dataSource]="WSDetails.upstreamApp" class="mat-elevation-z0 border-table">
+                    @if (WSDetails?.upstreamApplications?.length) {
+                    <table mat-table [dataSource]="WSDetails.upstreamApplications"
+                        class="mat-elevation-z0 border-table">
 
                         <ng-container matColumnDef="appName">
                             <th mat-header-cell *matHeaderCellDef>Application Name</th>
@@ -822,6 +860,102 @@
                 </div>
 
             </section>
+
+            <section class="audit-section">
+                <div class="section-header">
+                    <h3>Version History / Change Log</h3>
+                </div>
+                @if (versionData?.results?.length) {
+
+                <div class="table-container version-table-container">
+                    <table mat-table [dataSource]="versionData.results"
+                        class="mat-elevation-z0 border-table version-table">
+                        <ng-container matColumnDef="version">
+                            <th mat-header-cell *matHeaderCellDef>Web Service Version</th>
+                            <td mat-cell *matCellDef="let v"><p class="mono">{{v.buildVersion || '-'}}</p></td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="date">
+                            <th mat-header-cell *matHeaderCellDef>Modified Date&Time</th>
+                            <td mat-cell *matCellDef="let v">{{v.createdAt | date:'MMM dd, yyyy, HH:mm:ss'}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="stage">
+                            <th mat-header-cell *matHeaderCellDef>Release Stage</th>
+                            <td mat-cell *matCellDef="let v">
+                                <span class="custom-chip" [ngClass]="{
+                                    'pre-alpha': v.releaseStage === 'PRE_ALPHA',
+                                    'alpha': v.releaseStage === 'ALPHA',
+                                    'beta': v.releaseStage === 'BETA',
+                                    'rc': v.releaseStage === 'RC',
+                                    'stable': v.releaseStage === 'STABLE',
+                                    'patch': v.releaseStage === 'PATCH',
+                                    'minor': v.releaseStage === 'MINOR',
+                                    'major': v.releaseStage === 'MAJOR'
+                                }">
+                                    {{v.releaseStage || '-'}}
+                                </span>
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="env">
+                            <th mat-header-cell *matHeaderCellDef>Environment</th>
+                            <td mat-cell *matCellDef="let v">
+                                <span class="custom-chip" [ngClass]="{
+                                    'prod': v.env === 'PROD',
+                                    'uat': v.env === 'UAT',
+                                    'sit': v.env === 'SIT',
+                                    'dr' : v.environment === 'DR',
+                                    'dev' : v.environment === 'DEV'
+                                }">
+                                    {{v.environment || '-'}}
+                                </span>
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="build">
+                            <th mat-header-cell *matHeaderCellDef>Application Version</th>
+                            <td mat-cell *matCellDef="let v" class="text-muted"><p class="mono">{{v.appVersion || '-'}}</p></td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="documents">
+                            <th mat-header-cell *matHeaderCellDef>Documents</th>
+                            <td mat-cell *matCellDef="let v">
+                                <button mat-icon-button class="btn-custom-blue" (click)="openUrl(v.docsUrl)"
+                                    [disabled]="!v.docs_url">
+                                    <mat-icon>open_in_new</mat-icon>
+                                </button>
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="options">
+                            <th mat-header-cell *matHeaderCellDef>Options</th>
+                            <td mat-cell *matCellDef="let v">
+                                <button (click)="openDialog(v.appVersionUuid)"><mat-icon
+                                        class="action-icon">visibility</mat-icon></button>
+                                <!-- <mat-icon class="action-icon">edit</mat-icon> -->
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedVersionColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedVersionColumns;"></tr>
+                    </table>
+
+                </div>
+                <app-pagination [totalElements]="versionData.totalElements" [pageSize]="versionData.pageSize"
+                    [currentPage]="versionData.currentPage" (pageChange)="onHandleVersionPage($event)">
+                </app-pagination>
+                } @else {
+                <div class="table-container">
+                    <div class="empty-container">
+                        <mat-icon>warning</mat-icon>
+                        <p>No Version History Found</p>
+                    </div>
+                </div>
+                }
+
+            </section>
+
 
             <section>
                 <h3>Links & Resources</h3>

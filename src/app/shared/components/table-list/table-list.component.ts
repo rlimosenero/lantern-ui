@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { TableItem } from '../../../core/models/interface';
+import { ReplaceUnderscorePipe } from '../../pipes/replace-underscore/replace-underscore.pipe';
 
 @Component({
   selector: 'app-table-list',
@@ -16,7 +17,8 @@ import { TableItem } from '../../../core/models/interface';
     MatButtonModule,
     MatIconModule,
     MatChipsModule,
-    MatCardModule
+    MatCardModule,
+    ReplaceUnderscorePipe
   ],
   templateUrl: './table-list.component.html',
   styleUrl: './table-list.component.scss',

@@ -83,6 +83,12 @@ export class WebServicesDashboardComponent {
     this.isFilterExpanded = !this.isFilterExpanded;
   }
 
+  toggleDropdown(selectedFilter: any) {
+    const willOpen = !selectedFilter.isOpen;
+    this.filterData.forEach(f => f.isOpen = false);
+    selectedFilter.isOpen = willOpen;
+  }
+
   toggleFilter(key: string, option: string) {
     if (!this.activeFilters[key]) {
       this.activeFilters[key] = [];
@@ -149,7 +155,6 @@ export class WebServicesDashboardComponent {
   fetchFilterOptions() {
     this.webServicesApiService.getFilterOptions().subscribe({
       next: (res: any) => {
-        console.log(res);
         this.filterData = res.data;
 
       },

@@ -69,3 +69,28 @@ span.custom-chip {
     margin-top: 1rem;
     gap: 1.5rem;
 }
+
+.text-muted, .no-link {
+  color: #9e9e9e;
+  font-style: italic;
+  font-size: 0.9rem;
+}
+
+.placeholder-text {
+  color: #bdbdbd;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px;
+  color: #757575;
+  
+  mat-icon {
+    font-size: 48px;
+    height: 48px;
+    width: 48px;
+    margin-bottom: 12px;
+  }
+}
