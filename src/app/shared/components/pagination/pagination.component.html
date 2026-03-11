@@ -14,7 +14,7 @@
       class="pag-btn" 
       [disabled]="currentPage() === 0" 
       (click)="onPageClick(currentPage() - 1)">
-      &laquo; Prev
+      &laquo;
     </button>
 
     @for (page of visiblePages; track $index) {
@@ -34,7 +34,7 @@
       class="pag-btn" 
       [disabled]="currentPage() >= totalPages() - 1" 
       (click)="onPageClick(currentPage() + 1)">
-      Next &raquo;
+      &raquo;
     </button>
   </div>
 </div>

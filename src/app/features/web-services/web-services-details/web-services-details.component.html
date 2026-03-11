@@ -211,12 +211,14 @@
                             <th mat-header-cell *matHeaderCellDef>Required?</th>
                             <td mat-cell *matCellDef="let v">
                                 @if (v.isRequired !== null && v.isRequired !== undefined) {
-                                <span class="custom-chip alpha"
-                                    [class.req-yes]="v.isRequired === 'Y' || v.isRequired === true">
-                                    {{ v.isRequired }}
+                                <span class="custom-chip" [ngClass]="{
+                                    'alpha': v.isRequired == true,
+                                    'pre-alpha': v.isRequired == false,
+                                }">
+                                    {{ v.isRequired ? 'Yes' : 'No' }}
                                 </span>
                                 } @else {
-                                <span class="text-muted">N/A</span>
+                                <span class="text-muted">—</span>
                                 }
                             </td>
                         </ng-container>
@@ -270,7 +272,10 @@
                             <th mat-header-cell *matHeaderCellDef>Required?</th>
                             <td mat-cell *matCellDef="let v">
                                 @if (v.isRequired !== null && v.isRequired !== undefined) {
-                                <span class="custom-chip alpha">
+                                <span class="custom-chip" [ngClass]="{
+                                    'alpha': v.isRequired == true,
+                                    'pre-alpha': v.isRequired == false,
+                                }">
                                     {{ v.isRequired ? 'Yes' : 'No' }}
                                 </span>
                                 } @else {
@@ -353,7 +358,10 @@
                             <th mat-header-cell *matHeaderCellDef>Required?</th>
                             <td mat-cell *matCellDef="let v">
                                 @if (v.isRequired !== null && v.isRequired !== undefined) {
-                                <span class="custom-chip alpha">
+                                <span class="custom-chip" [ngClass]="{
+                                    'alpha': v.isRequired == true,
+                                    'pre-alpha': v.isRequired == false,
+                                }">
                                     {{ v.isRequired ? 'Yes' : 'No' }}
                                 </span>
                                 } @else {
@@ -481,7 +489,10 @@
                             <th mat-header-cell *matHeaderCellDef>Required?</th>
                             <td mat-cell *matCellDef="let v">
                                 @if (v.isRequired !== null && v.isRequired !== undefined) {
-                                <span class="custom-chip alpha">
+                                <span class="custom-chip" [ngClass]="{
+                                    'alpha': v.isRequired == true,
+                                    'pre-alpha': v.isRequired == false,
+                                }">
                                     {{ v.isRequired ? 'Yes' : 'No' }}
                                 </span>
                                 } @else {
@@ -565,7 +576,10 @@
                             <th mat-header-cell *matHeaderCellDef>Required?</th>
                             <td mat-cell *matCellDef="let v">
                                 @if (v.isRequired !== null && v.isRequired !== undefined) {
-                                <span class="custom-chip alpha">
+                                <span class="custom-chip" [ngClass]="{
+                                    'alpha': v.isRequired == true,
+                                    'pre-alpha': v.isRequired == false,
+                                }">
                                     {{ v.isRequired ? 'Yes' : 'No' }}
                                 </span>
                                 } @else {
