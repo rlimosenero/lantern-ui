@@ -2,6 +2,29 @@
   display: block;
 }
 
+.table-container {
+  margin: 1rem 0 0;
+  overflow-x: auto;
+  max-width: 100%;
+  border: 1px solid #E0E0E0;
+  border-radius: .625rem;
+}
+
+.empty-container {
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1rem;
+
+  h3,
+  mat-icon {
+    font-weight: 500;
+    color: #808080;
+  }
+}
+
 .content-body {
   padding: 24px;
   border-radius: 0.625rem;
@@ -59,18 +82,19 @@ span.custom-chip {
   font-weight: 500;
   display: inline-block;
   line-height: calc(1rem);
-  margin: 0.5rem 0;
+  margin: 0.1rem 0;
   border: 1px solid #0000001a;
 }
 
 .flex-col {
-    display: flex;
-    flex-direction: column;
-    margin-top: 1rem;
-    gap: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+  gap: 1.5rem;
 }
 
-.text-muted, .no-link {
+.text-muted,
+.no-link {
   color: #9e9e9e;
   font-style: italic;
   font-size: 0.9rem;
@@ -86,11 +110,52 @@ span.custom-chip {
   align-items: center;
   padding: 40px;
   color: #757575;
-  
+
   mat-icon {
     font-size: 48px;
     height: 48px;
     width: 48px;
     margin-bottom: 12px;
   }
+}
+
+table,
+.mat-mdc-table {
+  width: 900px !important;
+  display: table !important;
+}
+
+// Table Styles
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.border-table {
+  width: 100%;
+  // border: 1px solid #eee;
+  border-radius: 8px;
+  overflow: hidden;
+
+  .mat-mdc-header-row {
+    height: 40px;
+  }
+
+  .mat-mdc-row {
+    height: 39px;
+  }
+
+  .app-name {
+    font-weight: 500;
+  }
+
+  span.custom-chip {
+    border: 1px solid #0000001a;
+  }
+}
+
+.event-stack {
+  display: flex;
+  flex-direction: column;
 }

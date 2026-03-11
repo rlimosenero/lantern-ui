@@ -88,7 +88,7 @@ export class AppDetailsComponent implements OnInit {
 
     this.applicationApiService.getWebServicesList(appUuid, 0).subscribe({
       next: (data: any) => {
-        console.log(data)
+        // console.log(data)
         this.wsData = data.data;
       },
       error: (err: any) => {
@@ -125,7 +125,8 @@ export class AppDetailsComponent implements OnInit {
 
   openDialog(uuid: string): void {
     const dialogRef = this.dialog.open(VersionModalComponent, {
-      width: '1000px',
+      maxWidth: '1000px',
+      height:'750px',
       data: { uuid: uuid, type: 'application'  }
     });
 

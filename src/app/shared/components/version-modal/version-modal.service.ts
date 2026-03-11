@@ -9,8 +9,13 @@ export class VersionModalService {
   private http = inject(HttpClient);
   private config = inject(APP_CONFIG);
 
-  getVersionDetails(uuid: string){
-    const url = `${this.config.baseUrl}/applications/versions/${uuid}/details`;
+  getVersionDetails(appVersionUuid: string) {
+    const url = `${this.config.baseUrl}/applications/versions/${appVersionUuid}/details`;
+    return this.http.get(url);
+  }
+
+  getAudit(appVersionUuid: string, pagenumber?: number) {
+    const url = `${this.config.baseUrl}/applications/versions/${appVersionUuid}/audit?size=5&page=${pagenumber}`;
     return this.http.get(url);
   }
 }

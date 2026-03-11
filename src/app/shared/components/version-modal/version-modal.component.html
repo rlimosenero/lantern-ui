@@ -1,72 +1,136 @@
 <div class="content-body">
   @if (details) {
-    <section>
-      <h3>Version Details</h3>
-      <p>Complete information about this version release</p>
-      
-      <div class="grid-2">
-        <div class="data-field">
-          <label>Application Version</label>
-          <p>{{ details.appVersion || '—' }}</p>
-        </div>
-        <div class="data-field">
-          <label>Build Version</label>
-          <p>{{ details.buildVersion || '—' }}</p>
-        </div>
-        <div class="data-field">
-          <label>Release Stage</label>
-          @if (details.releaseStage) {
-            <span class="custom-chip">{{ details.releaseStage }}</span>
-          } @else {
-            <span class="text-muted">N/A</span>
+  <section>
+    <h3>Version Details</h3>
+    <p>Complete information about this version release</p>
+
+    <div class="grid-2">
+      <div class="data-field">
+        <label>Application Version</label>
+        <p>{{ details.appVersion || '—' }}</p>
+      </div>
+      <div class="data-field">
+        <label>Build Version</label>
+        <p>{{ details.buildVersion || '—' }}</p>
+      </div>
+      <div class="data-field">
+        <label>Release Stage</label>
+        @if (details.releaseStage) {
+        <span class="custom-chip">{{ details.releaseStage }}</span>
+        } @else {
+        <span class="text-muted">N/A</span>
+        }
+      </div>
+      <div class="data-field">
+        <label>Environment</label>
+        <span class="custom-chip sit">{{ details.environment || 'UNKNOWN' }}</span>
+      </div>
+    </div>
+
+    <div class="flex-col">
+      <div class="data-field">
+        <label>Features & Changes</label>
+        <p [class.placeholder-text]="!details.features">
+          {{ details.features ?? 'No features documented for this release.' }}
+        </p>
+      </div>
+
+      <div class="data-field">
+        <label>Developers</label>
+        <div>
+          @for (dev of (details.developers | split); track dev) {
+          <p>{{ dev }}</p>
+          } @empty {
+          <span class="text-muted">No developers listed</span>
           }
-        </div>
-        <div class="data-field">
-          <label>Environment</label>
-          <span class="custom-chip sit">{{ details.environment || 'UNKNOWN' }}</span>
         </div>
       </div>
 
-      <div class="flex-col">
-        <div class="data-field">
-          <label>Features & Changes</label>
-          <p [class.placeholder-text]="!details.features">
-            {{ details.features ?? 'No features documented for this release.' }}
-          </p>
+      <div class="data-field">
+        <label>Squad Name</label>
+        <p>{{ details.squadName ?? 'Unassigned' }}</p>
+      </div>
+
+      <div class="data-field">
+        <label>SharePoint Documents</label>
+        @if (details.docsUrl) {
+        <a [href]="details.docsUrl" target="_blank" class="link-text">
+          {{details.docsUrl}}
+        </a>
+        } @else {
+        <span class="no-link">No documents attached</span>
+        }
+      </div>
+    </div>
+
+    @if(data.type == 'application'){
+    <div class="flex-col">
+      <div class="data-field">
+        <label>Audit Trail</label>
+        @if (auditData?.results?.length) {
+
+        <div class="table-container">
+          <table mat-table [dataSource]="auditData?.results" class="mat-elevation-z0 border-table">
+            <ng-container matColumnDef="eventDate">
+              <th mat-header-cell *matHeaderCellDef>Event Date&Time</th>
+              <td mat-cell *matCellDef="let v">{{v.eventDatetime | date:'MMM dd, yyyy, HH:mm:ss'}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="event">
+              <th mat-header-cell *matHeaderCellDef>Events</th>
+              <td mat-cell *matCellDef="let v">
+                @let eventStack = (v.events | split);
+                <div class="event-stack">
+                @for (item of eventStack; track item) {
+                <span class="custom-chip pre-alpha">{{ item }}</span>
+                } @empty {
+                <span class="no-data">-</span>
+                }
+                </div>
+
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actor">
+              <th mat-header-cell *matHeaderCellDef>Actor</th>
+              <td mat-cell *matCellDef="let v">
+                {{v.actor || '-'}}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="newValues">
+              <th mat-header-cell *matHeaderCellDef>New Values</th>
+              <td mat-cell *matCellDef="let v">
+                {{v.data || '-'}}
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedAuditColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedAuditColumns;"></tr>
+          </table>
+
         </div>
-        
-        <div class="data-field">
-          <label>Developers</label>
-          <div>
-            @for (dev of (details.developers | split); track dev) {
-              <p>{{ dev }}</p>
-            } @empty {
-              <span class="text-muted">No developers listed</span>
-            }
+        <app-pagination [totalElements]="auditData.totalElements" [pageSize]="auditData.pageSize"
+          [currentPage]="auditData.currentPage" (pageChange)="onHandlePage($event)">
+        </app-pagination>
+        } @else {
+        <div class="table-container">
+          <div class="empty-container">
+            <mat-icon>warning</mat-icon>
+            <p>No Audit Trail Found</p>
           </div>
         </div>
-
-        <div class="data-field">
-          <label>Squad Name</label>
-          <p>{{ details.squadName ?? 'Unassigned' }}</p>
-        </div>
-
-        <div class="data-field">
-          <label>SharePoint Documents</label>
-          @if (details.docsUrl) {
-            <a [href]="details.docsUrl" target="_blank" class="link-text">
-              {{details.docsUrl}}
-            </a>
-          } @else {
-            <span class="no-link">No documents attached</span>
-          }
-        </div>
+        }
       </div>
-    </section>
-  } @else {
-    <div class="empty-state">
-      <mat-icon>info_outline</mat-icon>
-      <p>No version details found for this selection.</p>
     </div>
+    }
+
+
+  </section>
+  } @else {
+  <div class="empty-state">
+    <mat-icon>info_outline</mat-icon>
+    <p>No version details found for this selection.</p>
+  </div>
   }
 </div>
