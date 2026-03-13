@@ -15,6 +15,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { VersionModalComponent } from '../../../shared/components/version-modal/version-modal.component';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
 import { SplitPipe } from '../../../shared/pipes/split/split.pipe';
+import { LoaderComponent } from '../../../shared/components/loader/loader.component';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-app-details',
@@ -29,7 +31,8 @@ import { SplitPipe } from '../../../shared/pipes/split/split.pipe';
     MatDividerModule,
     MatTableModule,
     PaginationComponent,
-    SplitPipe
+    SplitPipe,
+    LoaderComponent
   ],
   templateUrl: './app-details.component.html',
   styleUrls: ['./app-details.component.scss']
@@ -48,6 +51,9 @@ export class AppDetailsComponent implements OnInit {
 
   versionData: any = [];
 
+  isVersionListLoading = true;
+  isWebServiceListLoading = true;
+
   constructor(
     private applicationApiService: ApplicationApiService,
     private router: Router,
@@ -60,12 +66,15 @@ export class AppDetailsComponent implements OnInit {
     this.fetchAppVersions();
   }
 
+  mockList() {
+    return new Array(5).fill({});
+  }
+
   fetchAppDetails() {
     const appUuid = this.getIdFromUrl();
 
     this.applicationApiService.getAppDetails(appUuid).subscribe({
       next: (data: any) => {
-        // console.log(data.data);
         this.applicationDetails = data.data;
       },
       error: (err: any) => {
@@ -84,11 +93,17 @@ export class AppDetailsComponent implements OnInit {
   }
 
   getWebServicesList() {
+    this.loadWebServiceList(0);
+  }
+
+  loadWebServiceList(page: number) {
+    this.isWebServiceListLoading = true;
     const appUuid = this.getIdFromUrl();
 
-    this.applicationApiService.getWebServicesList(appUuid, 0).subscribe({
+    this.applicationApiService.getWebServicesList(appUuid, page).pipe(
+      finalize(() => this.isWebServiceListLoading = false)
+    ).subscribe({
       next: (data: any) => {
-        // console.log(data)
         this.wsData = data.data;
       },
       error: (err: any) => {
@@ -98,36 +113,15 @@ export class AppDetailsComponent implements OnInit {
   }
 
   onHandleWSPage(newPage: number) {
-    const appUuid = this.getIdFromUrl();
-    this.wsData = [];
-
-    this.applicationApiService.getWebServicesList(appUuid, newPage).subscribe({
-      next: (res: any) => {
-        this.wsData = res.data;
-      },
-      error: (err) => console.error(err)
-    });
+    this.wsData.results = this.mockList();
+    this.loadWebServiceList(newPage);
   }
-
-  onHandleVersionPage(newPage: number) {
-    const appUuid = this.getIdFromUrl();
-    this.versionData = [];
-
-    this.applicationApiService.getVersionHistoryList(appUuid, newPage).subscribe({
-      next: (res: any) => {
-        // console.log(res)
-        this.versionData = res.data;
-      },
-      error: (err) => console.error(err)
-    });
-  }
-
 
   openDialog(uuid: string): void {
     const dialogRef = this.dialog.open(VersionModalComponent, {
       maxWidth: '1000px',
-      height:'750px',
-      data: { uuid: uuid, type: 'application'  }
+      height: '750px',
+      data: { uuid: uuid, type: 'application' }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -136,10 +130,22 @@ export class AppDetailsComponent implements OnInit {
   }
 
   fetchAppVersions() {
+    this.loadVersionList(0);
+  }
+
+  onHandleVersionPage(newPage: number) {
+    this.versionData.results = this.mockList();
+    this.loadVersionList(newPage)
+  }
+
+  loadVersionList(page: number) {
+    this.isVersionListLoading = true;
     const appUuid = this.getIdFromUrl();
-    this.applicationApiService.getVersionHistoryList(appUuid, 0).subscribe({
+
+    this.applicationApiService.getVersionHistoryList(appUuid, page).pipe(
+      finalize(() => this.isVersionListLoading = false)
+    ).subscribe({
       next: (res: any) => {
-        // console.log(res)
         this.versionData = res.data;
       },
       error: (err) => console.error(err)

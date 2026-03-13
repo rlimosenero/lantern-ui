@@ -14,6 +14,8 @@ import { PaginationComponent } from '../../../shared/components/pagination/pagin
 import { ButtonComponent } from '../../../shared/components/button/button.component';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { FormsModule } from '@angular/forms';
+import { finalize } from 'rxjs';
+import { LoaderComponent } from '../../../shared/components/loader/loader.component';
 
 @Component({
   selector: 'app-web-services-dashboard',
@@ -27,7 +29,8 @@ import { FormsModule } from '@angular/forms';
     TableListComponent,
     PaginationComponent,
     ButtonComponent,
-    FormsModule
+    FormsModule,
+    LoaderComponent
   ],
   templateUrl: './web-services-dashboard.component.html',
   styleUrl: './web-services-dashboard.component.scss',
@@ -60,6 +63,8 @@ export class WebServicesDashboardComponent {
   filterData: FilterOption[] = [];
   searchQuery: string = '';
 
+  isLoading = true;
+
   dataRes: any | [] = [];
 
   constructor(
@@ -69,12 +74,17 @@ export class WebServicesDashboardComponent {
 
 
   ngOnInit(): void {
+    this.webServicesList = this.mockWebList();
     this.loadData(0)
     this.fetchFilterOptions();
   }
 
+  mockWebList() {
+    return new Array(10).fill({});
+  }
+
   onHandlePage(newPage: number) {
-    this.webServicesList = [];
+    // this.webServicesList = this.mockWebList();
     this.loadData(newPage)
   }
 
@@ -125,6 +135,7 @@ export class WebServicesDashboardComponent {
   }
 
   loadData(page: number = 0) {
+    this.isLoading = true;
     const formattedFilters = this.allSelectedTags.map(tag => ({
       key: tag.key,
       value: tag.value
@@ -137,7 +148,9 @@ export class WebServicesDashboardComponent {
     };
 
 
-    this.webServicesApiService.getWebServicesList(page, payload).subscribe({
+    this.webServicesApiService.getWebServicesList(page, payload).pipe(
+      finalize(() => this.isLoading = false)
+    ).subscribe({
       next: (data: any) => {
         this.dataRes = data.data;
         this.webServicesList = data.data.results;

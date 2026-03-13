@@ -15,6 +15,8 @@ import { ApplicationSummary, FilterOption, PaginatedData, SearchResponse } from 
 import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
 import { FormsModule } from '@angular/forms';
 import { ReplaceUnderscorePipe } from '../../../shared/pipes/replace-underscore/replace-underscore.pipe';
+import { LoaderComponent } from '../../../shared/components/loader/loader.component';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-application',
@@ -29,7 +31,8 @@ import { ReplaceUnderscorePipe } from '../../../shared/pipes/replace-underscore/
     ButtonComponent,
     PaginationComponent,
     FormsModule,
-    ReplaceUnderscorePipe
+    ReplaceUnderscorePipe,
+    LoaderComponent
   ],
   templateUrl: './application.component.html',
   styleUrl: './application.component.scss',
@@ -71,17 +74,26 @@ export class ApplicationComponent implements OnInit {
   dataRes: any | [] = [];
   appList: ApplicationSummary[] | [] = [];
 
+  isLoading = true;
+
   constructor(
     private applicationApiService: ApplicationApiService,
     private router: Router
   ) { }
 
   ngOnInit(): void {
+    this.appList = this.mockAppList();
     this.loadData(0);
     this.fetchFilterOptions();
   }
 
+  // initial placeholder
+  mockAppList() {
+    return new Array(10).fill({});
+  }
+
   loadData(page: number = 0) {
+    this.isLoading = true;
     const formattedFilters = this.allSelectedTags.map(tag => ({
       key: tag.key,
       value: tag.value
@@ -92,7 +104,9 @@ export class ApplicationComponent implements OnInit {
       filters: formattedFilters
     };
 
-    this.applicationApiService.getAppList(page, payload).subscribe({
+    this.applicationApiService.getAppList(page, payload).pipe(
+      finalize(() => this.isLoading = false)
+    ).subscribe({
       next: (data) => {
         this.dataRes = data.data;
         this.appList = data.data.results;
@@ -106,7 +120,7 @@ export class ApplicationComponent implements OnInit {
   }
 
   onHandlePage(newPage: number) {
-    this.appList = [];
+    // this.appList = [];
     this.loadData(newPage);
   }
 

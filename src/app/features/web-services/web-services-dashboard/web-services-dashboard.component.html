@@ -69,6 +69,10 @@
     @if (webServicesList.length > 0) {
 
     <div class="table-container">
+      @if(isLoading){
+        <app-loader/>
+      }
+
       <app-table-list [dataSource]="webServicesList" [type]="'WEBSERVICE'" />
     </div>
 

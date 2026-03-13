@@ -75,6 +75,11 @@
 
     @if (appList.length > 0) {
     <div class="table-container">
+
+      @if(isLoading){
+        <app-loader/>
+      }
+
       <app-table-list [dataSource]="appList" [type]="'APP'" />
     </div>
 

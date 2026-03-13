@@ -263,6 +263,9 @@
         </div>
         @if (wsData?.results?.length) {
         <div class="table-container">
+          @if(isWebServiceListLoading){
+          <app-loader />
+          }
           <table mat-table [dataSource]="wsData.results" class="mat-elevation-z0 border-table">
             <ng-container matColumnDef="name">
               <th mat-header-cell *matHeaderCellDef>Name</th>
@@ -323,6 +326,10 @@
         @if (versionData?.results?.length) {
 
         <div class="table-container">
+
+          @if(isVersionListLoading){
+            <app-loader />
+          }
           <table mat-table [dataSource]="versionData.results" class="mat-elevation-z0 border-table">
             <ng-container matColumnDef="version">
               <th mat-header-cell *matHeaderCellDef>Application Version</th>

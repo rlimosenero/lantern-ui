@@ -12,16 +12,17 @@
   max-width: 100%;
   border: 1px solid #E0E0E0;
   border-radius: .625rem;
+  position: relative;
 }
 
-.empty-container{
-
+.empty-container {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 0.5rem;
 
-  h3, mat-icon{
+  h3,
+  mat-icon {
     font-weight: 500;
     color: #808080;
   }
@@ -118,7 +119,7 @@
     flex-wrap: wrap;
     gap: 1rem;
     margin-top: 1rem;
-}
+  }
 }
 
 .selected-tags {

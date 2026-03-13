@@ -1,0 +1,60 @@
+:host {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+}
+
+.glass-overlay {
+  width: 100%;
+  height: 100%;
+  /* Glassmorphism Effect */
+  background: rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.spinner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.modern-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(0, 82, 204, 0.1);
+  border-top: 3px solid #0052cc;
+  /* Matches your UAT/Button blue */
+  border-radius: 50%;
+  animation: spin 0.8s cubic-bezier(0.5, 0.1, 0.4, 0.9) infinite;
+}
+
+.loading-text {
+  font-family: var(--font-mono);
+  /* Reusing your global mono font */
+  font-size: 12px;
+  color: #0052cc;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
