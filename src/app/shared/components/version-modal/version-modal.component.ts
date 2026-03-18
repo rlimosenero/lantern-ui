@@ -6,6 +6,8 @@ import { MatIcon } from '@angular/material/icon';
 import { PaginationComponent } from '../pagination/pagination.component';
 import { DatePipe } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
+import { finalize } from 'rxjs';
+import { LoaderComponent } from '../loader/loader.component';
 
 @Component({
   selector: 'app-version-modal',
@@ -15,7 +17,8 @@ import { MatTableModule } from '@angular/material/table';
     PaginationComponent,
     DatePipe,
     MatTableModule,
-    SplitPipe
+    SplitPipe,
+    LoaderComponent
   ],
   templateUrl: './version-modal.component.html',
   styleUrl: './version-modal.component.scss',
@@ -24,6 +27,7 @@ export class VersionModalComponent implements OnInit {
   displayedAuditColumns: string[] = ['eventDate', 'event', 'actor', 'newValues'];
   details: any = [];
   auditData: any = [];
+  isLoading = true;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { uuid: string, type: string },
@@ -33,6 +37,10 @@ export class VersionModalComponent implements OnInit {
   ngOnInit(): void {
     this.fetchVersionDetails();
     this.fetchAudit();
+  }
+
+  mockAppList() {
+    return new Array(5).fill({});
   }
 
   fetchVersionDetails() {
@@ -50,7 +58,10 @@ export class VersionModalComponent implements OnInit {
   }
 
   loadData(pageNumber: number) {
-    this.versionModalService.getAudit(this.data.uuid, pageNumber).subscribe({
+    this.isLoading = true;
+    this.versionModalService.getAudit(this.data.uuid, pageNumber).pipe(
+          finalize(() => this.isLoading = false)
+        ).subscribe({
       next: (res: any) => {
         console.log(res);
         this.auditData = res.data
@@ -60,7 +71,7 @@ export class VersionModalComponent implements OnInit {
   }
 
   onHandlePage(newPage: number) {
-    this.auditData = [];
+    this.auditData.results = this.mockAppList();
     this.loadData(newPage);
   }
 

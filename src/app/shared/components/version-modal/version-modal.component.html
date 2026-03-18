@@ -70,6 +70,11 @@
         @if (auditData?.results?.length) {
 
         <div class="table-container">
+
+          @if(isLoading){
+          <app-loader />
+          }
+
           <table mat-table [dataSource]="auditData?.results" class="mat-elevation-z0 border-table">
             <ng-container matColumnDef="eventDate">
               <th mat-header-cell *matHeaderCellDef>Event Date&Time</th>
@@ -81,11 +86,11 @@
               <td mat-cell *matCellDef="let v">
                 @let eventStack = (v.events | split);
                 <div class="event-stack">
-                @for (item of eventStack; track item) {
-                <span class="custom-chip pre-alpha">{{ item }}</span>
-                } @empty {
-                <span class="no-data">-</span>
-                }
+                  @for (item of eventStack; track item) {
+                  <span class="custom-chip pre-alpha">{{ item }}</span>
+                  } @empty {
+                  <span class="no-data">-</span>
+                  }
                 </div>
 
               </td>

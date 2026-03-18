@@ -91,6 +91,11 @@ $warning-text: #856404;
   }
 }
 
+span.custom-chip {
+  margin: 0;
+  border: 1px solid #0000001a;
+}
+
 .card-container {
   display: flex;
   flex-wrap: wrap;
@@ -139,11 +144,6 @@ $warning-text: #856404;
     margin: 0;
   }
 
-  span.custom-chip{
-    margin: 0;
-    border: 1px solid #0000001a;
-  }
-
   .cpu-usage {
     height: 8px;
     border-radius: 10px;
@@ -163,7 +163,7 @@ $warning-text: #856404;
 }
 
 .mat-column-options {
-  button{
+  button {
     border: none;
     margin: 0;
     background: transparent;

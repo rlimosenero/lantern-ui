@@ -14,6 +14,8 @@ import { ButtonComponent } from '../../../shared/components/button/button.compon
 import { VersionModalComponent } from '../../../shared/components/version-modal/version-modal.component';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
 import { environment } from '../../../../environments/environment';
+import { finalize } from 'rxjs';
+import { LoaderComponent } from '../../../shared/components/loader/loader.component';
 
 @Component({
   selector: 'app-web-services-details',
@@ -26,7 +28,8 @@ import { environment } from '../../../../environments/environment';
     MatProgressBarModule,
     MatDividerModule,
     MatTableModule,
-    PaginationComponent
+    PaginationComponent,
+    LoaderComponent,
     // ButtonComponent
   ],
   templateUrl: './web-services-details.component.html',
@@ -36,6 +39,7 @@ export class WebServicesDetailsComponent implements OnInit {
   requestBodySampleString = '';
   responseBodySampleString = '';
   WSDetails: any = undefined;
+  isLoading = true;
   genericColumn: string[] = ['paramName', 'typeAndFormat', 'isRequired', 'value', 'desc'];
   reqBodyFields: string[] = ['name', 'typeAndFormat', 'desc', 'isRequired', 'sampleValue', 'rules', 'logic', 'defaultValue'];
   resBodyFields: string[] = ['name', 'typeAndFormat', 'desc', 'isRequired', 'sampleValue', 'rules', 'logic', 'defaultValue', 'sourceOrDomainApplication', 'sourceOrDomainFieldName'];
@@ -94,13 +98,24 @@ export class WebServicesDetailsComponent implements OnInit {
     }
   }
 
-  onHandleVersionPage(newPage: number) {
-    const appUuid = this.getIdFromUrl();
-    this.versionData = [];
+  // initial placeholder
+  mockAppList() {
+    return new Array(5).fill({});
+  }
 
-    this.webServiceApiService.getVersionHistoryList(appUuid, newPage).subscribe({
+  onHandleVersionPage(newPage: number) {
+    this.versionData.results = this.mockAppList();
+    this.loadVersionData(newPage);
+  }
+
+  loadVersionData(page: number){
+    this.isLoading = true;
+    const appUuid = this.getIdFromUrl();
+
+    this.webServiceApiService.getVersionHistoryList(appUuid, page).pipe(
+      finalize(() => this.isLoading = false)
+    ).subscribe({
       next: (res: any) => {
-        // console.log(res)
         this.versionData = res.data;
       },
       error: (err) => console.error(err)
@@ -108,14 +123,7 @@ export class WebServicesDetailsComponent implements OnInit {
   }
 
   fetchVersions() {
-    const appUuid = this.getIdFromUrl();
-    this.webServiceApiService.getVersionHistoryList(appUuid, 0).subscribe({
-      next: (res: any) => {
-        console.log(res)
-        this.versionData = res.data;
-      },
-      error: (err) => console.error(err)
-    });
+    this.loadVersionData(0);
   }
 
   openLink(uuid: string){

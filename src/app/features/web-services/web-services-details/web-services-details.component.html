@@ -8,8 +8,12 @@
                     <h1>{{ WSDetails?.serviceConfig?.[0]?.name ?? 'Unnamed Web Service' }}</h1>
 
                     <div class="chip-container">
+                        <span class="custom-chip header-chip">Web Service</span>
                         @if (WSDetails?.serviceConfig?.[0]?.type) {
-                        <span class="custom-chip header-chip">{{ WSDetails.serviceConfig[0].type }}</span>
+                            <span class="custom-chip ">{{ WSDetails.serviceConfig[0].type }}</span>
+                        }
+                        @if (WSDetails.serviceConfig[0].method) {
+                            <span class="custom-chip active">{{ WSDetails.serviceConfig[0].method }}</span>
                         }
                     </div>
                 </div>
@@ -31,6 +35,14 @@
                     <span class="version-text">
                         Version {{ WSDetails?.serviceConfig?.[0]?.version ?? 'N/A' }}
                     </span>
+
+
+                    @if (WSDetails.serviceConfig[0].accessedViaGateway){
+                    <span class="badge sit">
+                        Via Gateway
+                    </span>
+                    }
+
                 </div>
             </div>
         </div>
@@ -44,12 +56,13 @@
                 <div class="grid-2">
                     <div class="data-field">
                         <label>Application</label>
-                        <button (click)="openLink(WSDetails?.serviceConfig?.[0]?.appUuid)">{{ WSDetails?.serviceConfig?.[0]?.appName ?? '—' }}</button>
+                        <button (click)="openLink(WSDetails?.serviceConfig?.[0]?.appUuid)">{{
+                            WSDetails?.serviceConfig?.[0]?.appName ?? '—' }}</button>
                     </div>
 
                     <div class="data-field">
                         <label>Web Service Name</label>
-                        <p  class="highlight">{{ WSDetails?.serviceConfig?.[0]?.name ?? '—' }}</p>
+                        <p class="highlight">{{ WSDetails?.serviceConfig?.[0]?.name ?? '—' }}</p>
                     </div>
 
                     <div class="data-field">
@@ -341,12 +354,16 @@
 
                         <ng-container matColumnDef="name">
                             <th mat-header-cell *matHeaderCellDef>Field Name</th>
-                            <td mat-cell *matCellDef="let v"><p class="mono">{{ v.fieldName ?? '—' }}</p></td>
+                            <td mat-cell *matCellDef="let v">
+                                <p class="mono">{{ v.fieldName ?? '—' }}</p>
+                            </td>
                         </ng-container>
 
                         <ng-container matColumnDef="typeAndFormat">
                             <th mat-header-cell *matHeaderCellDef>Data Type and Format</th>
-                            <td mat-cell *matCellDef="let v"><p class="mono">{{ v.typeAndFormat ?? '—' }}</p></td>
+                            <td mat-cell *matCellDef="let v">
+                                <p class="mono">{{ v.typeAndFormat ?? '—' }}</p>
+                            </td>
                         </ng-container>
 
                         <ng-container matColumnDef="desc">
@@ -559,12 +576,16 @@
 
                         <ng-container matColumnDef="name">
                             <th mat-header-cell *matHeaderCellDef>Field Name</th>
-                            <td mat-cell *matCellDef="let v"><p class="mono">{{ v.fieldName ?? '—' }}</p></td>
+                            <td mat-cell *matCellDef="let v">
+                                <p class="mono">{{ v.fieldName ?? '—' }}</p>
+                            </td>
                         </ng-container>
 
                         <ng-container matColumnDef="typeAndFormat">
                             <th mat-header-cell *matHeaderCellDef>Data Type and Format</th>
-                            <td mat-cell *matCellDef="let v"><p class="mono">{{ v.typeAndFormat ?? '—' }}</p></td>
+                            <td mat-cell *matCellDef="let v">
+                                <p class="mono">{{ v.typeAndFormat ?? '—' }}</p>
+                            </td>
                         </ng-container>
 
                         <ng-container matColumnDef="desc">
@@ -590,7 +611,9 @@
 
                         <ng-container matColumnDef="sampleValue">
                             <th mat-header-cell *matHeaderCellDef>Sample Value</th>
-                            <td mat-cell *matCellDef="let v"><p class="mono">{{ v.sampleValue ?? '—' }}</p></td>
+                            <td mat-cell *matCellDef="let v">
+                                <p class="mono">{{ v.sampleValue ?? '—' }}</p>
+                            </td>
                         </ng-container>
 
                         <ng-container matColumnDef="rules">
@@ -605,17 +628,23 @@
 
                         <ng-container matColumnDef="defaultValue">
                             <th mat-header-cell *matHeaderCellDef>Default Value</th>
-                            <td mat-cell *matCellDef="let v"><p class="mono">{{ v.defaultValue ?? 'None' }}</p></td>
+                            <td mat-cell *matCellDef="let v">
+                                <p class="mono">{{ v.defaultValue ?? 'None' }}</p>
+                            </td>
                         </ng-container>
 
                         <ng-container matColumnDef="sourceOrDomainApplication">
                             <th mat-header-cell *matHeaderCellDef>Source/Domain Application</th>
-                            <td mat-cell *matCellDef="let v"><p class="mono">{{ v.sourceOrDomainApplication ?? '—' }}</p></td>
+                            <td mat-cell *matCellDef="let v">
+                                <p class="mono">{{ v.sourceOrDomainApplication ?? '—' }}</p>
+                            </td>
                         </ng-container>
 
                         <ng-container matColumnDef="sourceOrDomainFieldName">
                             <th mat-header-cell *matHeaderCellDef>Source/Domain Field Name</th>
-                            <td mat-cell *matCellDef="let v"><p class="mono">{{ v.sourceOrDomainFieldName ?? '—' }}</p></td>
+                            <td mat-cell *matCellDef="let v">
+                                <p class="mono">{{ v.sourceOrDomainFieldName ?? '—' }}</p>
+                            </td>
                         </ng-container>
 
                         <tr mat-header-row *matHeaderRowDef="resBodyFields"></tr>
@@ -646,7 +675,9 @@
 
                         <ng-container matColumnDef="businessCode">
                             <th mat-header-cell *matHeaderCellDef>Business Code</th>
-                            <td mat-cell *matCellDef="let v"><p class="mono">{{ v.businessCode ?? '—' }}</p></td>
+                            <td mat-cell *matCellDef="let v">
+                                <p class="mono">{{ v.businessCode ?? '—' }}</p>
+                            </td>
                         </ng-container>
 
                         <ng-container matColumnDef="message">
@@ -882,11 +913,18 @@
                 @if (versionData?.results?.length) {
 
                 <div class="table-container version-table-container">
+                    
+                    @if(isLoading){
+                        <app-loader/>
+                    }
+
                     <table mat-table [dataSource]="versionData.results"
                         class="mat-elevation-z0 border-table version-table">
                         <ng-container matColumnDef="version">
                             <th mat-header-cell *matHeaderCellDef>Web Service Version</th>
-                            <td mat-cell *matCellDef="let v"><p class="mono">{{v.buildVersion || '-'}}</p></td>
+                            <td mat-cell *matCellDef="let v">
+                                <p class="mono">{{v.buildVersion || '-'}}</p>
+                            </td>
                         </ng-container>
 
                         <ng-container matColumnDef="date">
@@ -929,7 +967,9 @@
 
                         <ng-container matColumnDef="build">
                             <th mat-header-cell *matHeaderCellDef>Application Version</th>
-                            <td mat-cell *matCellDef="let v" class="text-muted"><p class="mono">{{v.appVersion || '-'}}</p></td>
+                            <td mat-cell *matCellDef="let v" class="text-muted">
+                                <p class="mono">{{v.appVersion || '-'}}</p>
+                            </td>
                         </ng-container>
 
                         <ng-container matColumnDef="documents">
