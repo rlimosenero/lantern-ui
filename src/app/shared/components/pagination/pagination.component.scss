@@ -35,14 +35,15 @@
     font-weight: 500;
 
     &:hover:not(:disabled) {
-      background-color: #f9fafb;
-      border-color: #d1d5db;
+      background-color: rgba(186, 26, 26, 0.1);
+      border-color: #ba1a1a;
+      color: #ba1a1a;
     }
 
     &.active {
-      background-color: #2563eb;
+      background-color: #ba1a1a;
       color: white;
-      border-color: #2563eb;
+      border-color: #ba1a1a;
     }
 
     &:disabled {

@@ -99,8 +99,8 @@
 }
 
 .active-filter {
-  color: #155dfc;
-  background-color: rgba(21, 93, 252, 0.1);
+  color: #ba1a1a;
+  background-color: rgba(186, 26, 26, 0.1);
 }
 
 .filter-section {
@@ -190,7 +190,7 @@
     transition: border-color 0.2s;
 
     &:hover {
-      border-color: #155dfc;
+      border-color: #ba1a1a;
     }
 
     mat-icon {
@@ -267,8 +267,8 @@
     }
 
     &.selected {
-      color: #155dfc;
-      background: #eff6ff;
+      color: #ba1a1a;
+      background: rgba(186, 26, 26, 0.1);
     }
   }
 }
