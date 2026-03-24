@@ -97,6 +97,7 @@ export interface FilterOption {
   key: string;
   options: string[];
   isOpen?: boolean;
+  searchTerm?: string;
 }
 
 export interface ApiFilterRequest {

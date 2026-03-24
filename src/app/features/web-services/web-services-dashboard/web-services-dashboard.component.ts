@@ -16,6 +16,7 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 import { FormsModule } from '@angular/forms';
 import { finalize } from 'rxjs';
 import { LoaderComponent } from '../../../shared/components/loader/loader.component';
+import { ReplaceUnderscorePipe } from '../../../shared/pipes/replace-underscore/replace-underscore.pipe';
 
 @Component({
   selector: 'app-web-services-dashboard',
@@ -30,7 +31,8 @@ import { LoaderComponent } from '../../../shared/components/loader/loader.compon
     PaginationComponent,
     ButtonComponent,
     FormsModule,
-    LoaderComponent
+    LoaderComponent,
+    ReplaceUnderscorePipe
   ],
   templateUrl: './web-services-dashboard.component.html',
   styleUrl: './web-services-dashboard.component.scss',
@@ -131,6 +133,8 @@ export class WebServicesDashboardComponent {
   }
 
   applyFilters() {
+    this.closeAllFilters();
+    this.isFilterExpanded = false;
     this.loadData(0);
   }
 
@@ -160,6 +164,7 @@ export class WebServicesDashboardComponent {
   }
 
   clearAll() {
+    this.closeAllFilters();
     this.activeFilters = {};
     this.searchQuery = '';
     this.applyFilters();
@@ -168,11 +173,37 @@ export class WebServicesDashboardComponent {
   fetchFilterOptions() {
     this.webServicesApiService.getFilterOptions().subscribe({
       next: (res: any) => {
-        this.filterData = res.data;
-
+        this.filterData = res.data.map((filter: any) => ({
+          ...filter,
+          isOpen: false,
+          searchTerm: ''
+        }));
       },
       error: (err) => console.error(err)
     });
+  }
+
+  getFilteredOptions(filter: any): string[] {
+    const sourceOptions = filter.options || [];
+
+    if (!filter.searchTerm) {
+      return sourceOptions;
+    }
+
+    const search = filter.searchTerm.toLowerCase();
+    return sourceOptions.filter((option: string) =>
+      option.toLowerCase().includes(search)
+    );
+  }
+
+  closeAllFilters() {
+    if (this.filterData) {
+      this.filterData.forEach(filter => {
+        filter.isOpen = false;
+
+        filter.searchTerm = '';
+      });
+    }
   }
 
 }

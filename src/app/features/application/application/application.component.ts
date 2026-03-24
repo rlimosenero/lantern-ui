@@ -116,6 +116,8 @@ export class ApplicationComponent implements OnInit {
   }
 
   applyFilters() {
+    this.closeAllFilters();
+    this.isFilterExpanded = false;
     this.loadData(0);
   }
 
@@ -168,6 +170,7 @@ export class ApplicationComponent implements OnInit {
   }
 
   clearAll() {
+    this.closeAllFilters();
     this.activeFilters = {};
     this.searchQuery = '';
     this.applyFilters();
@@ -178,10 +181,30 @@ export class ApplicationComponent implements OnInit {
       next: (res: any) => {
         this.filterData = res.data.map((filter: any) => ({
           ...filter,
-          isOpen: false
+          isOpen: false,
+          searchTerm: ''
         }));
       },
       error: (err) => console.error(err)
     });
   }
+
+  getFilteredOptions(filter: any): string[] {
+    if (!filter.searchTerm) return filter.options[0];
+
+    return filter.options[0].filter((option: string) =>
+      option.toLowerCase().includes(filter.searchTerm.toLowerCase())
+    );
+  }
+
+  closeAllFilters() {
+    if (this.filterData) {
+      this.filterData.forEach(filter => {
+        filter.isOpen = false;
+
+        filter.searchTerm = '';
+      });
+    }
+  }
+
 }

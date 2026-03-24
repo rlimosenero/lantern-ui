@@ -37,16 +37,26 @@
           </div>
 
           @if (filter.isOpen) {
-          <div class="options-grid">
-            @for (option of filter.options[0]; track option) {
-            <div class="option-item" [class.selected]="isSelected(filter.key, option)"
-              (click)="toggleFilter(filter.key, option)">
-              <div class="checkbox">
-                @if (isSelected(filter.key, option)) { <mat-icon>done</mat-icon> }
-              </div>
-              {{ option | replaceUnderscore | titlecase }}
+          <div class="options-container">
+            <div class="filter-search-wrapper" (click)="$event.stopPropagation()">
+              <mat-icon>search</mat-icon>
+              <input type="text" [(ngModel)]="filter.searchTerm" placeholder="Search {{ filter.label }}..."
+                class="filter-inner-search">
             </div>
-            }
+
+            <div>
+              @for (option of getFilteredOptions(filter); track option) {
+              <div class="option-item" [class.selected]="isSelected(filter.key, option)"
+                (click)="toggleFilter(filter.key, option)">
+                <div class="checkbox">
+                  @if (isSelected(filter.key, option)) { <mat-icon>done</mat-icon> }
+                </div>
+                {{ option | replaceUnderscore | titlecase }}
+              </div>
+              } @empty {
+              <div class="no-options">No matches found</div>
+              }
+            </div>
           </div>
           }
         </div>
@@ -77,7 +87,7 @@
     <div class="table-container">
 
       @if(isLoading){
-        <app-loader/>
+      <app-loader />
       }
 
       <app-table-list [dataSource]="appList" [type]="'APP'" />
