@@ -97,6 +97,7 @@ export class SearchComponent implements OnInit {
   filterData: FilterOption[] = filterData;
 
   isLoading = true;
+  isError = false;
 
   constructor(
     private searchService: SearchService,
@@ -124,6 +125,7 @@ export class SearchComponent implements OnInit {
   }
 
   loadData(page: number) {
+    this.isError = false;
     this.isLoading = true;
     let filters: string = this.formatFilter(this.activeFilters)
 
@@ -136,6 +138,7 @@ export class SearchComponent implements OnInit {
 
       },
       error: (err: any) => {
+        this.isError = true;
         console.log('Error: ' + err);
       }
     })

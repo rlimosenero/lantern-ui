@@ -12,7 +12,8 @@
         <div class="search-row">
             <div class="search-box">
                 <mat-icon>search</mat-icon>
-                <input type="text" [(ngModel)]="searchQuery" (keydown.enter)="search()" placeholder="Search web services or applications...">
+                <input type="text" [(ngModel)]="searchQuery" (keydown.enter)="search()"
+                    placeholder="Search web services or applications...">
             </div>
 
             <button mat-icon-button (click)="toggleFilters()" [class.active-filter]="isFilterExpanded"
@@ -79,14 +80,24 @@
 
         </div>
 
-        @if (searchList.length > 0) {
+        @if (isError) {
+        <div class="table-container">
+            <div class="empty-container">
+                <mat-icon>warning</mat-icon>
+                <p>Please try again later or check your internet connection.</p>
+            </div>
+        </div>
+
+
+
+        } @else if (searchList.length > 0) {
 
         <div class="table-container">
 
             @if(isLoading){
             <app-loader />
             }
-            
+
             <table mat-table [dataSource]="searchList" class="mat-elevation-z0 lantern-table">
 
                 <ng-container matColumnDef="type">

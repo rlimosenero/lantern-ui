@@ -66,6 +66,7 @@ export class WebServicesDashboardComponent {
   searchQuery: string = '';
 
   isLoading = true;
+  isError = false;
 
   dataRes: any | [] = [];
 
@@ -139,6 +140,7 @@ export class WebServicesDashboardComponent {
   }
 
   loadData(page: number = 0) {
+    this.isError = false;
     this.isLoading = true;
     const formattedFilters = this.allSelectedTags.map(tag => ({
       key: tag.key,
@@ -159,7 +161,10 @@ export class WebServicesDashboardComponent {
         this.dataRes = data.data;
         this.webServicesList = data.data.results;
       },
-      error: (err: any) => console.error('Error fetching data:', err)
+      error: (err: any) => {
+        this.isError = true;
+        console.error('Error fetching data:', err);
+      }
     });
   }
 
@@ -179,7 +184,9 @@ export class WebServicesDashboardComponent {
           searchTerm: ''
         }));
       },
-      error: (err) => console.error(err)
+      error: (err) => {
+        console.error(err);
+      }
     });
   }
 

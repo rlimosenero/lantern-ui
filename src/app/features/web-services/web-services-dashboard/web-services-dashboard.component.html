@@ -3,7 +3,8 @@
     <div class="search-row">
       <div class="search-box">
         <mat-icon>search</mat-icon>
-        <input [(ngModel)]="searchQuery" type="text" (keydown.enter)="applyFilters()" placeholder="Search web services...">
+        <input [(ngModel)]="searchQuery" type="text" (keydown.enter)="applyFilters()"
+          placeholder="Search web services...">
       </div>
 
       <button mat-icon-button (click)="toggleFilters()" [class.active-filter]="isFilterExpanded"
@@ -76,8 +77,17 @@
 
     </div>
 
-    @if (webServicesList.length > 0) {
+    @if (isError) {
+    <div class="table-container">
+      <div class="empty-container">
+        <mat-icon>warning</mat-icon>
+        <p>Please try again later or check your internet connection.</p>
+      </div>
+    </div>
 
+
+
+    } @else if (webServicesList.length > 0) {
     <div class="table-container">
       @if(isLoading){
       <app-loader />
@@ -90,7 +100,7 @@
       [currentPage]="dataRes.currentPage" (pageChange)="onHandlePage($event)">
     </app-pagination>
 
-    } @else {
+    }@else {
 
     <div class="table-container">
       <div class="empty-container">

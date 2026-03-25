@@ -75,6 +75,7 @@ export class ApplicationComponent implements OnInit {
   appList: ApplicationSummary[] | [] = [];
 
   isLoading = true;
+  isError = false;
 
   constructor(
     private applicationApiService: ApplicationApiService,
@@ -93,6 +94,7 @@ export class ApplicationComponent implements OnInit {
   }
 
   loadData(page: number = 0) {
+    this.isError = false;
     this.isLoading = true;
     const formattedFilters = this.allSelectedTags.map(tag => ({
       key: tag.key,
@@ -111,7 +113,10 @@ export class ApplicationComponent implements OnInit {
         this.dataRes = data.data;
         this.appList = data.data.results;
       },
-      error: (err) => console.error('Error: ' + err)
+      error: (err) => {
+        this.isError = true;
+        console.error('Error: ' + err);
+      }
     });
   }
 
