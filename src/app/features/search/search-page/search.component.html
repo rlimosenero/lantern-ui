@@ -82,6 +82,11 @@
         @if (searchList.length > 0) {
 
         <div class="table-container">
+
+            @if(isLoading){
+            <app-loader />
+            }
+            
             <table mat-table [dataSource]="searchList" class="mat-elevation-z0 lantern-table">
 
                 <ng-container matColumnDef="type">

@@ -19,7 +19,7 @@
       <span class="tags-title">Active Filters:</span>
       @for (tag of allSelectedTags; track tag.value) {
       <span class="tag" [ngClass]="String(tag.value).toLowerCase().replace('_', '-')">
-        {{ tag.value }}
+        {{ tag.value | replaceUnderscore | titlecase }}
         <mat-icon (click)="toggleFilter(tag.key, tag.value)">close</mat-icon>
       </span>
       }

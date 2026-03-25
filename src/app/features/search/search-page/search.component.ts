@@ -14,6 +14,8 @@ import { FormsModule } from '@angular/forms';
 import { SearchService } from '../services/search.service';
 import { Router } from '@angular/router';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
+import { LoaderComponent } from '../../../shared/components/loader/loader.component';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-search',
@@ -27,7 +29,8 @@ import { PaginationComponent } from '../../../shared/components/pagination/pagin
     HighlightPipe,
     ButtonComponent,
     FormsModule,
-    PaginationComponent
+    PaginationComponent,
+    LoaderComponent
   ],
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss',
@@ -93,21 +96,41 @@ export class SearchComponent implements OnInit {
   activeFilters: { [key: string]: string[] } = {};
   filterData: FilterOption[] = filterData;
 
+  isLoading = true;
+
   constructor(
     private searchService: SearchService,
     private router: Router
   ) { }
 
   ngOnInit(): void {
-
+    this.searchList = this.mockList();
   }
 
   onHandlePage(newPage: number) {
+    this.loadData(newPage);
+  }
+
+  search() {
+    this.isSearched = true;
+    this.dataRes = [];
+    this.searchList = this.mockList();
+
+    this.loadData(0);
+  }
+
+  mockList() {
+    return new Array(10).fill({});
+  }
+
+  loadData(page: number) {
+    this.isLoading = true;
     let filters: string = this.formatFilter(this.activeFilters)
 
-    this.searchService.getSearchList(this.searchQuery, filters, newPage).subscribe({
+    this.searchService.getSearchList(this.searchQuery, filters, page).pipe(
+      finalize(() => this.isLoading = false)
+    ).subscribe({
       next: (data: any) => {
-        console.log(data)
         this.dataRes = data.data;
         this.searchList = data.data.results
 
@@ -116,10 +139,6 @@ export class SearchComponent implements OnInit {
         console.log('Error: ' + err);
       }
     })
-  }
-
-  onFilterChange() {
-    console.log('toggle');
   }
 
   toggleFilters() {
@@ -163,24 +182,6 @@ export class SearchComponent implements OnInit {
     this.activeFilters = {};
   }
 
-  search() {
-    this.isSearched = true;
-    let filters: string = this.formatFilter(this.activeFilters)
-    this.dataRes = [];
-    this.searchList = [];
-
-    this.searchService.getSearchList(this.searchQuery, filters, 0).subscribe({
-      next: (data: any) => {
-        this.dataRes = data.data;
-        this.searchList = data.data.results
-
-      },
-      error: (err: any) => {
-        console.log('Error: ' + err);
-      }
-    })
-  }
-
   formatFilter(activeFilters: { [key: string]: string[] }): string {
     const types = activeFilters['type'] || [];
 
@@ -197,12 +198,15 @@ export class SearchComponent implements OnInit {
   }
 
   openDetails(data: any) {
-    if (data.category === 'APPLICATION') {
-      this.router.navigate(['/app-details/' + data.uuid])
-    } else if (data.category === 'WEB_SERVICE') {
-      this.router.navigate(['/web-service-details/' + data.uuid])
-    }
+    
+    const path = data.category === 'APPLICATION'
+      ? '/app-details/' + data.uuid
+      : '/web-service-details/' + data.uuid;
 
+    
+    this.router.navigate([path], {
+      queryParams: { searchKeyword: this.searchQuery }
+    });
   }
 
 }

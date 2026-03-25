@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { WebServicesApiServiceService } from '../services/web-services-api-service.service';
 import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -10,7 +10,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTableModule } from '@angular/material/table';
-import { ButtonComponent } from '../../../shared/components/button/button.component';
+// import { ButtonComponent } from '../../../shared/components/button/button.component';
 import { VersionModalComponent } from '../../../shared/components/version-modal/version-modal.component';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
 import { environment } from '../../../../environments/environment';
@@ -36,6 +36,7 @@ import { LoaderComponent } from '../../../shared/components/loader/loader.compon
   styleUrl: './web-services-details.component.scss',
 })
 export class WebServicesDetailsComponent implements OnInit {
+  private route = inject(ActivatedRoute);
   requestBodySampleString = '';
   responseBodySampleString = '';
   WSDetails: any = undefined;
@@ -67,12 +68,42 @@ export class WebServicesDetailsComponent implements OnInit {
     this.webServiceApiService.getWebServicesDetails(WSId).subscribe({
       next: (res: any) => {
         this.WSDetails = res.data;
-        console.log(this.WSDetails)
+
         this.requestBodySampleString = this.WSDetails?.requestBodySample ? JSON.stringify(JSON.parse(this.WSDetails.requestBodySample), null, 2) : 'null';
         this.responseBodySampleString = this.WSDetails?.responseBodySample ? JSON.stringify(JSON.parse(this.WSDetails.responseBodySample), null, 2) : 'null';
+
+        setTimeout(() => this.scrollToKeyword(), 300);
       },
       error: (err: any) => console.error(err)
     });
+  }
+
+  scrollToKeyword() {
+    const keyword = this.route.snapshot.queryParamMap.get('searchKeyword');
+    if (!keyword || keyword.trim() === '') return;
+
+    const elements = document.querySelectorAll('h1, h2, h3, h4, span, td, b, p, div');
+
+    const target = Array.from(elements).find(el =>
+      el.childNodes.length > 0 &&
+      Array.from(el.childNodes).some(node => node.nodeType === Node.TEXT_NODE) &&
+      el.textContent?.toLowerCase().includes(keyword.toLowerCase())
+    ) as HTMLElement;
+
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+
+      const originalHTML = target.innerHTML;
+      const regex = new RegExp(`(${keyword})`, 'gi'); // 'gi' makes it case-insensitive
+
+      // Wrap the matching text in a span with red color
+      target.innerHTML = originalHTML.replace(regex, `<span class="search-highlight" style="color: #ba1a1a;">$1</span>`);
+
+      setTimeout(() => {
+        target.innerHTML = originalHTML;
+      }, 3000);
+    }
   }
 
   getIdFromUrl() {
@@ -108,7 +139,7 @@ export class WebServicesDetailsComponent implements OnInit {
     this.loadVersionData(newPage);
   }
 
-  loadVersionData(page: number){
+  loadVersionData(page: number) {
     this.isLoading = true;
     const appUuid = this.getIdFromUrl();
 
@@ -126,7 +157,7 @@ export class WebServicesDetailsComponent implements OnInit {
     this.loadVersionData(0);
   }
 
-  openLink(uuid: string){
+  openLink(uuid: string) {
     this.router.navigate(['/app-details/' + uuid]);
   }
 

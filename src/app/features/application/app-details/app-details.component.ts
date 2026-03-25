@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,7 +9,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatTableModule } from '@angular/material/table';
 import { Application, BasicInfo, LinkAndResources, TechStack } from '../../../core/models/interface';
 import { ApplicationApiService } from '../services/application-api-service.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { ButtonComponent } from '../../../shared/components/button/button.component';
 import { MatDialog } from '@angular/material/dialog';
 import { VersionModalComponent } from '../../../shared/components/version-modal/version-modal.component';
@@ -38,6 +38,7 @@ import { finalize } from 'rxjs';
   styleUrls: ['./app-details.component.scss']
 })
 export class AppDetailsComponent implements OnInit {
+  private route = inject(ActivatedRoute);
   appDetails: Application | undefined = undefined;
   appBasicInfo: BasicInfo | undefined = undefined;
   appLinkAndResources: LinkAndResources | undefined = undefined;
@@ -76,11 +77,41 @@ export class AppDetailsComponent implements OnInit {
     this.applicationApiService.getAppDetails(appUuid).subscribe({
       next: (data: any) => {
         this.applicationDetails = data.data;
+
+        setTimeout(() => this.scrollToKeyword(), 300);
       },
       error: (err: any) => {
         console.log('Error: ' + err);
       }
     })
+  }
+
+  scrollToKeyword() {
+    const keyword = this.route.snapshot.queryParamMap.get('searchKeyword');
+    if (!keyword || keyword.trim() === '') return;
+
+    const elements = document.querySelectorAll('h1, h2, h3, h4, span, td, b, p, div');
+
+    const target = Array.from(elements).find(el =>
+      el.childNodes.length > 0 &&
+      Array.from(el.childNodes).some(node => node.nodeType === Node.TEXT_NODE) &&
+      el.textContent?.toLowerCase().includes(keyword.toLowerCase())
+    ) as HTMLElement;
+
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+
+      const originalHTML = target.innerHTML;
+      const regex = new RegExp(`(${keyword})`, 'gi'); // 'gi' makes it case-insensitive
+
+      // Wrap the matching text in a span with red color
+      target.innerHTML = originalHTML.replace(regex, `<span class="search-highlight" style="color: #ba1a1a;">$1</span>`);
+
+      setTimeout(() => {
+        target.innerHTML = originalHTML;
+      }, 3000);
+    }
   }
 
   // get id from url
