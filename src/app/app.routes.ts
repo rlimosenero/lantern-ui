@@ -9,6 +9,7 @@ import { WebServicesDetailsComponent } from './features/web-services/web-service
 import { WebServicesDashboardComponent } from './features/web-services/web-services-dashboard/web-services-dashboard.component';
 import { authGuard } from './core/guards/auth.guard';
 import { SearchComponent } from './features/search/search-page/search.component';
+import { MasterlistExcelComponent } from './features/admin/masterlist-excel/masterlist-excel.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -18,6 +19,7 @@ export const routes: Routes = [
     canActivate: [authGuard],
     children: [
       { path: 'admin', component: AdminAnalyticsComponent },
+      { path: 'masterlist-io', component: MasterlistExcelComponent },
       { path: 'search', component: SearchComponent },
       { path: 'application', component: ApplicationComponent },
       { path: 'add-app', component: AddAppComponent },

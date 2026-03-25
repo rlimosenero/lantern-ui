@@ -1,0 +1,42 @@
+<div class="page-container">
+    <mat-card appearance="outlined">
+        <div>
+            <h2>Masterlist Excel Upload/Download</h2>
+        </div>
+
+        <button class="btn-dl" (click)="downloadMasterExcel()" [disabled]="isLoading">
+            <span class="content">
+                <h3>Download Template:</h3>
+                <p>Get the standard Excel template, fill it with the required data, and ensure the format is followed.
+                </p>
+            </span>
+
+            <span class="icon-container">
+                @if (isLoading) {
+                <div class="test-spinner"></div>
+                } @else if (isDownloaded) {
+                <mat-icon style="color: #4caf50;">check_circle</mat-icon>
+                } @else {
+                <mat-icon>download</mat-icon>
+                }
+            </span>
+        </button>
+
+        <div class="upload-section">
+            <span class="content">
+                @if (isUploading) {
+                <div class="test-spinner"></div>
+                <h3>Uploading...</h3>
+                } @else {
+                <mat-icon>cloud_upload</mat-icon>
+                <h3>Upload File</h3>
+                }
+                <p>Upload the Excel file here to save the data into the database.</p>
+            </span>
+
+            <input type="file" #fileInput (change)="onFileSelected($event)" accept=".xlsx, .xls" style="display: none;">
+
+            <app-button [name]="'Upload'" (click)="fileInput.click()" [disabled]="isUploading" />
+        </div>
+    </mat-card>
+</div>

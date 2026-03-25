@@ -1,0 +1,152 @@
+:host {
+  display: flex;
+  width: 100%;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+  font-family: var(--font-sans) !important;
+}
+
+h2{
+  margin: 0;
+}
+
+.btn-dl {
+  // border-style: dashed;
+  // border-width: 2px;
+  // border-color: black;
+  border: none;
+  border-radius: 0.625rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  background: #dcfce7;
+  cursor: pointer;
+  gap: 1rem;
+
+  .content {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: left;
+
+    h3,
+    p {
+      margin: 0;
+      line-height: 1.25rem;
+    }
+  }
+}
+
+.icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+
+
+.test-spinner {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+
+  border: 3px solid rgba(0, 0, 0, 0.1);
+  border-top: 3px solid #ba1a1a;
+
+  box-sizing: border-box;
+
+  animation: spin 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.upload-section {
+  border-style: dashed;
+  border-width: 2px;
+  background-color: #f9fbff;
+  border-color: #dfdfdf;
+  border-radius: 0.625rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 3rem;
+  gap: 3rem;
+  flex-direction: column;
+  margin-bottom: 2rem;
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 0.5rem;
+
+    h3,
+    p {
+      margin: 0;
+      line-height: 1.25rem;
+    }
+  }
+}
+
+.page-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+mat-card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.mat-mdc-card {
+  border-radius: .625rem;
+  border: none;
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+@container (min-width: 1280px) {
+  .page-container {
+    width: 976px;
+  }
+}
+
+@container (max-width: 1279px) {
+  .page-container {
+    width: 976px;
+  }
+}
+
+@container (max-width: 1023px) {
+  .page-container {
+    width: 720px;
+  }
+}
+
+@container (max-width: 767px) {
+  .page-container {
+    max-width: 592px;
+    width: 100%;
+  }
+}

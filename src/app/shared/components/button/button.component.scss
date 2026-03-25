@@ -10,6 +10,7 @@
   background: #fff;
   padding: .5rem .8rem;
   font-family: var(--font-sans);
+  cursor: pointer;
 
   // Hover state - only triggers if NOT disabled
   &:hover:not(:disabled):not(.btn-disabled) {
