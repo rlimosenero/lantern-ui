@@ -12,7 +12,7 @@
         <div class="search-row">
             <div class="search-box">
                 <mat-icon>search</mat-icon>
-                <input type="text" [(ngModel)]="searchQuery" placeholder="Search web services or applications...">
+                <input type="text" [(ngModel)]="searchQuery" (keydown.enter)="search()" placeholder="Search web services or applications...">
             </div>
 
             <button mat-icon-button (click)="toggleFilters()" [class.active-filter]="isFilterExpanded"

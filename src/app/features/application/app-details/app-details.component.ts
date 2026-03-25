@@ -90,7 +90,7 @@ export class AppDetailsComponent implements OnInit {
     const keyword = this.route.snapshot.queryParamMap.get('searchKeyword');
     if (!keyword || keyword.trim() === '') return;
 
-    const elements = document.querySelectorAll('h1, h2, h3, h4, span, td, b, p, div');
+    const elements = document.querySelectorAll('h1, h2, h3, h4, span, td, b, p, div, a');
 
     const target = Array.from(elements).find(el =>
       el.childNodes.length > 0 &&
@@ -102,8 +102,10 @@ export class AppDetailsComponent implements OnInit {
       target.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
 
+      const escapedKeyword = keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const regex = new RegExp(`(${escapedKeyword})`, 'gi');
+
       const originalHTML = target.innerHTML;
-      const regex = new RegExp(`(${keyword})`, 'gi'); // 'gi' makes it case-insensitive
 
       // Wrap the matching text in a span with red color
       target.innerHTML = originalHTML.replace(regex, `<span class="search-highlight" style="color: #ba1a1a;">$1</span>`);
