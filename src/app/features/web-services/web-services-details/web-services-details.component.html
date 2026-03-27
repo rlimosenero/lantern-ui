@@ -493,7 +493,7 @@
 
                 <div class="table-container">
                     @if (WSDetails?.responseHeaders?.length) {
-                    <table mat-table [dataSource]="WSDetails.responseHeaders" class="mat-elevation-z0 border-table">
+                    <table mat-table [dataSource]="WSDetails.responseHeaders" class="mat-elevation-z0 border-table req-body-field">
 
                         <ng-container matColumnDef="paramName">
                             <th mat-header-cell *matHeaderCellDef>Header Name</th>
@@ -671,7 +671,7 @@
 
                 <div class="table-container">
                     @if (WSDetails?.responseStatusCodes?.length) {
-                    <table mat-table [dataSource]="WSDetails.responseStatusCodes" class="mat-elevation-z0 border-table">
+                    <table mat-table [dataSource]="WSDetails.responseStatusCodes" class="mat-elevation-z0 border-table version-table">
 
                         <ng-container matColumnDef="HTTPCode">
                             <th mat-header-cell *matHeaderCellDef>HTTP Code</th>
@@ -698,7 +698,13 @@
                             <th mat-header-cell *matHeaderCellDef>Category</th>
                             <td mat-cell *matCellDef="let v">
                                 @if (v.type) {
-                                <span class="custom-chip">{{ v.type }}</span>
+                                <span [ngClass]="{
+                                    'active': v.type == 'Success',
+                                    'for-deprecation': v.type == 'Client Error',
+                                    'retired': v.type == 'Server Error',
+                                }" class="custom-chip">
+                                    {{ v.type }}
+                                </span>
                                 } @else {
                                 <span class="text-muted">—</span>
                                 }

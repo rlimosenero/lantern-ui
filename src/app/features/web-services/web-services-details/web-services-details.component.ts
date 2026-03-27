@@ -69,8 +69,8 @@ export class WebServicesDetailsComponent implements OnInit {
       next: (res: any) => {
         this.WSDetails = res.data;
 
-        this.requestBodySampleString = this.WSDetails?.requestBodySample ? JSON.stringify(JSON.parse(this.WSDetails.requestBodySample), null, 2) : 'null';
-        this.responseBodySampleString = this.WSDetails?.responseBodySample ? JSON.stringify(JSON.parse(this.WSDetails.responseBodySample), null, 2) : 'null';
+        this.requestBodySampleString = this.formatSample(this.WSDetails?.requestBodySample);
+        this.responseBodySampleString = this.formatSample(this.WSDetails?.responseBodySample);
 
         setTimeout(() => this.scrollToKeyword(), 300);
       },
@@ -99,7 +99,6 @@ export class WebServicesDetailsComponent implements OnInit {
 
       const originalHTML = target.innerHTML;
 
-      // Wrap the matching text in a span with red color
       target.innerHTML = originalHTML.replace(regex, `<span class="search-highlight" style="color: #ba1a1a;">$1</span>`);
 
       setTimeout(() => {
@@ -161,6 +160,46 @@ export class WebServicesDetailsComponent implements OnInit {
 
   openLink(uuid: string) {
     this.router.navigate(['/app-details/' + uuid]);
+  }
+
+  formatSample(rawString: string | null | undefined): string {
+    if (!rawString) return 'null';
+
+    const trimmed = rawString.trim();
+
+    try {
+      if (trimmed.startsWith('{') || trimmed.startsWith('[')) {
+        return JSON.stringify(JSON.parse(trimmed), null, 2);
+      }
+
+
+      if (trimmed.startsWith('<')) {
+        return this.formatXml(trimmed);
+      }
+    } catch (e) {
+      console.warn('Could not parse sample data, displaying as plain text', e);
+    }
+
+    return trimmed;
+  }
+
+  private formatXml(xml: string): string {
+    let formatted = '';
+    let indent = '';
+    const tab = '  ';
+
+    xml.split(/>\s*</).forEach((node) => {
+      if (node.match(/^\/\w/)) {
+
+        indent = indent.substring(tab.length);
+      }
+      formatted += indent + '<' + node + '>\r\n';
+      if (node.match(/^<?\w[^>]*[^\/]$/)) {
+
+        indent += tab;
+      }
+    });
+    return formatted.substring(1, formatted.length - 3);
   }
 
 }
