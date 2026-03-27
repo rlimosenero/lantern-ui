@@ -44,7 +44,25 @@ export class VersionModalComponent implements OnInit {
   }
 
   fetchVersionDetails() {
-    this.versionModalService.getVersionDetails(this.data.uuid).subscribe({
+    if (this.data.type == 'application') {
+      this.fetchAppVersionDetails();
+    } else {
+      this.fetchApiVersionDetails();
+    }
+  }
+
+  fetchAppVersionDetails(){
+    this.versionModalService.getApplicationVersionDetails(this.data.uuid).subscribe({
+      next: (res: any) => {
+        // console.log(res);
+        this.details = res.data
+      },
+      error: (err) => console.error(err)
+    });
+  }
+
+  fetchApiVersionDetails(){
+    this.versionModalService.getApiVersionDetails(this.data.uuid).subscribe({
       next: (res: any) => {
         // console.log(res);
         this.details = res.data

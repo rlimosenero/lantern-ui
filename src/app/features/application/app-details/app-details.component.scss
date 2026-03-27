@@ -370,6 +370,16 @@ table,
   }
 }
 
+.sec-warn {
+  padding: 1rem;
+  border-radius: 0.25rem;
+  border-color: $border-color;
+
+  .msg-warn{
+    font-size: 14px;
+  }
+}
+
 @container (min-width: 1280px) {
   .page-layout {
     width: 1024px;

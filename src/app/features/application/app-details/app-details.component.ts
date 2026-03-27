@@ -152,7 +152,7 @@ export class AppDetailsComponent implements OnInit {
 
   openDialog(uuid: string): void {
     const dialogRef = this.dialog.open(VersionModalComponent, {
-      maxWidth: '1000px',
+      width: '1000px',
       height: '750px',
       data: { uuid: uuid, type: 'application' }
     });

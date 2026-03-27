@@ -10,10 +10,10 @@
                     <div class="chip-container">
                         <span class="custom-chip header-chip">Web Service</span>
                         @if (WSDetails?.serviceConfig?.[0]?.type) {
-                            <span class="custom-chip ">{{ WSDetails.serviceConfig[0].type }}</span>
+                        <span class="custom-chip ">{{ WSDetails.serviceConfig[0].type }}</span>
                         }
                         @if (WSDetails.serviceConfig[0].method) {
-                            <span class="custom-chip active">{{ WSDetails.serviceConfig[0].method }}</span>
+                        <span class="custom-chip active">{{ WSDetails.serviceConfig[0].method }}</span>
                         }
                     </div>
                 </div>
@@ -27,6 +27,7 @@
                             'active': WSDetails?.serviceConfig?.[0]?.status == 'ACTIVE',
                             'for-deprecation': WSDetails?.serviceConfig?.[0]?.status == 'FOR_DEPRECATION',
                             'deprecated': WSDetails?.serviceConfig?.[0]?.status == 'DEPRECATED',
+                            'retired': WSDetails?.serviceConfig?.[0]?.status == 'RETIRED',
                             'for-retirement': WSDetails?.serviceConfig?.[0]?.status == 'FOR_RETIREMENT'
                         }" [class.unknown]="!WSDetails?.serviceConfig?.[0]?.status">
                         {{ WSDetails?.serviceConfig?.[0]?.status ?? 'UNKNOWN' }}
@@ -104,6 +105,11 @@
                         }">
                             {{ WSDetails?.serviceConfig?.[0]?.status ?? 'Unknown' }}
                         </span>
+                    </div>
+
+                    <div class="data-field">
+                        <label>API Layer</label>
+                        <p>{{ (WSDetails?.layer | titlecase) ?? '—' }}</p>
                     </div>
                 </div>
             </section>
@@ -204,7 +210,8 @@
                 <div class="data-field"><label>URL Path Parameters</label></div>
                 <div class="table-container">
                     @if (WSDetails?.urlPathParameters?.length) {
-                    <table mat-table [dataSource]="WSDetails.urlPathParameters" class="mat-elevation-z0 border-table">
+                    <table mat-table [dataSource]="WSDetails.urlPathParameters"
+                        class="mat-elevation-z0 border-table urlParams">
 
                         <ng-container matColumnDef="paramName">
                             <th mat-header-cell *matHeaderCellDef>Parameter Name</th>
@@ -899,13 +906,14 @@
                     } @else {
                     <div class="empty-container">
                         <mat-icon>warning</mat-icon>
-                        <p>No upstream application dependencies documented.</p>
+                        <p>No upstream/source application dependencies documented.</p>
                     </div>
                     }
                 </div>
 
             </section>
 
+            @if (WSDetails?.serviceConfig?.[0]?.status == 'ACTIVE'){
             <section class="audit-section">
                 <div class="section-header">
                     <h3>Version History / Change Log</h3>
@@ -913,9 +921,9 @@
                 @if (versionData?.results?.length) {
 
                 <div class="table-container version-table-container">
-                    
+
                     @if(isLoading){
-                        <app-loader/>
+                    <app-loader />
                     }
 
                     <table mat-table [dataSource]="versionData.results"
@@ -985,7 +993,7 @@
                         <ng-container matColumnDef="options">
                             <th mat-header-cell *matHeaderCellDef>Options</th>
                             <td mat-cell *matCellDef="let v">
-                                <button (click)="openDialog(v.appVersionUuid)"><mat-icon
+                                <button (click)="openDialog(v.apiVersionUuid)"><mat-icon
                                         class="action-icon">visibility</mat-icon></button>
                                 <!-- <mat-icon class="action-icon">edit</mat-icon> -->
                             </td>
@@ -1009,6 +1017,7 @@
                 }
 
             </section>
+            }
 
 
             <section>
@@ -1038,6 +1047,42 @@
                     }
                 </div>
             </section>
+
+            <section>
+                @if (WSDetails?.serviceConfig?.[0]?.status == 'RETIRED'){
+                <div class="sec-warn retired">
+                    <span class="msg-warn">
+                        🚫 This service is retired. It should not be used for new projects.
+                    </span>
+                </div>
+                }
+
+                @if (WSDetails?.serviceConfig?.[0]?.status == 'FOR_DEPRECATION'){
+                <div class="sec-warn for-deprecation">
+                    <span class="msg-warn">
+                        🚫 This service is for deprecation. It should not be used for new projects.
+                    </span>
+                </div>
+                }
+
+                @if (WSDetails?.serviceConfig?.[0]?.status == 'DEPRECATED'){
+                <div class="sec-warn deprecated">
+                    <span class="msg-warn">
+                        🚫 This service is deprecated. It should not be used for new projects.
+                    </span>
+                </div>
+                }
+
+                @if (WSDetails?.serviceConfig?.[0]?.status == 'FOR_RETIREMENT'){
+                <div class="sec-warn for-retirement">
+                    <span class="msg-warn">
+                        🚫 This service is fore retirement. It should not be used for new projects.
+                    </span>
+                </div>
+                }
+            </section>
+
+
 
             <!-- <section class="analytics-section">
                 <div class="section-header">

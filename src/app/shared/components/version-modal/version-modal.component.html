@@ -6,7 +6,12 @@
 
     <div class="grid-2">
       <div class="data-field">
+        @if(data.type == 'application'){
         <label>Application Version</label>
+        } @else {
+        <label>Web Service Version</label>
+        }
+
         <p>{{ details.appVersion || '—' }}</p>
       </div>
       <div class="data-field">
