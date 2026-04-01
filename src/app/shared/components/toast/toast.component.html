@@ -1,0 +1,10 @@
+<div class="toast-stack" [ngClass]="position">
+  @for (toast of toasts; track toast.id) {
+    <div class="toast-card" [ngClass]="toast.type">
+      <div class="toast-content">
+        <span>{{ toast.message }}</span>
+      </div>
+      <button class="close-btn" (click)="remove(toast.id)">&times;</button>
+    </div>
+  }
+</div>

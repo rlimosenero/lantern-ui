@@ -72,10 +72,10 @@ export class MasterlistExcelComponent {
     this.adminService.importExcel(file).subscribe({
       next: (res) => {
         if (res.flag === 'S') {
-          alert('Success: ' + res.message);
+          // alert('Success: ' + res.message);
         } else {
           this.isError = true;
-          alert('Error: ' + res.message);
+          // alert('Error: ' + res.message);
         }
         this.isUploading = false;
       },

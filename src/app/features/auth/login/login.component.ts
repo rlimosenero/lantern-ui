@@ -29,7 +29,7 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       this.auth.authenticate(this.loginForm.value).subscribe({
         next: () => console.log('Successfully logged in'),
-        error: (err) => alert('Login failed. Please check your credentials.')
+        error: (err) => console.log('Login failed. Please check your credentials.')
       });
     }
   }

@@ -424,4 +424,4 @@ COMMIT;
 
 
 -- ALTER TABLE tbl_application_http_apis 
--- ADD COLUMN api_layer INT CHECK (api_layer IN (0,1,2));
+-- ADD COLUMN api_layer VARCHAR(255) NOT NULL;

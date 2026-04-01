@@ -7,13 +7,14 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { environment } from '../environments/environment';
 import { APP_CONFIG } from './core/models/app.config.model';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
+import { errorInterceptor } from './core/interceptors/error.interceptor';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     // provideHttpClient(),
     provideHttpClient(
-      withInterceptors([authInterceptor]) // Registers the interceptor globally
+      withInterceptors([authInterceptor, errorInterceptor]) // Registers the interceptor globally
     ),
     provideAnimationsAsync(),
     {
