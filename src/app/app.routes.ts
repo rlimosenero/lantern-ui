@@ -15,22 +15,59 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   {
     path: '',
-    component: MainShellComponent, // Wrap your dashboard/catalogue inside the shell
+    component: MainShellComponent,
     canActivate: [authGuard],
     children: [
-      { path: 'admin', component: AdminAnalyticsComponent },
+      { path: 'admin', component: AdminAnalyticsComponent, data: { breadcrumb: 'Admin' } },
       { path: 'masterlist-io', component: MasterlistExcelComponent },
-      { path: 'search', component: SearchComponent },
-      { path: 'application', component: ApplicationComponent },
-      { path: 'add-app', component: AddAppComponent },
-      { path: 'app-details/:id', component: AppDetailsComponent },
-      { path: 'web-services', component: WebServicesDashboardComponent },
-      { path: 'web-service-details/:id', component: WebServicesDetailsComponent },
-      { path: '', redirectTo: 'admin', pathMatch: 'full' } // Default inside the shell
+      {
+        path: 'application',
+        data: { breadcrumb: 'Applications' },
+        children: [
+          {
+            path: '',
+            component: ApplicationComponent,
+            data: { breadcrumb: null }
+          },
+          {
+            path: 'add-app',
+            component: AddAppComponent,
+            data: { breadcrumb: 'Add New App' }
+          },
+          {
+            path: 'details/:id',
+            component: AppDetailsComponent,
+            data: { breadcrumb: 'Application Details' }
+          }
+        ]
+      },
+      {
+        path: 'web-services',
+        data: { breadcrumb: 'Web Services' },
+        children: [
+          {
+            path: '',
+            component: WebServicesDashboardComponent,
+            data: { breadcrumb: null }
+          },
+          {
+            path: 'details/:id',
+            component: WebServicesDetailsComponent,
+            data: { breadcrumb: 'Service Details' }
+          }
+        ]
+      },
+      { 
+        path: 'search', 
+        component: SearchComponent, 
+        // data: { breadcrumb: 'Search' } 
+      },
+      { 
+        path: '', 
+        redirectTo: 'admin', 
+        pathMatch: 'full' 
+      }
     ]
   },
-  {
-    path: '**',
-    redirectTo: 'login'
-  }
+  { path: '**', redirectTo: 'login' }
 ];

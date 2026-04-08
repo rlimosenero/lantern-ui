@@ -1,0 +1,16 @@
+<section class="breadcrumbs">
+  <nav class="breadcrumb-nav">
+    <ol class="breadcrumb-list">
+      @for (bc of (breadcrumbs$ | async); track bc.url; let last = $last) {
+      <li class="breadcrumb-item">
+        @if (!last) {
+        <a [routerLink]="bc.url">{{ bc.label }}</a>
+        <span class="separator"> > </span>
+        } @else {
+        <span class="active">{{ bc.label }}</span>
+        }
+      </li>
+      }
+    </ol>
+  </nav>
+</section>

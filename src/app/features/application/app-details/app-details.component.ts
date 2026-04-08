@@ -17,6 +17,7 @@ import { PaginationComponent } from '../../../shared/components/pagination/pagin
 import { SplitPipe } from '../../../shared/pipes/split/split.pipe';
 import { LoaderComponent } from '../../../shared/components/loader/loader.component';
 import { finalize } from 'rxjs';
+import { BreadcrumbService } from '../../../shared/components/breadcrumbs/breadcrumbs.service';
 
 @Component({
   selector: 'app-app-details',
@@ -58,7 +59,8 @@ export class AppDetailsComponent implements OnInit {
   constructor(
     private applicationApiService: ApplicationApiService,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private breadcrumbService: BreadcrumbService
   ) { }
 
   ngOnInit(): void {
@@ -77,6 +79,9 @@ export class AppDetailsComponent implements OnInit {
     this.applicationApiService.getAppDetails(appUuid).subscribe({
       next: (data: any) => {
         this.applicationDetails = data.data;
+
+        // update breadcrumbs name
+        this.breadcrumbService.setOverride(this.router.url, data.data.appName);
 
         setTimeout(() => this.scrollToKeyword(), 300);
       },

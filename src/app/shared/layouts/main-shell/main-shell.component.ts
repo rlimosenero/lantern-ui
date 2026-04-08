@@ -6,6 +6,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from '../../../core/auth/auth.service';
+import { BreadcrumbsComponent } from '../../components/breadcrumbs/breadcrumbs.component';
 @Component({
   selector: 'app-main-shell',
   standalone: true,
@@ -18,6 +19,7 @@ import { AuthService } from '../../../core/auth/auth.service';
     MatIconModule,
     MatButtonModule,
     RouterLinkActive,
+    BreadcrumbsComponent
   ],
   templateUrl: './main-shell.component.html',
   styleUrl: './main-shell.component.scss',

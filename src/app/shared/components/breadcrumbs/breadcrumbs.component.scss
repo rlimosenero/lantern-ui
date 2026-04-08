@@ -1,0 +1,88 @@
+:host {
+  display: block;
+  font-family: var(--font-sans);
+}
+
+.breadcrumbs{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.breadcrumb-nav {
+  padding: 10px 0;
+  font-size: 14px;
+  width: 100%;
+  display: flex;
+
+  .breadcrumb-list {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0;
+    margin: 0;
+  }
+
+  .breadcrumb-item {
+    color: black !important;
+
+    a {
+      text-decoration: none;
+      color: black !important;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    .separator {
+      margin: 0 8px;
+      color: #ccc;
+    }
+
+    .active {
+      background-color: transparent !important;
+      font-weight: bold;
+      color: #333;
+    }
+  }
+}
+
+@container (min-width: 1536px) {
+  .breadcrumb-nav {
+    width: 1488px;
+  }
+}
+
+@container (max-width: 1535px) {
+  .breadcrumb-nav {
+    width: 1232px;
+  }
+}
+
+
+@container (max-width: 1279px) {
+  .breadcrumb-nav {
+    width: 1024px;
+  }
+}
+
+@container (max-width: 1279px) {
+  .breadcrumb-nav {
+    width: 976px;
+  }
+}
+
+@container (max-width: 1023px) {
+  .breadcrumb-nav {
+    width: 720px;
+  }
+}
+
+@container (max-width: 767px) {
+  .breadcrumb-nav {
+    max-width: 592px;
+    width: 100%;
+  }
+}

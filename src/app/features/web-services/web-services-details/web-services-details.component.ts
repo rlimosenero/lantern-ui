@@ -16,6 +16,7 @@ import { PaginationComponent } from '../../../shared/components/pagination/pagin
 import { environment } from '../../../../environments/environment';
 import { finalize } from 'rxjs';
 import { LoaderComponent } from '../../../shared/components/loader/loader.component';
+import { BreadcrumbService } from '../../../shared/components/breadcrumbs/breadcrumbs.service';
 
 @Component({
   selector: 'app-web-services-details',
@@ -55,7 +56,8 @@ export class WebServicesDetailsComponent implements OnInit {
   constructor(
     private webServiceApiService: WebServicesApiServiceService,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private breadcrumbService: BreadcrumbService
   ) { }
 
   ngOnInit(): void {
@@ -71,6 +73,9 @@ export class WebServicesDetailsComponent implements OnInit {
 
         this.requestBodySampleString = this.formatSample(this.WSDetails?.requestBodySample);
         this.responseBodySampleString = this.formatSample(this.WSDetails?.responseBodySample);
+
+                // update breadcrumbs name
+        this.breadcrumbService.setOverride(this.router.url, res.data.serviceConfig?.[0]?.name );
 
         setTimeout(() => this.scrollToKeyword(), 300);
       },

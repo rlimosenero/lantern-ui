@@ -76,9 +76,9 @@ export class TableListComponent implements OnChanges, OnInit {
 
   openDetails(rowData: any) {
     if (this.type == 'WEBSERVICE') {
-      this.router.navigate(['/web-service-details/' + rowData.appUuid])
+      this.router.navigate(['/web-services/details/' + rowData.appUuid])
     } else if (this.type == 'APP') {
-      this.router.navigate(['/app-details/' + rowData.appUuid])
+      this.router.navigate(['/application/details/' + rowData.appUuid])
     }
   }
 
