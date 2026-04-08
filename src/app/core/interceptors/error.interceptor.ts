@@ -29,7 +29,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       }
     }),
     catchError((error) => {
-      const isFilterRequest = url.includes('/filters') || url.includes('/filter');
+      const isFilterRequest = url.includes('/filters') || url.includes('/filter') || url.includes('/version');
       if (!isFilterRequest) {
         let msg = error.error?.message || 'Connection to server lost';
         toast.show(msg, 'error');

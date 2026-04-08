@@ -16,6 +16,8 @@ import { Router } from '@angular/router';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
 import { LoaderComponent } from '../../../shared/components/loader/loader.component';
 import { finalize } from 'rxjs';
+import { ReplaceUnderscorePipe } from '../../../shared/pipes/replace-underscore/replace-underscore.pipe';
+import { CamelCaseSeparatePipe } from '../../../shared/pipes/camel-case-separate/camel-case-separate.pipe';
 
 @Component({
   selector: 'app-search',
@@ -30,7 +32,9 @@ import { finalize } from 'rxjs';
     ButtonComponent,
     FormsModule,
     PaginationComponent,
-    LoaderComponent
+    LoaderComponent,
+    ReplaceUnderscorePipe,
+    CamelCaseSeparatePipe
   ],
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss',
@@ -91,6 +95,7 @@ export class SearchComponent implements OnInit {
 
   searchQuery: string = '';
   displayedColumns: string[] = ['type', 'name', 'match', 'view'];
+  displayedColumnsGeneric: string[] = ['type', 'name', 'view'];
 
   isFilterExpanded = false;
   activeFilters: { [key: string]: string[] } = {};
@@ -98,6 +103,8 @@ export class SearchComponent implements OnInit {
 
   isLoading = true;
   isError = false;
+
+  expandedRows: Set<number> = new Set();
 
   constructor(
     private searchService: SearchService,
@@ -201,15 +208,27 @@ export class SearchComponent implements OnInit {
   }
 
   openDetails(data: any) {
-    
+
     const path = data.category === 'APPLICATION'
       ? '/app-details/' + data.uuid
       : '/web-service-details/' + data.uuid;
 
-    
+
     this.router.navigate([path], {
       queryParams: { searchKeyword: this.searchQuery }
     });
+  }
+
+  toggleRow(index: number) {
+    if (this.expandedRows.has(index)) {
+      this.expandedRows.delete(index);
+    } else {
+      this.expandedRows.add(index);
+    }
+  }
+
+  isExpanded(index: number): boolean {
+    return this.expandedRows.has(index);
   }
 
 }

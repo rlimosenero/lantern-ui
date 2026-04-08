@@ -117,10 +117,10 @@ export class AppDetailsComponent implements OnInit {
   }
 
   // get id from url
-  getIdFromUrl() {
-    return this.router.url.split('/')[2];
+  getIdFromUrl(): any {
+    return this.route.snapshot.paramMap.get('id');
   }
-
+  
   openEditPage() {
     console.log('Edit');
   }

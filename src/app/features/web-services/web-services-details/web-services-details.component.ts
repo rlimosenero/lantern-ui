@@ -107,8 +107,8 @@ export class WebServicesDetailsComponent implements OnInit {
     }
   }
 
-  getIdFromUrl() {
-    return this.router.url.split('/')[2];
+  getIdFromUrl(): any {
+    return this.route.snapshot.paramMap.get('id');
   }
 
   openDialog(uuid: string): void {

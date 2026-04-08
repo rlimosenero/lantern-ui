@@ -103,7 +103,7 @@
                 <ng-container matColumnDef="type">
                     <th mat-header-cell *matHeaderCellDef> Type </th>
                     <td mat-cell *matCellDef="let list">
-                        {{list.category}}
+                        {{list.category | replaceUnderscore | titlecase}}
                     </td>
                 </ng-container>
 
@@ -116,14 +116,51 @@
 
                 <ng-container matColumnDef="match">
                     <th mat-header-cell *matHeaderCellDef> Match(es) </th>
-                    <td mat-cell *matCellDef="let list">
+                    <td mat-cell *matCellDef="let list; index as i">
                         <div class="match-details">
+                            @if (list.matches){
+                            @if(list.matches.length > 1) {
+                            <div class="see-matches" (click)="toggleRow(i)">
+                                {{list.matches.length}} matches found.
+                                <span class="link">
+                                    {{ isExpanded(i) ? 'Hide matches' : 'See matches...' }}
+                                </span>
+                            </div>
+
+                            <div class="expanded-content" [@expandCollapse]="isExpanded(i) ? 'expanded' : 'collapsed'">
+
+                                @for (entry of list.matches; track entry.uuid + entry.field) {
+                                <div class="match-item expanded">
+                                    <span>
+                                        <strong>Category: </strong>
+                                        <span>{{ entry.matchingCategory | replaceUnderscore | titlecase }}</span>
+                                    </span>
+                                    <span>
+                                        <strong>{{ entry.field | camelCaseSeparate | titlecase }}: </strong>
+                                        <span [innerHTML]="entry.value | highlight: searchQuery"></span>
+                                    </span>
+                                </div>
+                                }
+
+                            </div>
+                            } @else if(list.matches.length == 0) {
+                            <span>-</span>
+                            } @else {
                             @for (entry of list.matches | keyvalue; track entry.key) {
                             <div class="match-item">
-                                <strong>{{ entry.key.toString() | titlecase }} : </strong>
-                                <span [innerHTML]="entry.value | highlight: searchQuery"></span>
+                                <span>
+                                    <strong>Category: </strong>
+                                    <span>{{ entry.value.matchingCategory | replaceUnderscore | titlecase }}</span>
+                                </span>
+                                <span>
+                                    <strong>{{ entry.value.field | camelCaseSeparate | titlecase }}: </strong>
+                                    <span [innerHTML]="entry.value.value | highlight: searchQuery"></span>
+                                </span>
                             </div>
                             }
+                            }
+                            }
+
                         </div>
                     </td>
                 </ng-container>
