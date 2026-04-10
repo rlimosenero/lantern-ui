@@ -3,7 +3,7 @@
   font-family: var(--font-sans);
 }
 
-.breadcrumbs{
+.breadcrumbs {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -12,7 +12,6 @@
 
 .breadcrumb-nav {
   padding: 10px 0;
-  font-size: 14px;
   width: 100%;
   display: flex;
 
@@ -25,64 +24,66 @@
   }
 
   .breadcrumb-item {
-    color: black !important;
+    display: flex;
+    align-items: center;
+    position: relative;
 
-    a {
+    .bc-link, .active {
+      display: inline-block;
+      padding: 10px 20px 10px 20px;
       text-decoration: none;
-      color: black !important;
+      font-size: 0.8rem;
+      transition: all 0.2s ease;
+      
+      clip-path: polygon(
+        calc(100% - 10px) 0%, 
+        100% 50%, 
+        calc(100% - 10px) 100%, 
+        0% 100%, 
+        10px 50%, 
+        0% 0%
+      );
+    }
+
+    .bc-link {
+      background-color: rgba(186, 26, 26, 0.1);
+      color: #ba1a1a !important;
+      font-weight: 500;
 
       &:hover {
-        text-decoration: underline;
+        background-color: #d1e9ff;
+        text-decoration: none;
       }
     }
 
-    .separator {
-      margin: 0 8px;
-      color: #ccc;
-    }
-
     .active {
-      background-color: transparent !important;
-      font-weight: bold;
-      color: #333;
+      background-color: #ba1a1a !important;
+      color: white !important;
+      font-weight: 600;
+    }
+
+    &:first-child .bc-link, &:first-child .active {
+      padding-left: 20px;
+      clip-path: polygon(
+        calc(100% - 10px) 0%, 
+        100% 50%, 
+        calc(100% - 10px) 100%, 
+        0% 100%, 
+        0% 50%, 
+        0% 0%
+      );
+      border-radius: 8px 0 0 8px; // Rounded left edge
+    }
+
+    // Special Case: The last item (current) can have a rounded right edge
+    &.last .active {
+      border-radius: 0 8px 8px 0;
     }
   }
 }
 
-@container (min-width: 1536px) {
-  .breadcrumb-nav {
-    width: 1488px;
-  }
-}
-
-@container (max-width: 1535px) {
-  .breadcrumb-nav {
-    width: 1232px;
-  }
-}
-
-
-@container (max-width: 1279px) {
-  .breadcrumb-nav {
-    width: 1024px;
-  }
-}
-
-@container (max-width: 1279px) {
-  .breadcrumb-nav {
-    width: 976px;
-  }
-}
-
-@container (max-width: 1023px) {
-  .breadcrumb-nav {
-    width: 720px;
-  }
-}
-
-@container (max-width: 767px) {
-  .breadcrumb-nav {
-    max-width: 592px;
-    width: 100%;
-  }
-}
+@container (min-width: 1536px) { .breadcrumb-nav { width: 1488px; } }
+@container (max-width: 1535px) { .breadcrumb-nav { width: 1232px; } }
+@container (max-width: 1279px) { .breadcrumb-nav { width: 1024px; } }
+@container (max-width: 1023px) { .breadcrumb-nav { width: 720px; } }
+@container (max-width: 767px) { .breadcrumb-nav { max-width: 592px; width: 100%; } }

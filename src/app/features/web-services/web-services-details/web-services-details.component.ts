@@ -61,21 +61,30 @@ export class WebServicesDetailsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.breadcrumbService.clearAllOverrides();
+    
     this.fetchWebServiceDetails();
     this.fetchVersions();
   }
 
   fetchWebServiceDetails() {
     const WSId = this.getIdFromUrl();
+    const keyword = this.route.snapshot.queryParamMap.get('searchKeyword');
+
     this.webServiceApiService.getWebServicesDetails(WSId).subscribe({
       next: (res: any) => {
         this.WSDetails = res.data;
+        const serviceName = res.data.serviceConfig?.[0]?.name || 'Service Details';
+
+        if (keyword) {
+          console.log('true')
+          this.breadcrumbService.setOverride('/search', 'Search');
+        }
+
+        this.breadcrumbService.setOverride(this.router.url, serviceName);
 
         this.requestBodySampleString = this.formatSample(this.WSDetails?.requestBodySample);
         this.responseBodySampleString = this.formatSample(this.WSDetails?.responseBodySample);
-
-                // update breadcrumbs name
-        this.breadcrumbService.setOverride(this.router.url, res.data.serviceConfig?.[0]?.name );
 
         setTimeout(() => this.scrollToKeyword(), 300);
       },

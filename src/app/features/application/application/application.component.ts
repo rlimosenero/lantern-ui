@@ -17,6 +17,9 @@ import { FormsModule } from '@angular/forms';
 import { ReplaceUnderscorePipe } from '../../../shared/pipes/replace-underscore/replace-underscore.pipe';
 import { LoaderComponent } from '../../../shared/components/loader/loader.component';
 import { finalize } from 'rxjs';
+import { BreadcrumbService } from '../../../shared/components/breadcrumbs/breadcrumbs.service';
+
+const APP_SEARCH_CACHE_KEY = 'app_search_state';
 
 @Component({
   selector: 'app-application',
@@ -56,6 +59,7 @@ import { finalize } from 'rxjs';
     ])
   ],
 })
+
 export class ApplicationComponent implements OnInit {
   public auth = inject(AuthService);
   searchQuery: string = '';
@@ -79,13 +83,23 @@ export class ApplicationComponent implements OnInit {
 
   constructor(
     private applicationApiService: ApplicationApiService,
+    private breadcrumbService: BreadcrumbService,
     private router: Router
   ) { }
 
   ngOnInit(): void {
-    this.appList = this.mockAppList();
-    this.loadData(0);
+    this.breadcrumbService.clearAllOverrides();
+    const hasCache = this.loadStateFromCache();
+
+    if (hasCache) {
+      this.isLoading = false;
+    } else {
+      this.appList = this.mockAppList();
+      this.loadData(0);
+    }
+
     this.fetchFilterOptions();
+
   }
 
   // initial placeholder
@@ -112,6 +126,7 @@ export class ApplicationComponent implements OnInit {
       next: (data) => {
         this.dataRes = data.data;
         this.appList = data.data.results;
+        this.saveStateToCache();
       },
       error: (err) => {
         this.isError = true;
@@ -175,6 +190,7 @@ export class ApplicationComponent implements OnInit {
   }
 
   clearAll() {
+    localStorage.removeItem(APP_SEARCH_CACHE_KEY);
     this.closeAllFilters();
     this.activeFilters = {};
     this.searchQuery = '';
@@ -210,6 +226,33 @@ export class ApplicationComponent implements OnInit {
         filter.searchTerm = '';
       });
     }
+  }
+
+  // Save state to localStorage
+  private saveStateToCache() {
+    const state = {
+      searchQuery: this.searchQuery,
+      activeFilters: this.activeFilters,
+      filterData: this.filterData,
+      appList: this.appList,
+      dataRes: this.dataRes
+    };
+    localStorage.setItem(APP_SEARCH_CACHE_KEY, JSON.stringify(state));
+  }
+
+  // Load state from localStorage
+  private loadStateFromCache(): boolean {
+    const cached = localStorage.getItem(APP_SEARCH_CACHE_KEY);
+    if (cached) {
+      const state = JSON.parse(cached);
+      this.searchQuery = state.searchQuery || '';
+      this.activeFilters = state.activeFilters || {};
+      this.filterData = state.filterData || [];
+      this.appList = state.appList || [];
+      this.dataRes = state.dataRes || [];
+      return true;
+    }
+    return false;
   }
 
 }

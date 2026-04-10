@@ -2,9 +2,14 @@
   <div class="search-container">
     <div class="search-row">
       <div class="search-box">
-        <mat-icon>search</mat-icon>
+        <mat-icon class="search-icon">search</mat-icon>
+
         <input [(ngModel)]="searchQuery" type="text" (keydown.enter)="applyFilters()"
           placeholder="Search applications...">
+
+        @if (searchQuery) {
+          <mat-icon class="clear-btn" (click)="searchQuery = '';">close</mat-icon>
+        }
       </div>
 
       <button mat-icon-button (click)="toggleFilters()" [class.active-filter]="isFilterExpanded"

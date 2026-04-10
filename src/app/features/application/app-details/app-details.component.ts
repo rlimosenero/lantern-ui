@@ -64,6 +64,8 @@ export class AppDetailsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.breadcrumbService.clearAllOverrides();
+
     this.fetchAppDetails();
     this.getWebServicesList();
     this.fetchAppVersions();
@@ -75,12 +77,16 @@ export class AppDetailsComponent implements OnInit {
 
   fetchAppDetails() {
     const appUuid = this.getIdFromUrl();
+    const keyword = this.route.snapshot.queryParamMap.get('searchKeyword');
 
     this.applicationApiService.getAppDetails(appUuid).subscribe({
       next: (data: any) => {
         this.applicationDetails = data.data;
 
-        // update breadcrumbs name
+        if (keyword) {
+          this.breadcrumbService.setOverride('/search', 'Search');
+        }
+
         this.breadcrumbService.setOverride(this.router.url, data.data.appName);
 
         setTimeout(() => this.scrollToKeyword(), 300);
@@ -125,7 +131,7 @@ export class AppDetailsComponent implements OnInit {
   getIdFromUrl(): any {
     return this.route.snapshot.paramMap.get('id');
   }
-  
+
   openEditPage() {
     console.log('Edit');
   }

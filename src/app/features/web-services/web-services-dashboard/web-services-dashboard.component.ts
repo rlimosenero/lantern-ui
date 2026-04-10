@@ -17,6 +17,9 @@ import { FormsModule } from '@angular/forms';
 import { finalize } from 'rxjs';
 import { LoaderComponent } from '../../../shared/components/loader/loader.component';
 import { ReplaceUnderscorePipe } from '../../../shared/pipes/replace-underscore/replace-underscore.pipe';
+import { BreadcrumbService } from '../../../shared/components/breadcrumbs/breadcrumbs.service';
+
+const WEB_SERVICES_CACHE_KEY = 'web_services_search_state';
 
 @Component({
   selector: 'app-web-services-dashboard',
@@ -72,14 +75,24 @@ export class WebServicesDashboardComponent {
 
   constructor(
     private webServicesApiService: WebServicesApiServiceService,
+    private breadcrumbService: BreadcrumbService,
     private router: Router
   ) { }
 
 
-  ngOnInit(): void {
-    this.webServicesList = this.mockWebList();
-    this.loadData(0)
+ngOnInit(): void {
+    this.breadcrumbService.clearAllOverrides();
+    const hasCache = this.loadStateFromCache();
+
+    if (hasCache) {
+      this.isLoading = false;
+    } else {
+      this.webServicesList = this.mockWebList();
+      this.loadData(0);
+    }
+
     this.fetchFilterOptions();
+
   }
 
   mockWebList() {
@@ -87,7 +100,6 @@ export class WebServicesDashboardComponent {
   }
 
   onHandlePage(newPage: number) {
-    // this.webServicesList = this.mockWebList();
     this.loadData(newPage)
   }
 
@@ -160,6 +172,7 @@ export class WebServicesDashboardComponent {
       next: (data: any) => {
         this.dataRes = data.data;
         this.webServicesList = data.data.results;
+        this.saveStateToCache();
       },
       error: (err: any) => {
         this.isError = true;
@@ -169,6 +182,7 @@ export class WebServicesDashboardComponent {
   }
 
   clearAll() {
+    localStorage.removeItem(WEB_SERVICES_CACHE_KEY);
     this.closeAllFilters();
     this.activeFilters = {};
     this.searchQuery = '';
@@ -211,6 +225,31 @@ export class WebServicesDashboardComponent {
         filter.searchTerm = '';
       });
     }
+  }
+
+  private saveStateToCache() {
+    const state = {
+      searchQuery: this.searchQuery,
+      activeFilters: this.activeFilters,
+      filterData: this.filterData,
+      webServicesList: this.webServicesList,
+      dataRes: this.dataRes
+    };
+    localStorage.setItem(WEB_SERVICES_CACHE_KEY, JSON.stringify(state));
+  }
+
+  private loadStateFromCache(): boolean {
+    const cached = localStorage.getItem(WEB_SERVICES_CACHE_KEY);
+    if (cached) {
+      const state = JSON.parse(cached);
+      this.searchQuery = state.searchQuery || '';
+      this.activeFilters = state.activeFilters || {};
+      this.filterData = state.filterData || [];
+      this.webServicesList = state.webServicesList || [];
+      this.dataRes = state.dataRes || [];
+      return true;
+    }
+    return false;
   }
 
 }

@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs';
 import { APP_CONFIG } from '../models/app.config.model';
+import { BreadcrumbService } from '../../shared/components/breadcrumbs/breadcrumbs.service';
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +18,9 @@ export class AuthService {
   currentUser = computed(() => this.currentUserSignal());
   isAuthenticated = computed(() => !!this.currentUserSignal());
 
-  constructor() {
+  constructor(
+    private breadcrumbService: BreadcrumbService
+  ) {
     this.hydrateUser();
   }
 
@@ -38,7 +41,16 @@ export class AuthService {
   }
 
   logout() {
+    // remove token
     localStorage.removeItem('lantern_jwt');
+
+    // remove table cache
+    localStorage.removeItem('app_search_state');
+    localStorage.removeItem('global_search_state');
+    localStorage.removeItem('web_services_search_state');
+
+    this.breadcrumbService.clearAllOverrides();
+
     this.currentUserSignal.set(null);
     this.router.navigate(['/auth/login']);
   }

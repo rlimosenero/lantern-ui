@@ -5,6 +5,10 @@
         <mat-icon>search</mat-icon>
         <input [(ngModel)]="searchQuery" type="text" (keydown.enter)="applyFilters()"
           placeholder="Search web services...">
+
+        @if (searchQuery) {
+          <mat-icon class="clear-btn" (click)="searchQuery = '';">close</mat-icon>
+        }
       </div>
 
       <button mat-icon-button (click)="toggleFilters()" [class.active-filter]="isFilterExpanded"

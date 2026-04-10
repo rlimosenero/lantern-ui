@@ -37,7 +37,11 @@ export const routes: Routes = [
           {
             path: 'details/:id',
             component: AppDetailsComponent,
-            data: { breadcrumb: 'Application Details' }
+            data: {
+              breadcrumb: 'Application Details',
+              parentBreadcrumb: 'Search',
+              parentUrl: '/search'
+            }
           }
         ]
       },
@@ -53,19 +57,23 @@ export const routes: Routes = [
           {
             path: 'details/:id',
             component: WebServicesDetailsComponent,
-            data: { breadcrumb: 'Service Details' }
+            data: {
+              breadcrumb: 'Web Service Details',
+              parentBreadcrumb: 'Search',
+              parentUrl: '/search'
+            }
           }
         ]
       },
-      { 
-        path: 'search', 
-        component: SearchComponent, 
-        // data: { breadcrumb: 'Search' } 
+      {
+        path: 'search',
+        component: SearchComponent,
+        data: { breadcrumb: 'Search' } 
       },
-      { 
-        path: '', 
-        redirectTo: 'admin', 
-        pathMatch: 'full' 
+      {
+        path: '',
+        redirectTo: 'admin',
+        pathMatch: 'full'
       }
     ]
   },

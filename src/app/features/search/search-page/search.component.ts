@@ -19,6 +19,8 @@ import { finalize } from 'rxjs';
 import { ReplaceUnderscorePipe } from '../../../shared/pipes/replace-underscore/replace-underscore.pipe';
 import { CamelCaseSeparatePipe } from '../../../shared/pipes/camel-case-separate/camel-case-separate.pipe';
 
+const SEARCH_PAGE_CACHE_KEY = 'global_search_state';
+
 @Component({
   selector: 'app-search',
   imports: [
@@ -111,8 +113,15 @@ export class SearchComponent implements OnInit {
     private router: Router
   ) { }
 
-  ngOnInit(): void {
-    this.searchList = this.mockList();
+ngOnInit(): void {
+    const hasCache = this.loadState();
+    
+    if (hasCache) {
+      this.isLoading = false;
+    } else {
+      this.searchList = this.mockList();
+      this.isLoading = false;
+    }
   }
 
   onHandlePage(newPage: number) {
@@ -122,7 +131,7 @@ export class SearchComponent implements OnInit {
   search() {
     this.isSearched = true;
     this.dataRes = [];
-    this.searchList = this.mockList();
+    // this.searchList = this.mockList();
 
     this.loadData(0);
   }
@@ -142,6 +151,7 @@ export class SearchComponent implements OnInit {
       next: (data: any) => {
         this.dataRes = data.data;
         this.searchList = data.data.results
+        this.saveState();
 
       },
       error: (err: any) => {
@@ -210,8 +220,8 @@ export class SearchComponent implements OnInit {
   openDetails(data: any) {
 
     const path = data.category === 'APPLICATION'
-      ? '/app-details/' + data.uuid
-      : '/web-service-details/' + data.uuid;
+      ? '/application/details/' + data.uuid
+      : '/web-services/details/' + data.uuid;
 
 
     this.router.navigate([path], {
@@ -229,6 +239,34 @@ export class SearchComponent implements OnInit {
 
   isExpanded(index: number): boolean {
     return this.expandedRows.has(index);
+  }
+
+  private saveState() {
+    const state = {
+      searchQuery: this.searchQuery,
+      activeFilters: this.activeFilters,
+      isSearched: this.isSearched,
+      searchList: this.searchList,
+      dataRes: this.dataRes,
+      // keeps expanded row open
+      expandedRows: Array.from(this.expandedRows) 
+    };
+    localStorage.setItem(SEARCH_PAGE_CACHE_KEY, JSON.stringify(state));
+  }
+
+  private loadState(): boolean {
+    const cached = localStorage.getItem(SEARCH_PAGE_CACHE_KEY);
+    if (cached) {
+      const state = JSON.parse(cached);
+      this.searchQuery = state.searchQuery;
+      this.activeFilters = state.activeFilters;
+      this.isSearched = state.isSearched;
+      this.searchList = state.searchList;
+      this.dataRes = state.dataRes;
+      this.expandedRows = new Set(state.expandedRows || []);
+      return true;
+    }
+    return false;
   }
 
 }

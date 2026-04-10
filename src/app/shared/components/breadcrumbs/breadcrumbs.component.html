@@ -2,12 +2,11 @@
   <nav class="breadcrumb-nav">
     <ol class="breadcrumb-list">
       @for (bc of (breadcrumbs$ | async); track bc.url; let last = $last) {
-      <li class="breadcrumb-item">
+      <li class="breadcrumb-item" [class.last]="last">
         @if (!last) {
-        <a [routerLink]="bc.url">{{ bc.label }}</a>
-        <span class="separator"> > </span>
+          <a [routerLink]="bc.url" class="bc-link">{{ bc.label }}</a>
         } @else {
-        <span class="active">{{ bc.label }}</span>
+          <span class="active">{{ bc.label }}</span>
         }
       </li>
       }

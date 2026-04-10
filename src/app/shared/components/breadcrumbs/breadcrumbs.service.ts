@@ -22,7 +22,6 @@ export class BreadcrumbService {
     });
   }
 
-  // New method to trigger the update from anywhere
   private refresh() {
     const root = this.router.routerState.snapshot.root;
     const breadcrumbs: Breadcrumb[] = [];
@@ -33,21 +32,39 @@ export class BreadcrumbService {
   private buildBreadcrumb(route: ActivatedRouteSnapshot, parentUrl: string[], breadcrumbs: Breadcrumb[]) {
     if (route) {
       const routeUrl = parentUrl.concat(route.url.map(url => url.path));
-      const fullUrl = '/' + routeUrl.join('/');
-      
-      // 1. Check if there is a manual override for this specific URL
-      // 2. Otherwise fall back to the static route data
-      let label = this.overrides[fullUrl] || route.data['breadcrumb'];
+      const fullUrl = '/' + routeUrl.join('/').replace(/\/$/, '') || '/';
+      const pathOnly = fullUrl.split('?')[0];
 
-      if (label) {
-        const breadcrumb = {
-          label: label,
-          url: fullUrl
-        };
-        
-        // Prevent duplicates (e.g., if parent and child have same label)
-        if (breadcrumbs.length === 0 || breadcrumbs[breadcrumbs.length - 1].label !== breadcrumb.label) {
-          breadcrumbs.push(breadcrumb);
+      // --- NEW LOGIC: Check for explicit Virtual Parent Override ---
+      // If we have set a manual override for '/search', we want to skip the 
+      // standard 'Application' or 'Web Service' parents to keep it clean.
+      const isDetailSearchMode = !!this.overrides['/search'];
+
+      // If we are in "Search Mode", skip the intermediate containers like 'Web Services'
+      // unless they ARE the search page itself.
+      const isContainer = route.data['breadcrumb'] === 'Web Services' || route.data['breadcrumb'] === 'Applications';
+
+      if (isDetailSearchMode && isContainer) {
+        // Skip adding 'Web Services' to the array
+      } else {
+        // Handle the virtual parent injection
+        if (route.data['parentBreadcrumb'] && breadcrumbs.length === 0 && isDetailSearchMode) {
+          breadcrumbs.push({
+            label: route.data['parentBreadcrumb'],
+            url: route.data['parentUrl']
+          });
+        }
+
+        let label = this.overrides[pathOnly] || this.overrides[fullUrl] || route.data['breadcrumb'];
+
+        if (label && label !== null) {
+          const breadcrumb = { label, url: fullUrl };
+          const isDuplicate = breadcrumbs.length > 0 &&
+            breadcrumbs[breadcrumbs.length - 1].label === label;
+
+          if (!isDuplicate) {
+            breadcrumbs.push(breadcrumb);
+          }
         }
       }
 
@@ -57,8 +74,22 @@ export class BreadcrumbService {
     }
   }
 
+  clearAllOverrides() {
+    this.overrides = {};
+    this.refresh();
+  }
+
   setOverride(url: string, label: string) {
-    this.overrides[url] = label;
-    this.refresh(); // Now correctly updates the stream
+    // Standardize URL to path only before saving to avoid param mismatches
+    const cleanUrl = url.split('?')[0];
+    this.overrides[cleanUrl] = label;
+    this.refresh();
+  }
+
+  // Helper to clear specific overrides if needed when navigating away
+  clearOverride(url: string) {
+    const cleanUrl = url.split('?')[0];
+    delete this.overrides[cleanUrl];
+    this.refresh();
   }
 }
