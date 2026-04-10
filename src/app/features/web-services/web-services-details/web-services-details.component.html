@@ -68,7 +68,24 @@
 
                     <div class="data-field">
                         <label>Web Service Version</label>
-                        <p class="mono">{{ WSDetails?.serviceConfig?.[0]?.version ?? '—' }}</p>
+                        <div class="version-container">
+                            @if (WSDetails?.serviceConfig?.[0]; as config) {
+                            @if (config.stableVersion || config.betaVersion) {
+                            <p class="mono">
+                                {{ config.stableVersion ?? config.betaVersion }}
+                            </p>
+
+                            <span class="custom-chip header-chip" [class.stable]="config.stableVersion"
+                                [class.beta]="!config.stableVersion && config.betaVersion">
+                                {{ config.stableVersion ? 'STABLE' : 'BETA' }}
+                            </span>
+                            } @else {
+                            <p class="mono">—</p>
+                            }
+                            } @else {
+                            <p class="mono">—</p>
+                            }
+                        </div>
                     </div>
 
                     <div class="data-field">
@@ -272,7 +289,8 @@
 
                 <div class="table-container">
                     @if (WSDetails?.requestHeaders?.length) {
-                    <table mat-table [dataSource]="WSDetails.requestHeaders" class="mat-elevation-z0 border-table consumer-table">
+                    <table mat-table [dataSource]="WSDetails.requestHeaders"
+                        class="mat-elevation-z0 border-table consumer-table">
 
                         <ng-container matColumnDef="paramName">
                             <th mat-header-cell *matHeaderCellDef>Header Name</th>
@@ -493,7 +511,8 @@
 
                 <div class="table-container">
                     @if (WSDetails?.responseHeaders?.length) {
-                    <table mat-table [dataSource]="WSDetails.responseHeaders" class="mat-elevation-z0 border-table req-body-field">
+                    <table mat-table [dataSource]="WSDetails.responseHeaders"
+                        class="mat-elevation-z0 border-table req-body-field">
 
                         <ng-container matColumnDef="paramName">
                             <th mat-header-cell *matHeaderCellDef>Header Name</th>
@@ -671,7 +690,8 @@
 
                 <div class="table-container">
                     @if (WSDetails?.responseStatusCodes?.length) {
-                    <table mat-table [dataSource]="WSDetails.responseStatusCodes" class="mat-elevation-z0 border-table version-table">
+                    <table mat-table [dataSource]="WSDetails.responseStatusCodes"
+                        class="mat-elevation-z0 border-table version-table">
 
                         <ng-container matColumnDef="HTTPCode">
                             <th mat-header-cell *matHeaderCellDef>HTTP Code</th>

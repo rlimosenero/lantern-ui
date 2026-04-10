@@ -59,6 +59,17 @@ mat-divider.mat-divider.mat-divider-horizontal {
   font-weight: 500 !important;
 }
 
+.version-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  p { margin: 0; }
+  
+  .stable { background-color: #f0fdf4 !important; color: #15803d; } // Greenish
+  .beta   { background-color: #fff7ed !important; color: #c2410c; } // Orangeish
+}
+
 .page-layout {
   width: 100%;
   margin: 0 auto;
