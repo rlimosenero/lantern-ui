@@ -70,11 +70,11 @@ export const routes: Routes = [
         component: SearchComponent,
         data: { breadcrumb: 'Search' } 
       },
-      {
-        path: '',
-        redirectTo: 'admin',
-        pathMatch: 'full'
-      }
+      // {
+      //   path: '',
+      //   redirectTo: 'admin',
+      //   pathMatch: 'full'
+      // }
     ]
   },
   { path: '**', redirectTo: 'login' }
