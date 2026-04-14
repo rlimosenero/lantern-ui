@@ -7,7 +7,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
-import { ApplicationApiService } from '../services/application-api-service.service';
+import { ApplicationApiService } from '../services/application-api.service';
 import { TableListComponent } from '../../../shared/components/table-list/table-list.component';
 import { AuthService } from '../../../core/auth/auth.service';
 import { ButtonComponent } from '../../../shared/components/button/button.component';

@@ -1,6 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { Application, SearchResponse } from '../../../core/models/interface';
-import { applicationData, filterData } from '../../../core/models/static';
+import { SearchResponse } from '../../../core/models/interface';
 import { HttpClient } from '@angular/common/http';
 import { APP_CONFIG } from '../../../core/models/app.config.model';
 

@@ -8,9 +8,9 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTableModule } from '@angular/material/table';
 import { Application, BasicInfo, LinkAndResources, TechStack } from '../../../core/models/interface';
-import { ApplicationApiService } from '../services/application-api-service.service';
+import { ApplicationApiService } from '../services/application-api.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ButtonComponent } from '../../../shared/components/button/button.component';
+// import { ButtonComponent } from '../../../shared/components/button/button.component';
 import { MatDialog } from '@angular/material/dialog';
 import { VersionModalComponent } from '../../../shared/components/version-modal/version-modal.component';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
@@ -206,6 +206,6 @@ export class AppDetailsComponent implements OnInit {
   }
 
   openDetails(uuid: any) {
-    this.router.navigate(['/web-service-details/' + uuid])
+    this.router.navigate(['/web-services/details/' + uuid])
   }
 }
