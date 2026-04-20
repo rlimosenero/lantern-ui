@@ -1,6 +1,8 @@
 <button 
   class="btn-generic" 
   [disabled]="disabled"
-  [class.btn-disabled]="disabled">
+  [class.btn-disabled]="disabled"
+  [class.inverted]="inverted">
+  <mat-icon *ngIf="icon" class="btn-icon">{{ icon }}</mat-icon>
     {{name}}
 </button>

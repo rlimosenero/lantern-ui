@@ -70,10 +70,10 @@
       border-radius: 8px 0 0 8px; // Rounded left edge
     }
 
-    // Special Case: The last item (current) can have a rounded right edge
-    &.last .active {
-      border-radius: 0 8px 8px 0;
-    }
+    // // Special Case: The last item (current) can have a rounded right edge
+    // &.last .active {
+    //   border-radius: 0 8px 8px 0;
+    // }
   }
 }
 

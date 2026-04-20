@@ -4,12 +4,13 @@ import { MainShellComponent } from './shared/layouts/main-shell/main-shell.compo
 import { AdminAnalyticsComponent } from './features/admin/admin-analytics/admin-analytics.component';
 import { ApplicationComponent } from './features/application/application/application.component';
 import { AddAppComponent } from './features/application/add-app/add-app.component';
-import { AppDetailsComponent } from './features/application/app-details/app-details.component';
+import { AppDetailsComponent } from './features/application/application-details/app-details.component';
 import { WebServicesDetailsComponent } from './features/web-services/web-services-details/web-services-details.component';
 import { WebServicesDashboardComponent } from './features/web-services/web-services-dashboard/web-services-dashboard.component';
 import { authGuard } from './core/guards/auth.guard';
 import { SearchComponent } from './features/search/search-page/search.component';
 import { MasterlistExcelComponent } from './features/admin/masterlist-excel/masterlist-excel.component';
+import { ApplicationFormComponent } from './features/application/application-form/application-form.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -30,18 +31,29 @@ export const routes: Routes = [
             data: { breadcrumb: null }
           },
           {
-            path: 'add-app',
-            component: AddAppComponent,
-            data: { breadcrumb: 'Add New App' }
+            path: 'new',
+            component: ApplicationFormComponent,
+            data: { breadcrumb: 'Add Application' }
           },
           {
             path: 'details/:id',
-            component: AppDetailsComponent,
+            // component: AppDetailsComponent,
             data: {
               breadcrumb: 'Application Details',
               parentBreadcrumb: 'Search',
               parentUrl: '/search'
-            }
+            },
+            children: [ // Children MUST be here, not inside data
+              {
+                path: '',
+                component: AppDetailsComponent, // This renders for /details/id
+              },
+              {
+                path: 'edit',
+                component: ApplicationFormComponent, // This renders for /details/id/edit
+                data: { breadcrumb: 'Edit Application Detail' }
+              }
+            ]
           }
         ]
       },
@@ -68,7 +80,7 @@ export const routes: Routes = [
       {
         path: 'search',
         component: SearchComponent,
-        data: { breadcrumb: 'Search' } 
+        data: { breadcrumb: 'Search' }
       },
       // {
       //   path: '',

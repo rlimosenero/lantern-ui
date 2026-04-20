@@ -45,16 +45,27 @@ $warning-text: #856404;
     align-items: flex-start;
 
     .title-block {
+      width: 100%;
+
       .title-row {
         display: flex;
         align-items: center;
         gap: 12px;
+        flex-direction: row;
+        justify-content: space-between;
 
         h1 {
           margin: 0;
           font-size: 1.875rem;
           font-weight: 500;
           line-height: 1.2rem;
+        }
+
+        span {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          gap: 0.8rem;
         }
       }
 

@@ -1,0 +1,212 @@
+:host {
+  display: block;
+  font-family: var(--font-sans);
+  color: #364153;
+}
+
+// Global Variables
+$border-color: #e9ecef;
+$text-muted: #6c757d;
+$active-green: #dcfce7;
+$active-text: #016630;
+$warning-yellow: #fff3cd;
+$warning-text: #856404;
+
+.page-layout {
+  width: 100%;
+  margin: 0 auto;
+
+  section {
+    margin-bottom: 2rem;
+
+    h2 {
+      font-size: 1.25rem;
+      line-height: 1.4rem;
+      font-weight: 600;
+      margin: 0 0 1.5rem 0;
+      padding-bottom: 1rem;
+      color: black;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    label {
+      font-size: 0.875rem;
+      line-height: 1.4rem;
+      font-weight: 500;
+    }
+  }
+}
+
+.required {
+  color: #ba1a1a;
+}
+
+.detail-container {
+  border-radius: 12px !important;
+  border: 1px solid $border-color;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+  background: white;
+  padding: 2rem;
+}
+
+/* Header */
+.header {
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+
+  .header-content {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 0;
+
+    h1 {
+      font-size: 24px;
+      font-weight: 600;
+    }
+  }
+}
+
+.btn-back {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* Main */
+.main {
+  padding: 32px 0;
+}
+
+.form-wrapper {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Grid */
+.grid {
+  display: grid;
+  gap: 20px;
+
+  &.two {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  &.one {
+    grid-template-columns: 1fr;
+  }
+}
+
+.full {
+  grid-column: span 2;
+}
+
+/* Form */
+.form-group {
+  display: flex;
+  flex-direction: column;
+
+  label {
+    font-size: 13px;
+    margin-bottom: 6px;
+    color: #374151;
+  }
+
+  input,
+  select,
+  textarea {
+    padding: 8px 10px;
+    border: 1px solid #d1d5db;
+    /* border-radius: 6px; */
+    font-size: 1rem;
+    border-radius: 0.25rem;
+    font-family: var(--font-sans);
+
+    &:focus {
+      outline: none;
+      border-color: #2563eb;
+    }
+
+    &::placeholder {
+      color: #99a1af !important;
+    }
+  }
+}
+
+.custom-dropdown {
+  appearance: none; // Removes default browser arrow
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  cursor: pointer;
+
+  // Add a custom arrow icon to match your filter style
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+
+  &:focus {
+    outline: none;
+    border-color: #0052cc;
+    box-shadow: 0 0 0 2px rgba(0, 82, 204, 0.1);
+  }
+
+  &:disabled {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+  }
+}
+
+input.ng-invalid.ng-touched,
+select.ng-invalid.ng-touched,
+textarea.ng-invalid.ng-touched {
+  border: 1px solid #ef4444;
+}
+
+.error {
+  font-size: 12px;
+  color: #ef4444;
+  margin-top: 4px;
+}
+
+/* Buttons */
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 20px;
+  border-top: 1px solid #e5e7eb;
+}
+
+@container (min-width: 1280px) {
+  .page-layout {
+    width: 1024px;
+  }
+}
+
+@container (max-width: 1279px) {
+  .page-layout {
+    width: 1024px;
+  }
+}
+
+@container (max-width: 1023px) {
+  .page-layout {
+    width: 720px;
+  }
+}
+
+@container (max-width: 767px) {
+  .page-layout {
+    max-width: 592px;
+    width: 100%;
+  }
+}

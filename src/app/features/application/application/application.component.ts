@@ -255,4 +255,9 @@ export class ApplicationComponent implements OnInit {
     return false;
   }
 
+  openFormPage(){
+    this.router.navigate(['/application/new']);
+    // this.router.navigate(['/application/new']);
+  }
+
 }

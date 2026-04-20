@@ -1,0 +1,236 @@
+<div class="page-layout">
+
+    <!-- Main -->
+    <mat-card class="detail-container">
+        <form #form="ngForm">
+            <!-- Basic Info -->
+            <section>
+                <h2>Basic Information</h2>
+
+                <div class="grid two">
+                    <div class="form-group">
+                        <label>Application Name <span class="required">*</span></label>
+                        <input 
+                            type="text" 
+                            name="appName"
+                            [(ngModel)]="appName" 
+                            required 
+                            #appNameRef="ngModel"
+                            placeholder="Enter application name" 
+                        />
+                        <div class="error" *ngIf="appNameRef.touched && appNameRef.invalid">
+                            Application name is required
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Service Type <span class="required">*</span></label>
+                        <select 
+                            class="custom-dropdown" 
+                            [(ngModel)]="serviceType" 
+                            name="serviceType"
+                            #serviceTypeRef="ngModel"
+                            required
+                        >
+                            <option value="" disabled selected>Select Service Type</option>
+
+                            @for (opt of dropdownOptions['SERVICE_TYPE']; track opt.code) {
+                                <option [value]="opt.code">{{ opt.value }}</option>
+                            }
+
+                        </select>
+
+                        <div class="error" *ngIf="serviceTypeRef.touched && serviceTypeRef.invalid">
+                            Service type is required
+                        </div>
+                    </div>
+
+                    <div class="form-group full">
+                        <label>Description <span class="required">*</span></label>
+                        <textarea 
+                            rows="3" 
+                            name="desc"
+                            [(ngModel)]="desc"
+                            #descRef="ngModel"
+                            required
+                            placeholder="Describe the application's purpose and functionality"
+                        >
+                        </textarea>
+                        <div class="error" *ngIf="descRef.touched && descRef.invalid">
+                            Description is required
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Status <span class="required">*</span></label>
+                        <select 
+                            class="custom-dropdown" 
+                            name="lifecycleStatus"
+                            [(ngModel)]="lifecycleStatus" 
+                            #lifecycleStatusRef="ngModel"
+                            required
+                        >
+                            <option value="" disabled selected>Select Status</option>
+                            @for (opt of dropdownOptions['LIFECYCLE_STATUS']; track opt.code) {
+                                <option [value]="opt.code">{{ opt.value }}</option>
+                            }
+                        </select>
+
+                        <div class="error" *ngIf="lifecycleStatusRef.touched && lifecycleStatusRef.invalid">
+                            Status is required
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- Ownership -->
+            <section>
+                <h2>Ownership Information</h2>
+
+                <div class="grid two">
+                    <div class="form-group">
+                        <label>Owner Name <span class="required">*</span></label>
+                        <input 
+                            type="text" 
+                            name="ownerName"
+                            [(ngModel)]="ownerName"
+                            #ownerNameRef="ngModel"
+                            required 
+                            placeholder="Enter owner's full name" 
+                        />
+                        <div class="error" *ngIf="ownerNameRef.touched && ownerNameRef.invalid">
+                            Owner name is required
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Owner Department <span class="required">*</span></label>
+                        <input 
+                            type="text" 
+                            name="ownerDept"
+                            [(ngModel)]="ownerDept" 
+                            #ownerDeptRef="ngModel"
+                            required
+                            placeholder="Enter department name" 
+                        />
+                        <div class="error" *ngIf="ownerDeptRef.touched && ownerDeptRef.invalid">
+                            Owner name is required
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>BAU Support Name <span class="required">*</span></label>
+                        <input 
+                            type="text" 
+                            name="bauSupportName"
+                            [(ngModel)]="bauSupportName" 
+                            #bauSupportNameRef="ngModel"
+                            required
+                            placeholder="Enter BAU support contact name" 
+                        />
+                        <div class="error" *ngIf="bauSupportNameRef.touched && bauSupportNameRef.invalid">
+                            BAU Support Name is required
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>BAU Support Department <span class="required">*</span></label>
+                        <input 
+                            type="text" 
+                            name="bauSupportDept"
+                            [(ngModel)]="bauSupportDept" 
+                            #bauSupportDeptRef="ngModel"
+                            required
+                            placeholder="Enter BAU support department" 
+                        />
+                        <div class="error" *ngIf="bauSupportDeptRef.touched && bauSupportDeptRef.invalid">
+                            BAU Support Department is required
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Repository -->
+            <section>
+                <h2>Repository & Documentation</h2>
+
+                <div class="grid one">
+                    <div class="form-group">
+                        <label>Git Repository URL</label>
+                        <input 
+                            name="repoUrl"
+                            type="url" 
+                            [(ngModel)]="repoUrl" 
+                            #repoUrlRef="ngModel"
+                            pattern="https?://.+"
+                            placeholder="https://gitlab.com/company/repository" 
+                        />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Swagger URL</label>
+                        <input 
+                            name="swaggerUrl"
+                            type="url" 
+                            [(ngModel)]="swaggerUrl" 
+                            #swaggerUrlRef="ngModel"
+                            pattern="https?://.+"
+                            placeholder="https://api.company.com/docs"
+                        />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Documents URL</label>
+                        <input 
+                            name="docsUrl"
+                            type="url" 
+                            [(ngModel)]="docsUrl"
+                            #docsUrlRef="ngModel"
+                            pattern="https?://.+"
+                            placeholder="https://company.sharepoint.com/sites/docs" 
+                        />
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2>Techstack - Platform</h2>
+                <app-multi-select [data]="dropdownOptions['TECH_STACK_PLATFORM'] || []"
+                    [initialValue]="isEditMode ? techStackPlatform : ''"
+                    (selectionChange)="onTechStackChange($event, 'techStackPlatform')">
+                </app-multi-select>
+            </section>
+
+            <section>
+                <h2>Techstack - Application</h2>
+                <app-multi-select [data]="dropdownOptions['TECH_STACK_APP'] || []"
+                    [initialValue]="isEditMode ? techStackApp : ''"
+                    (selectionChange)="onTechStackChange($event, 'techStackApp')">
+                </app-multi-select>
+            </section>
+
+            <section>
+                <h2>Techstack - Storage</h2>
+                <app-multi-select [data]="dropdownOptions['TECH_STACK_STORAGE'] || []"
+                    [initialValue]="isEditMode ? techStackStorage : ''"
+                    (selectionChange)="onTechStackChange($event, 'techStackStorage')">
+                </app-multi-select>
+            </section>
+
+            <section>
+                <h2>Techstack - Security</h2>
+                <app-multi-select [data]="dropdownOptions['TECH_STACK_SECURITY'] || []"
+                    [initialValue]="isEditMode ? techStackSecurity : ''"
+                    (selectionChange)="onTechStackChange($event, 'techStackSecurity')">
+                </app-multi-select>
+            </section>
+
+            <!-- Actions -->
+            <div class="actions">
+                <app-button name="Cancel" />
+                <app-button [inverted]="true" name="Save" (click)="onSave()" [disabled]="isSaveDisabled(form)" />
+            </div>
+        </form>
+    </mat-card>
+</div>

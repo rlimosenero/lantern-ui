@@ -1,0 +1,44 @@
+<div class="multi-select" >
+
+  <!-- Selected Tags -->
+  <div class="selected-container" (click)="toggleDropdown()">
+    <ng-container *ngIf="selected.length; else placeholder">
+      <span class="tag" *ngFor="let item of selected">
+        {{ item.value }}
+        <mat-icon (click)="remove(item); $event.stopPropagation()">close</mat-icon>
+      </span>
+    </ng-container>
+
+    <ng-template #placeholder>
+      <span class="placeholder">Select options</span>
+    </ng-template>
+  </div>
+
+  <!-- Dropdown -->
+  <div class="dropdown" *ngIf="isOpen">
+
+    <!-- Search -->
+    <input
+      type="text"
+      placeholder="Search..."
+      [(ngModel)]="search"
+      (input)="onSearchChange()"
+      class="search"
+    />
+
+    <!-- Options -->
+    <div
+      class="option"
+      *ngFor="let item of filteredOptions"
+      (click)="toggleSelection(item)"
+    >
+      <input type="checkbox" [checked]="isSelected(item)" />
+      <span>
+        {{ item.value }}
+        <small *ngIf="item.isNew">(new)</small>
+      </span>
+    </div>
+
+  </div>
+
+</div>
