@@ -30,14 +30,13 @@
           <mat-icon matListItemIcon>lists</mat-icon>
           <div matListItemTitle>Web Services</div>
         </a>
-
-        <!-- @if (auth.isAdmin()) {
-          
-        } -->
+        
+        @if (auth.isAdmin()) {
         <a mat-list-item routerLink="/masterlist-io" routerLinkActive="active-link">
           <mat-icon matListItemIcon>upload_file</mat-icon>
           <div matListItemTitle>Master List I/O</div>
         </a>
+        }
 
       </mat-nav-list>
     </section>
