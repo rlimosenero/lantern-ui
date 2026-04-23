@@ -1,0 +1,48 @@
+<div class="overlay" *ngIf="config" @fadeOverlay>
+  <div class="modal" @scaleModal>
+
+    <!-- Close -->
+    <button class="close-btn" (click)="close()" *ngIf="!config.loading">×</button>
+
+    <!-- Icon / Loader -->
+    <div class="icon" [ngClass]="config.theme">
+
+      <!-- Loader -->
+      <div class="spinner" *ngIf="config.loading"></div>
+
+      <!-- Normal icon -->
+      <mat-icon *ngIf="!config.loading">
+        {{ config.icon || 'info' }}
+      </mat-icon>
+
+    </div>
+
+    <!-- Title -->
+    <h2>{{ config.title }}</h2>
+
+    <!-- Body -->
+    <p>{{ config.body }}</p>
+
+    <!-- Actions -->
+    <div class="actions"
+         *ngIf="(config.showConfirm || config.showCancel) && !config.loading">
+
+      <button
+        *ngIf="config.showCancel"
+        class="btn cancel"
+        (click)="cancel()">
+        {{ config.cancelText || 'Cancel' }}
+      </button>
+
+      <button
+        *ngIf="config.showConfirm"
+        class="btn confirm"
+        [ngClass]="config.theme"
+        (click)="confirm()">
+        {{ config.confirmText || 'Confirm' }}
+      </button>
+
+    </div>
+
+  </div>
+</div>

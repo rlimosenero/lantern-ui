@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { WebServicesApiServiceService } from './web-services-api-service.service';
+import { WebServicesApiServiceService } from './web-services-api.service';
 
 describe('WebServicesApiServiceService', () => {
   let service: WebServicesApiServiceService;

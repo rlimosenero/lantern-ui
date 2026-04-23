@@ -5,17 +5,21 @@
         <div class="header-section">
             <div class="title-block">
                 <div class="title-row">
-                    <h1>{{ WSDetails?.serviceConfig?.[0]?.name ?? 'Unnamed Web Service' }}</h1>
+                    <span>
+                        <h1>{{ WSDetails?.serviceConfig?.[0]?.name ?? 'Unnamed Web Service' }}</h1>
 
-                    <div class="chip-container">
-                        <span class="custom-chip header-chip">Web Service</span>
-                        @if (WSDetails?.serviceConfig?.[0]?.type) {
-                        <span class="custom-chip ">{{ WSDetails.serviceConfig[0].type }}</span>
-                        }
-                        @if (WSDetails.serviceConfig[0].method) {
-                        <span class="custom-chip active">{{ WSDetails.serviceConfig[0].method }}</span>
-                        }
-                    </div>
+                        <div class="chip-container">
+                            <span class="custom-chip header-chip">Web Service</span>
+                            @if (WSDetails?.serviceConfig?.[0]?.type) {
+                            <span class="custom-chip ">{{ WSDetails.serviceConfig[0].type }}</span>
+                            }
+                            @if (WSDetails.serviceConfig[0].method) {
+                            <span class="custom-chip active">{{ WSDetails.serviceConfig[0].method }}</span>
+                            }
+                        </div>
+                    </span>
+
+                    <app-button name="Edit Details" (click)="openEditPage()"/>
                 </div>
 
                 <p class="description" [class.no-desc]="!WSDetails?.upstreamApplications?.[0]?.description">
@@ -787,9 +791,9 @@
                     </div>
                     <div class="data-field">
                         <label>Response Data Cached?</label>
-                        <p [class.text-success]="WSDetails.serviceConfig[0].responseDataCached"
-                            [class.text-danger]="!WSDetails.serviceConfig[0].responseDataCached">
-                            {{ WSDetails.serviceConfig[0].responseDataCached ? '✓ Yes' : '✘ No' }}
+                        <p [class.text-success]="WSDetails.responseDataCached"
+                            [class.text-danger]="!WSDetails.responseDataCached">
+                            {{ WSDetails.responseDataCached ? '✓ Yes' : '✘ No' }}
                         </p>
                     </div>
                 </div>

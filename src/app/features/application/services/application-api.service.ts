@@ -36,4 +36,19 @@ export class ApplicationApiService {
     return this.http.get(url);
   }
 
+  updateAppDetails(uuid: string, payload: any) {
+    const url = `${this.config.baseUrl}/applications/${uuid}`;
+    return this.http.put(url, payload);
+  }
+
+  addAppDetails(payload: any) {
+    const url = `${this.config.baseUrl}/applications/add`;
+    return this.http.post(url, payload);
+  }
+
+  getDropdownOptions(groupName: string) {
+    const url = `${this.config.baseUrl}/reference-data/group/${groupName}`;
+    return this.http.get(url);
+  }
+
 }

@@ -7,7 +7,7 @@ import { SearchResponse } from '../../../core/models/interface';
 @Injectable({
   providedIn: 'root',
 })
-export class WebServicesApiServiceService {
+export class WebServicesApiService {
   private http = inject(HttpClient);
   private config = inject(APP_CONFIG);
 
@@ -29,6 +29,16 @@ export class WebServicesApiServiceService {
   getVersionHistoryList(uuid: string, pagenumber?: number) {
     const url = `${this.config.baseUrl}/web-services/${uuid}/versions?size=5&page=${pagenumber}`;
     return this.http.get(url);
+  }
+
+  addApiDetails(payload: any) {
+    const url = `${this.config.baseUrl}/web-services/add`;
+    return this.http.post(url, payload);
+  }
+
+  updateApiDetails(payload: any, apiUuid: string) {
+    const url = `${this.config.baseUrl}/web-services/${apiUuid}`;
+    return this.http.put(url, payload);
   }
 
 }

@@ -76,8 +76,6 @@ export class AuthService {
       const payloadBase64 = token.split('.')[1];
       const decodedJson = JSON.parse(atob(payloadBase64));
 
-      console.log(JSON.stringify(decodedJson));
-
       return {
         username: decodedJson.sub,
         roles: decodedJson.roles,

@@ -7,10 +7,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTableModule } from '@angular/material/table';
-import { Application, BasicInfo, LinkAndResources, TechStack } from '../../../core/models/interface';
 import { ApplicationApiService } from '../services/application-api.service';
 import { Router, ActivatedRoute } from '@angular/router';
-// import { ButtonComponent } from '../../../shared/components/button/button.component';
 import { MatDialog } from '@angular/material/dialog';
 import { VersionModalComponent } from '../../../shared/components/version-modal/version-modal.component';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
@@ -18,6 +16,7 @@ import { SplitPipe } from '../../../shared/pipes/split/split.pipe';
 import { LoaderComponent } from '../../../shared/components/loader/loader.component';
 import { finalize } from 'rxjs';
 import { BreadcrumbService } from '../../../shared/components/breadcrumbs/breadcrumbs.service';
+import { ButtonComponent } from '../../../shared/components/button/button.component';
 
 @Component({
   selector: 'app-app-details',
@@ -33,17 +32,14 @@ import { BreadcrumbService } from '../../../shared/components/breadcrumbs/breadc
     MatTableModule,
     PaginationComponent,
     SplitPipe,
-    LoaderComponent
+    LoaderComponent,
+    ButtonComponent
   ],
   templateUrl: './app-details.component.html',
   styleUrls: ['./app-details.component.scss']
 })
 export class AppDetailsComponent implements OnInit {
   private route = inject(ActivatedRoute);
-  appDetails: Application | undefined = undefined;
-  appBasicInfo: BasicInfo | undefined = undefined;
-  appLinkAndResources: LinkAndResources | undefined = undefined;
-  appTechStack: TechStack | undefined = undefined;
 
   displayedServiceColumns: string[] = ['name', 'description', 'version', 'status', 'options'];
   displayedVersionColumns: string[] = ['version', 'date', 'stage', 'env', 'build', 'documents', 'options'];
@@ -132,10 +128,6 @@ export class AppDetailsComponent implements OnInit {
     return this.route.snapshot.paramMap.get('id');
   }
 
-  openEditPage() {
-    console.log('Edit');
-  }
-
   getWebServicesList() {
     this.loadWebServiceList(0);
   }
@@ -206,6 +198,15 @@ export class AppDetailsComponent implements OnInit {
   }
 
   openDetails(uuid: any) {
-    this.router.navigate(['/web-services/details/' + uuid])
+    this.router.navigate(['/web-services/details/' + uuid]);
   }
+  
+  openEditPage() {
+    this.router.navigate([`/application/details/${this.getIdFromUrl()}/edit`]);
+  }
+
+  openApiForm() {
+    this.router.navigate([`/application/details/${this.getIdFromUrl()}/add-web-service`]);
+  }
+
 }

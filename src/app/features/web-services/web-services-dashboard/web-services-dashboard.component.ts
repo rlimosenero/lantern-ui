@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { MonitoringService } from '../../admin/services/monitoring.service';
-import { WebServicesApiServiceService } from '../services/web-services-api-service.service';
+import { WebServicesApiService } from '../services/web-services-api.service';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -74,7 +74,7 @@ export class WebServicesDashboardComponent {
   dataRes: any | [] = [];
 
   constructor(
-    private webServicesApiService: WebServicesApiServiceService,
+    private webServicesApiService: WebServicesApiService,
     private breadcrumbService: BreadcrumbService,
     private router: Router
   ) { }

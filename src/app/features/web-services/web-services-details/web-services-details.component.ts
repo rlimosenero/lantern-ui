@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { WebServicesApiServiceService } from '../services/web-services-api-service.service';
+import { WebServicesApiService } from '../services/web-services-api.service';
 import { MatDialog } from '@angular/material/dialog';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -17,6 +17,7 @@ import { environment } from '../../../../environments/environment';
 import { finalize } from 'rxjs';
 import { LoaderComponent } from '../../../shared/components/loader/loader.component';
 import { BreadcrumbService } from '../../../shared/components/breadcrumbs/breadcrumbs.service';
+import { ButtonComponent } from '../../../shared/components/button/button.component';
 
 @Component({
   selector: 'app-web-services-details',
@@ -31,7 +32,7 @@ import { BreadcrumbService } from '../../../shared/components/breadcrumbs/breadc
     MatTableModule,
     PaginationComponent,
     LoaderComponent,
-    // ButtonComponent
+    ButtonComponent
   ],
   templateUrl: './web-services-details.component.html',
   styleUrl: './web-services-details.component.scss',
@@ -54,7 +55,7 @@ export class WebServicesDetailsComponent implements OnInit {
   public baseUrl = environment.baseUrl;
 
   constructor(
-    private webServiceApiService: WebServicesApiServiceService,
+    private webServiceApiService: WebServicesApiService,
     private router: Router,
     private dialog: MatDialog,
     private breadcrumbService: BreadcrumbService
@@ -62,7 +63,7 @@ export class WebServicesDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.breadcrumbService.clearAllOverrides();
-    
+
     this.fetchWebServiceDetails();
     this.fetchVersions();
   }
@@ -214,6 +215,10 @@ export class WebServicesDetailsComponent implements OnInit {
       }
     });
     return formatted.substring(1, formatted.length - 3);
+  }
+
+  openEditPage() {
+    this.router.navigate([`/web-services/details/${this.getIdFromUrl()}/edit`]);
   }
 
 }

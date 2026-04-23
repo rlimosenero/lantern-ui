@@ -64,10 +64,22 @@ mat-divider.mat-divider.mat-divider-horizontal {
   align-items: center;
   gap: 8px;
 
-  p { margin: 0; }
-  
-  .stable { background-color: #f0fdf4 !important; color: #15803d; } // Greenish
-  .beta   { background-color: #fff7ed !important; color: #c2410c; } // Orangeish
+  p {
+    margin: 0;
+  }
+
+  .stable {
+    background-color: #f0fdf4 !important;
+    color: #15803d;
+  }
+
+  // Greenish
+  .beta {
+    background-color: #fff7ed !important;
+    color: #c2410c;
+  }
+
+  // Orangeish
 }
 
 .page-layout {
@@ -96,16 +108,25 @@ mat-divider.mat-divider.mat-divider-horizontal {
     align-items: flex-start;
 
     .title-block {
+      width: 100%;
+
       .title-row {
         display: flex;
         align-items: center;
-        gap: 12px;
+        justify-content: space-between;
 
         h1 {
           margin: 0;
           font-size: 1.875rem;
           font-weight: 500;
           line-height: 1.2rem;
+        }
+
+        span {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          gap: 0.8rem;
         }
       }
 
@@ -493,7 +514,7 @@ span.custom-chip {
   border-radius: 0.25rem;
   border-color: $border-color;
 
-  .msg-warn{
+  .msg-warn {
     font-size: 14px;
   }
 }

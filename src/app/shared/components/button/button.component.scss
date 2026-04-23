@@ -11,14 +11,17 @@
   padding: .5rem .8rem;
   font-family: var(--font-sans);
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: center;
+  gap: 0.5rem;
 
-  // Hover state - only triggers if NOT disabled
   &:hover:not(:disabled):not(.btn-disabled) {
     background-color: #e9ebef;
     border-color: #a1a1a1;
   }
 
-  // Active state (click feel)
   &:active:not(:disabled):not(.btn-disabled) {
     transform: scale(0.98);
     background-color: #d1d5db;
@@ -27,15 +30,34 @@
   // Disabled state
   &:disabled,
   &.btn-disabled {
+    color: gray !important;
     opacity: 0.5;
     cursor: not-allowed;
-    background-color: #f3f4f6; // Light gray background for disabled
+    background-color: #f3f4f6; 
     border-color: #d1d5db;
     filter: grayscale(1);
 
-    // Ensure hover doesn't change anything while disabled
     &:hover {
       background-color: #f3f4f6;
     }
+  }
+}
+
+.btn-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+}
+
+.inverted {
+  color: white !important;
+  background: #ba1a1a;
+
+  &:hover:not(:disabled):not(.btn-disabled) {
+    color: #ba1a1a !important;
+    background-color: rgba(186, 26, 26, 0.1) !important;
+      border-color: #ba1a1a !important;
+    
   }
 }
