@@ -1,5 +1,5 @@
 <div class="page-layout">
-  <!-- <button mat-button class="back-link"><mat-icon>arrow_back</mat-icon> Back to Catalog</button> -->
+
   @if (applicationDetails) {
   <mat-card class="detail-container">
     <div class="header-section">
@@ -18,7 +18,9 @@
             </div>
           </span>
 
-          <app-button name="Edit Details" (click)="openEditPage()"/>
+          @if (auth.isAdmin()) {
+            <app-button name="Edit Details" (click)="openEditPage()"/>
+          }
 
         </div>
 
@@ -41,7 +43,7 @@
           </span>
         </div>
       </div>
-      <!-- <app-button [name]="'Edit Details'" (click)="openEditPage()" /> -->
+
     </div>
 
     <mat-divider></mat-divider>
@@ -265,7 +267,9 @@
       <section>
         <div class="section-header">
           <h3>Web Services</h3>
-          <app-button [name]="'Add Web Service'" (click)="openApiForm()" />
+          @if (auth.isAdmin()) {
+            <app-button [name]="'Add Web Service'" (click)="openApiForm()" />
+          }
         </div>
         @if (wsData?.results?.length) {
         <div class="table-container">

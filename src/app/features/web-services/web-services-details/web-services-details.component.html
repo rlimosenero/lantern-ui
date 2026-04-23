@@ -18,8 +18,11 @@
                             }
                         </div>
                     </span>
+                    
+                    @if (auth.isAdmin()) {
+                        <app-button name="Edit Details" (click)="openEditPage()"/>
+                    }
 
-                    <app-button name="Edit Details" (click)="openEditPage()"/>
                 </div>
 
                 <p class="description" [class.no-desc]="!WSDetails?.upstreamApplications?.[0]?.description">

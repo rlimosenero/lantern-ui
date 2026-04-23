@@ -17,6 +17,7 @@ import { LoaderComponent } from '../../../shared/components/loader/loader.compon
 import { finalize } from 'rxjs';
 import { BreadcrumbService } from '../../../shared/components/breadcrumbs/breadcrumbs.service';
 import { ButtonComponent } from '../../../shared/components/button/button.component';
+import { AuthService } from '../../../core/auth/auth.service';
 
 @Component({
   selector: 'app-app-details',
@@ -39,6 +40,7 @@ import { ButtonComponent } from '../../../shared/components/button/button.compon
   styleUrls: ['./app-details.component.scss']
 })
 export class AppDetailsComponent implements OnInit {
+  public auth = inject(AuthService);
   private route = inject(ActivatedRoute);
 
   displayedServiceColumns: string[] = ['name', 'description', 'version', 'status', 'options'];

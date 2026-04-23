@@ -18,6 +18,7 @@ import { finalize } from 'rxjs';
 import { LoaderComponent } from '../../../shared/components/loader/loader.component';
 import { BreadcrumbService } from '../../../shared/components/breadcrumbs/breadcrumbs.service';
 import { ButtonComponent } from '../../../shared/components/button/button.component';
+import { AuthService } from '../../../core/auth/auth.service';
 
 @Component({
   selector: 'app-web-services-details',
@@ -38,6 +39,7 @@ import { ButtonComponent } from '../../../shared/components/button/button.compon
   styleUrl: './web-services-details.component.scss',
 })
 export class WebServicesDetailsComponent implements OnInit {
+  public auth = inject(AuthService);
   private route = inject(ActivatedRoute);
   requestBodySampleString = '';
   responseBodySampleString = '';
