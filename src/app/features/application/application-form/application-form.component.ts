@@ -211,8 +211,6 @@ export class ApplicationFormComponent implements OnInit {
             }
           });
         } else {
-          // logic for create
-          console.log('Creating new application...', payload);
 
           this.applicationApiService.addAppDetails(payload).subscribe({
             next: (res) => {

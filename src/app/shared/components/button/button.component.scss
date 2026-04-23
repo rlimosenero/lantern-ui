@@ -17,13 +17,11 @@
   justify-content: center;
   gap: 0.5rem;
 
-  // Hover state - only triggers if NOT disabled
   &:hover:not(:disabled):not(.btn-disabled) {
     background-color: #e9ebef;
     border-color: #a1a1a1;
   }
 
-  // Active state (click feel)
   &:active:not(:disabled):not(.btn-disabled) {
     transform: scale(0.98);
     background-color: #d1d5db;
@@ -35,11 +33,10 @@
     color: gray !important;
     opacity: 0.5;
     cursor: not-allowed;
-    background-color: #f3f4f6; // Light gray background for disabled
+    background-color: #f3f4f6; 
     border-color: #d1d5db;
     filter: grayscale(1);
 
-    // Ensure hover doesn't change anything while disabled
     &:hover {
       background-color: #f3f4f6;
     }

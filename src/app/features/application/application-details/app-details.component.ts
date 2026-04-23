@@ -198,12 +198,15 @@ export class AppDetailsComponent implements OnInit {
   }
 
   openDetails(uuid: any) {
-    this.router.navigate(['/web-services/details/' + uuid])
+    this.router.navigate(['/web-services/details/' + uuid]);
   }
   
   openEditPage() {
-    const appUuid = this.getIdFromUrl();
-    this.router.navigate([`/application/details/${appUuid}/edit`])
+    this.router.navigate([`/application/details/${this.getIdFromUrl()}/edit`]);
+  }
+
+  openApiForm() {
+    this.router.navigate([`/application/details/${this.getIdFromUrl()}/add-web-service`]);
   }
 
 }

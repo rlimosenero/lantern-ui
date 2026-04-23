@@ -9,9 +9,9 @@
             <h1>{{ applicationDetails?.appName ?? 'Untitled Application' }}</h1>
 
             <div class="chip-container">
-              <!-- <span class="custom-chip header-chip">Application</span> -->
+              <span class="custom-chip header-chip">Application</span>
               @if (applicationDetails?.serviceType) {
-              <span class="custom-chip">{{ applicationDetails.serviceType }}</span>
+              <span class="custom-chip">{{ applicationDetails.serviceType | titlecase }}</span>
               } @else {
               <span class="custom-chip header-chip placeholder-chip">General Service</span>
               }
@@ -265,7 +265,7 @@
       <section>
         <div class="section-header">
           <h3>Web Services</h3>
-          <!-- <app-button [name]="'Add Web Service'" (click)="openEditPage()" /> -->
+          <app-button [name]="'Add Web Service'" (click)="openApiForm()" />
         </div>
         @if (wsData?.results?.length) {
         <div class="table-container">

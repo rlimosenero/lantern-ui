@@ -51,3 +51,61 @@ VALUES
 ('b3333333-3333-4333-8333-333333333333', 'TECH_STACK_APP', 'FASTAPI', 'FastAPI', 'APPLICATION_DETAILS'),
 
 ('b4444444-4444-4444-8444-444444444444', 'TECH_STACK_APP', 'KOTLIN_SPRING', 'Kotlin Spring', 'APPLICATION_DETAILS');
+
+INSERT INTO tbl_reference_data (
+    reference_data_uuid, type, code, value, group_name
+) VALUES
+('6f1c2d6e-8a9b-4c2d-9e1f-7b6a5c4d3e21', 'API_LAYER', 'EXPERIENCE', 'Experience', 'API_DETAILS'),
+('5a1c2d6e-8a9b-4c2d-9e1f-7b6a5c4d3e21', 'API_LAYER', 'JOURNEY', 'Journey', 'API_DETAILS'),
+('4b1c2d6e-8a9b-4c2d-9e1f-7b6a5c4d3e21', 'API_LAYER', 'CORE', 'Core', 'API_DETAILS'),
+
+('5a142d6e-8a9b-5c2d-9e1f-7b6a5c4d3e21', 'API_TYPE', 'REST', 'Rest', 'API_DETAILS'),
+('5b3c2d6e-8a9b-6c2d-9e1f-7b6a5c4d3e21', 'API_TYPE', 'SOAP', 'Soap', 'API_DETAILS'),
+
+('5c3c299e-8a9b-6c2d-1000-7b6a5c4d3e21', 'HTTP_METHOD', 'POST', 'Post', 'API_DETAILS'),
+('5d3c299e-8a9b-6c2d-1100-7b6a5c4d3e21', 'HTTP_METHOD', 'GET', 'Get', 'API_DETAILS'),
+('5e3c299e-8a9b-6c2d-1010-7b6a5c4d3e21', 'HTTP_METHOD', 'PUT', 'Put', 'API_DETAILS'),
+('5f3c299e-8a9b-6c2d-1011-7b6a5c4d3e21', 'HTTP_METHOD', 'PATCH', 'Patch', 'API_DETAILS'),
+('5a3c299e-8a9b-6c2d-1101-7b6a5c4d3e21', 'HTTP_METHOD', 'DELETE', 'Delete', 'API_DETAILS'),
+('5b3c299e-8a9b-6c2d-1200-7b6a5c4d3e21', 'HTTP_METHOD', 'OPTIONS', 'Options', 'API_DETAILS'),
+('5c3c299e-8a9b-6c2d-1020-7b6a5c4d3e21', 'HTTP_METHOD', 'HEAD', 'Head', 'API_DETAILS'),
+('5d3c299e-8a9b-6c2d-1002-7b6a5c4d3e21', 'HTTP_METHOD', 'TRACE', 'Trace', 'API_DETAILS'),
+
+('5e3c299e-8b9c-6c2d-1002-7b6a5c4d3e21', 'AUTH_METHOD', 'API_KEY', 'API KEY', 'API_DETAILS'),
+('5f3c299e-8b9d-6c2d-1002-8b6a5c4d3e21', 'AUTH_METHOD', 'BASIC_AUTH', 'BASIC AUTH', 'API_DETAILS'),
+('5a3c299e-8b9e-6c2d-1002-9b6a5c4d3e21', 'AUTH_METHOD', 'BEARER_TOKEN', 'BEARER TOKEN', 'API_DETAILS'),
+('5b3c299e-8b9f-6c2d-1002-0b6a5c4d3e21', 'AUTH_METHOD', 'JWT', 'JWT', 'API_DETAILS'),
+('5c3c299e-8b9a-6c2d-1002-1b6a5c4d3e21', 'AUTH_METHOD', 'OAUTH2', 'OAUTH 2.0', 'API_DETAILS'),
+('5d3c299e-8b9b-6c2d-1002-2b6a5c4d3e21', 'AUTH_METHOD', 'OIDC', 'OIDC', 'API_DETAILS'),
+('5e3c299e-8b9c-6c2d-1002-3b6a5c4d3e21', 'AUTH_METHOD', 'MTLS', 'MTLS', 'API_DETAILS'),
+('5f3c299e-8b9a-6c2d-1002-4b6a5c4d3e21', 'AUTH_METHOD', 'HMAC', 'HMAC', 'API_DETAILS'),
+('5a3c299e-8b9b-6c2d-1002-5b6a5c4d3e21', 'AUTH_METHOD', 'SESSION_COOKIES', 'SESSION/COOKIES', 'API_DETAILS'),
+('5b3c299e-8b9c-6c2d-1002-6b6a5c4d3e21', 'AUTH_METHOD', 'CUSTOM_TOKENS', 'CUSTOM TOKENS', 'API_DETAILS'),
+
+-- ('a2a9f851-3d4b-4c7a-8f98-2e6d5b4a3c50', 'LIFECYCLE_STATUS', 'ACTIVE', 'Active', 'API_DETAILS'),
+-- ('f2b9f842-3d4b-4c7a-8f97-2e6d5b4a3c51', 'LIFECYCLE_STATUS', 'FOR_DEPRECATION', 'For Deprecation', 'API_DETAILS'),
+-- ('e2c9f833-3d4b-4c7a-8f96-2e6d5b4a3c52', 'LIFECYCLE_STATUS', 'DEPRECATED', 'Deprecated', 'API_DETAILS'),
+-- ('d2d9f824-3d4b-4c7a-8f95-2e6d5b4a3c53', 'LIFECYCLE_STATUS', 'FOR_RETIREMENT', 'For Retirement', 'API_DETAILS'),
+-- ('c2e9f815-3d4b-4c7a-8f99-2e6d5b4a3c54', 'LIFECYCLE_STATUS', 'RETIRED', 'Retired', 'API_DETAILS'),
+
+('d2e9f811-3a4b-4c7a-8f99-2e6d5b4a3c54', 'DATA_SENSITIVITY_TYPE', 'PUBLIC', 'Public', 'API_DETAILS'),
+('a2e9f812-3b4b-4c7a-8f99-2e6d5b4a3c54', 'DATA_SENSITIVITY_TYPE', 'INTERNAL', 'Internal', 'API_DETAILS'),
+('a2e9f813-3c4b-4c7a-8f99-2e6d5b4a3c54', 'DATA_SENSITIVITY_TYPE', 'CONFIDENTIAL', 'Confidential', 'API_DETAILS'),
+('b2e9f814-3d4b-4c7a-8f99-2e6d5b4a3c54', 'DATA_SENSITIVITY_TYPE', 'FINANCIAL_DATA', 'Financial Data', 'API_DETAILS'),
+('e2e9f815-3e4b-4c7a-8f99-2e6d5b4a3c54', 'DATA_SENSITIVITY_TYPE', 'PII', 'Restricted: Personally Identifiable Information', 'API_DETAILS'),
+('b2e9f816-3f4b-4c7a-8f99-2e6d5b4a3c54', 'DATA_SENSITIVITY_TYPE', 'SPI', 'Restricted: Sensitive Personal Information', 'API_DETAILS'),
+('a2e9f817-3a4b-4c7a-8f99-2e6d5b4a3c54', 'DATA_SENSITIVITY_TYPE', 'PHI', 'Restricted: Protected Health Information', 'API_DETAILS'),
+('c2e9f818-3b4b-4c7a-8f99-2e6d5b4a3c54', 'DATA_SENSITIVITY_TYPE', 'PCI', 'Restricted: Payment Card Information', 'API_DETAILS'),
+('e2e9f819-3c4b-4c7a-8f99-2e6d5b4a3c54', 'DATA_SENSITIVITY_TYPE', 'SECURITY_SENSITIVE', 'Restricted: Security-Sensitive', 'API_DETAILS'),
+('a2e9f810-3d4b-4c7a-8f99-2e6d5b4a3c54', 'DATA_SENSITIVITY_TYPE', 'CUSTOMER_DATA_NON_PII', 'Customer Data', 'API_DETAILS'),
+
+('92e9f810-3a4b-4c7a-8f99-1ead5b4a3c54', 'DATA_FORMAT', 'APPLICATION_JSON', 'application/json', 'API_DETAILS'),
+('82e9f810-3b4b-4c7a-8f99-2ead5b4a3c54', 'DATA_FORMAT', 'APPLICATION_XML', 'application/xml', 'API_DETAILS'),
+('72e9f810-3c4b-4c7a-8f99-3ead5b4a3c54', 'DATA_FORMAT', 'TEXT_JSON', 'text/xml', 'API_DETAILS'),
+('62e9f810-3d4b-4c7a-8f99-4ead5b4a3c54', 'DATA_FORMAT', 'TEXT_PLAIN', 'text/plain', 'API_DETAILS'),
+('52e9f810-3e4b-4c7a-8f99-5ead5b4a3c54', 'DATA_FORMAT', 'APPLICATION_X_WWW_FORM_URLENCODED', 'application/x-www-form-urlencoded', 'API_DETAILS'),
+('42e9f810-3f4b-4c7a-8f99-6ead5b4a3c54', 'DATA_FORMAT', 'MULTIPART_FORM_DATA', 'multipart/form-data', 'API_DETAILS'),
+('32e9f810-3a4b-4c7a-8f99-7ead5b4a3c54', 'DATA_FORMAT', 'APPLICATION_OCTET_STREAM', 'application/octet-stream', 'API_DETAILS'),
+('22e9f810-3b4b-4c7a-8f99-8ead5b4a3c54', 'DATA_FORMAT', 'TEXT_CSV', 'text/csv', 'API_DETAILS'),
+('12e9f810-3c4b-4c7a-8f99-9ead5b4a3c54', 'DATA_FORMAT', 'APPLICATION_AVRO', 'application/avro', 'API_DETAILS'),
+('02090010-0a0b-0c0a-0f09-0e0d0b0a0c04', 'DATA_FORMAT', 'APPLICATION_X_PROTOBUF', 'application/x-protobuf', 'API_DETAILS');

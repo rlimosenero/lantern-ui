@@ -1,0 +1,295 @@
+<div class="page-layout">
+
+    <mat-card class="detail-container">
+        <form #form="ngForm">
+            <section>
+                <h2>Basic Information</h2>
+
+                <div class="grid two">
+                    <div class="form-group">
+                        <label>API Name <span class="required">*</span></label>
+                        <input type="text" name="apiName" [(ngModel)]="payload.apiName" required #apiNameRef="ngModel"
+                            placeholder="Enter API name" />
+                        <div class="error" *ngIf="apiNameRef.touched && apiNameRef.invalid">
+                            API name is required
+                        </div>
+                    </div>
+
+                    <!-- <div class="form-group">
+                        <label>API ID</label>
+                        <input type="text" name="apiId" [(ngModel)]="payload.apiId" placeholder="Enter API ID" />
+                    </div> -->
+
+                    <!-- <div class="form-group">
+                        <label>Application Name <span class="required">*</span></label>
+                        <input type="text" name="appName" [(ngModel)]="payload.appName" required #appNameRef="ngModel"
+                            placeholder="Enter application name" />
+                        <div class="error" *ngIf="appNameRef.touched && appNameRef.invalid">
+                            Application name is required
+                        </div>
+                    </div> -->
+
+                    <div class="form-group">
+                        <label>Category</label>
+                        <input type="text" name="category" [(ngModel)]="payload.category" placeholder="Enter category" />
+                    </div>
+
+                    <div class="form-group full">
+                        <label>Description</label>
+                        <textarea rows="3" name="description" [(ngModel)]="payload.description"
+                            placeholder="Describe the API's purpose and functionality"></textarea>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2>Configuration & Security</h2>
+
+                <div class="grid two">
+                    <div class="form-group">
+                        <label>API Layer</label>
+                        <select class="custom-dropdown" name="layer" [(ngModel)]="payload.layer">
+                            <option value="" disabled selected>Select Layer</option>
+                            <option *ngFor="let opt of dropdownOptions['API_LAYER']" [value]="opt.code">{{ opt.value }}</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Web Service Type</label>
+                        <select class="custom-dropdown" name="webServiceType" [(ngModel)]="payload.webServiceType">
+                            <option value="" disabled selected>Select Service Type</option>
+                            <option *ngFor="let opt of dropdownOptions['API_TYPE']" [value]="opt.code">{{ opt.value }}</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>HTTP Method</label>
+                        <select class="custom-dropdown" name="httpMethod" [(ngModel)]="payload.httpMethod">
+                            <option value="" disabled selected>Select HTTP Method</option>
+                            <option *ngFor="let opt of dropdownOptions['HTTP_METHOD']" [value]="opt.code">{{ opt.value }}</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Lifecycle Status</label>
+                        <select class="custom-dropdown" name="lifecycleStatus" [(ngModel)]="payload.lifecycleStatus">
+                            <option value="" disabled selected>Select Status</option>
+                            <option *ngFor="let opt of dropdownOptions['LIFECYCLE_STATUS']" [value]="opt.code">{{ opt.value }}</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Authentication Method</label>
+                        <select class="custom-dropdown" name="authenticationMethod" [(ngModel)]="payload.authenticationMethod">
+                            <option value="" disabled selected>Select Auth Method</option>
+                            <option *ngFor="let opt of dropdownOptions['AUTH_METHOD']" [value]="opt.code">{{ opt.value }}</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Authorization Name</label>
+                        <input type="text" name="authorizationName" [(ngModel)]="payload.authorizationName" placeholder="e.g. Bearer Token" />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Accessed Via Gateway</label>
+                        <select class="custom-dropdown" name="accessedViaGateway" [(ngModel)]="payload.accessedViaGateway">
+                            <option [ngValue]="null" disabled selected>Select Option</option>
+                            <option [ngValue]="true">Yes</option>
+                            <option [ngValue]="false">No</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Exposure</label>
+                        <input type="text" name="exposure" [(ngModel)]="payload.exposure" placeholder="Enter exposure level" />
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2>Endpoints & Documentation</h2>
+
+                <div class="grid two">
+                    <div class="form-group">
+                        <label>Production URL</label>
+                        <input type="url" name="urlProd" [(ngModel)]="payload.urlProd" placeholder="https://..." />
+                    </div>
+
+                    <div class="form-group">
+                        <label>DR URL</label>
+                        <input type="url" name="urlDr" [(ngModel)]="payload.urlDr" placeholder="https://..." />
+                    </div>
+
+                    <div class="form-group">
+                        <label>UAT URL</label>
+                        <input type="url" name="urlUat" [(ngModel)]="payload.urlUat" placeholder="https://..." />
+                    </div>
+
+                    <div class="form-group">
+                        <label>SIT URL</label>
+                        <input type="url" name="urlSit" [(ngModel)]="payload.urlSit" placeholder="https://..." />
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Swagger URL</label>
+                        <input type="url" name="swaggerUrl" [(ngModel)]="payload.swaggerUrl" placeholder="https://..." />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Documents URL</label>
+                        <input type="url" name="docsUrl" [(ngModel)]="payload.docsUrl" placeholder="https://..." />
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2>Request Metadata</h2>
+
+                <div class="grid two">
+                    <div class="form-group">
+                        <label>Payload Data Format</label>
+                        <select class="custom-dropdown" name="requestDataFormat" [(ngModel)]="payload.requestDataFormat">
+                            <option value="" disabled selected>Select Format</option>
+                            <option *ngFor="let opt of dropdownOptions['DATA_FORMAT']" [value]="opt.code">{{ opt.value }}</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Data Sensitivity</label>
+                        <select class="custom-dropdown" name="requestDataSensitivityType" [(ngModel)]="payload.requestDataSensitivityType">
+                            <option value="" disabled selected>Select Sensitivity</option>
+                            <option *ngFor="let opt of dropdownOptions['DATA_SENSITIVITY_TYPE']" [value]="opt.code">{{ opt.value }}</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Data In-Transit Encryption</label>
+                        <input type="text" name="requestDataInTransitEnc" [(ngModel)]="payload.requestDataInTransitEnc" placeholder="e.g. TLS 1.2" />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Rate Limit Info</label>
+                        <input type="text" name="rateLimitInfo" [(ngModel)]="payload.rateLimitInfo" placeholder="e.g. 100/min" />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Average Size</label>
+                        <input type="text" name="requestAveSize" [(ngModel)]="payload.requestAveSize" placeholder="e.g. 1KB" />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Max Size</label>
+                        <input type="text" name="requestMaxSize" [(ngModel)]="payload.requestMaxSize" placeholder="e.g. 5KB" />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Data Logged</label>
+                        <select class="custom-dropdown" name="requestDataLogged" [(ngModel)]="payload.requestDataLogged">
+                            <option [ngValue]="null" disabled selected>Select Option</option>
+                            <option [ngValue]="true">Yes</option>
+                            <option [ngValue]="false">No</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Data Cached</label>
+                        <select class="custom-dropdown" name="requestDataCached" [(ngModel)]="payload.requestDataCached">
+                            <option [ngValue]="null" disabled selected>Select Option</option>
+                            <option [ngValue]="true">Yes</option>
+                            <option [ngValue]="false">No</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Duplicates Allowed</label>
+                        <select class="custom-dropdown" name="requestDuplicateAllowed" [(ngModel)]="payload.requestDuplicateAllowed">
+                            <option [ngValue]="null" disabled selected>Select Option</option>
+                            <option [ngValue]="true">Yes</option>
+                            <option [ngValue]="false">No</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Throttling Supported</label>
+                        <select class="custom-dropdown" name="requestThrottlingSupported" [(ngModel)]="payload.requestThrottlingSupported">
+                            <option [ngValue]="null" disabled selected>Select Option</option>
+                            <option [ngValue]="true">Yes</option>
+                            <option [ngValue]="false">No</option>
+                        </select>
+                    </div>
+
+                    <!-- <div class="form-group full">
+                        <label>Request Body Sample</label>
+                        <textarea rows="4" name="requestBodySample" [(ngModel)]="payload.requestBodySample" placeholder="{ ... }"></textarea>
+                    </div> -->
+                </div>
+            </section>
+
+            <section>
+                <h2>Response Metadata</h2>
+
+                <div class="grid two">
+                    <div class="form-group">
+                        <label>Payload Data Format</label>
+                        <select class="custom-dropdown" name="responseDataFormat" [(ngModel)]="payload.responseDataFormat">
+                            <option value="" disabled selected>Select Format</option>
+                            <option *ngFor="let opt of dropdownOptions['DATA_FORMAT']" [value]="opt.code">{{ opt.value }}</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Data Sensitivity</label>
+                        <select class="custom-dropdown" name="responseDataSensitivityType" [(ngModel)]="payload.responseDataSensitivityType">
+                            <option value="" disabled selected>Select Sensitivity</option>
+                            <option *ngFor="let opt of dropdownOptions['DATA_SENSITIVITY_TYPE']" [value]="opt.code">{{ opt.value }}</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Data In-Transit Encryption</label>
+                        <input type="text" name="responseDataInTransitEnc" [(ngModel)]="payload.responseDataInTransitEnc" placeholder="e.g. TLS 1.2" />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Average Size</label>
+                        <input type="text" name="responseAveSize" [(ngModel)]="payload.responseAveSize" placeholder="e.g. 1KB" />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Max Size</label>
+                        <input type="text" name="responseMaxSize" [(ngModel)]="payload.responseMaxSize" placeholder="e.g. 5KB" />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Data Logged</label>
+                        <select class="custom-dropdown" name="responseDataLogged" [(ngModel)]="payload.responseDataLogged">
+                            <option [ngValue]="null" disabled selected>Select Option</option>
+                            <option [ngValue]="true">Yes</option>
+                            <option [ngValue]="false">No</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Data Cached</label>
+                        <select class="custom-dropdown" name="responseDataCached" [(ngModel)]="payload.responseDataCached">
+                            <option [ngValue]="null" disabled selected>Select Option</option>
+                            <option [ngValue]="true">Yes</option>
+                            <option [ngValue]="false">No</option>
+                        </select>
+                    </div>
+<!-- 
+                    <div class="form-group full">
+                        <label>Response Body Sample</label>
+                        <textarea rows="4" name="responseBodySample" [(ngModel)]="payload.responseBodySample" placeholder="{ ... }"></textarea>
+                    </div> -->
+                </div>
+            </section>
+
+            <div class="actions">
+                <app-button name="Cancel" />
+                <app-button [inverted]="true" name="Save" (click)="onSave()" [disabled]="isSaveDisabled(form)" />
+            </div>
+        </form>
+    </mat-card>
+</div>

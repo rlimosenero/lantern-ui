@@ -121,7 +121,6 @@ $warning-text: #856404;
   textarea {
     padding: 8px 10px;
     border: 1px solid #d1d5db;
-    /* border-radius: 6px; */
     font-size: 1rem;
     border-radius: 0.25rem;
     font-family: var(--font-sans);
@@ -138,7 +137,7 @@ $warning-text: #856404;
 }
 
 .custom-dropdown {
-  appearance: none; 
+  appearance: none;
   width: 100%;
   padding: 10px 12px;
   font-size: 14px;
@@ -186,21 +185,15 @@ textarea.ng-invalid.ng-touched {
 }
 
 @container (min-width: 1280px) {
-  .page-layout {
-    width: 1024px;
-  }
+  .page-layout { width: 1024px; }
 }
 
 @container (max-width: 1279px) {
-  .page-layout {
-    width: 1024px;
-  }
+  .page-layout { width: 1024px; }
 }
 
 @container (max-width: 1023px) {
-  .page-layout {
-    width: 720px;
-  }
+  .page-layout { width: 720px; }
 }
 
 @container (max-width: 767px) {
