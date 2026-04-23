@@ -18,6 +18,11 @@ export class AuthService {
   currentUser = computed(() => this.currentUserSignal());
   isAuthenticated = computed(() => !!this.currentUserSignal());
 
+  isAdmin = computed(() => {
+    const user = this.currentUserSignal();
+    return user?.roles?.includes('ROLE_ADMIN') ?? false;
+  });
+
   constructor(
     private breadcrumbService: BreadcrumbService
   ) {
@@ -71,8 +76,11 @@ export class AuthService {
       const payloadBase64 = token.split('.')[1];
       const decodedJson = JSON.parse(atob(payloadBase64));
 
+      console.log(JSON.stringify(decodedJson));
+
       return {
         username: decodedJson.sub,
+        roles: decodedJson.roles,
         token: token
       };
     } catch (e) {
