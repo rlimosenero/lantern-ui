@@ -176,7 +176,7 @@ export class WebServicesDetailsComponent implements OnInit {
   }
 
   openLink(uuid: string) {
-    this.router.navigate(['/app-details/' + uuid]);
+    this.router.navigate(['/application/details/' + uuid]);
   }
 
   formatSample(rawString: string | null | undefined): string {

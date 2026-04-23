@@ -127,7 +127,7 @@ export class WebServicesFormComponent implements OnInit {
         this.payload.appName = data.serviceConfig[0].appName;
 
         this.payload.apiName = data.serviceConfig[0].name;
-        this.payload.category = 'Web Service'; //HARDCODED temporarily
+        this.payload.category = data.serviceConfig[0].category;
         this.payload.description = data.serviceConfig[0].description;
 
         this.payload.layer = data.layer;
@@ -163,7 +163,7 @@ export class WebServicesFormComponent implements OnInit {
         this.payload.responseDataInTransitEnc = data.responseDataInTransitEncryption;
         this.payload.responseAveSize = data.averageResponseSize;
         this.payload.responseMaxSize = data.maxResponseSize;
-        this.payload.responseDataLogged = false; // HARDCODED temporarily
+        this.payload.responseDataLogged = data.responseDataLogged;
         this.payload.responseDataCached = data.responseDataCached;
         this.payload.responseBodySample = data.responseBodySample;
 

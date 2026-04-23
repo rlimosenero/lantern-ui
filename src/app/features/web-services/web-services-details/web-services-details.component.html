@@ -1,5 +1,5 @@
 <div class="page-layout">
-    <!-- <button mat-button class="back-link"><mat-icon>arrow_back</mat-icon> Back to Catalog</button> -->
+
     @if (WSDetails) {
     <mat-card class="detail-container">
         <div class="header-section">
@@ -18,7 +18,7 @@
                             }
                         </div>
                     </span>
-                    
+
                     @if (auth.isAdmin()) {
                         <app-button name="Edit Details" (click)="openEditPage()"/>
                     }
@@ -64,7 +64,7 @@
                 <div class="grid-2">
                     <div class="data-field">
                         <label>Application</label>
-                        <button (click)="openLink(WSDetails?.serviceConfig?.[0]?.appUuid)">{{
+                        <button (click)="openLink(WSDetails.serviceConfig[0].appUuid)">{{
                             WSDetails?.serviceConfig?.[0]?.appName ?? '—' }}</button>
                     </div>
 
@@ -789,7 +789,7 @@
                         <label>Response Data Logged?</label>
                         <p [class.text-success]="WSDetails.serviceConfig[0].requestDataLogged"
                             [class.text-danger]="!WSDetails.serviceConfig[0].requestDataLogged">
-                            {{ WSDetails.serviceConfig[0].requestDataLogged ? '✓ Yes' : '✘ No' }}
+                            {{ WSDetails.responseDataLogged ? '✓ Yes' : '✘ No' }}
                         </p>
                     </div>
                     <div class="data-field">
