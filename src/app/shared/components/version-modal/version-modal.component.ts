@@ -81,7 +81,7 @@ export class VersionModalComponent implements OnInit {
           finalize(() => this.isLoading = false)
         ).subscribe({
       next: (res: any) => {
-        console.log(res);
+        // console.log(res);
         this.auditData = res.data
       },
       error: (err) => console.error(err)

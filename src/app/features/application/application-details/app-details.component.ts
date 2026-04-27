@@ -18,6 +18,9 @@ import { finalize } from 'rxjs';
 import { BreadcrumbService } from '../../../shared/components/breadcrumbs/breadcrumbs.service';
 import { ButtonComponent } from '../../../shared/components/button/button.component';
 import { AuthService } from '../../../core/auth/auth.service';
+import { VersionFormsModalComponent } from '../../../shared/components/version-forms-modal/version-forms-modal.component';
+import { VersionFormsModalService } from '../../../shared/components/version-forms-modal/version-forms-modal.service';
+import { VersionModalService } from '../../../shared/components/version-modal/version-modal.service';
 
 @Component({
   selector: 'app-app-details',
@@ -57,6 +60,8 @@ export class AppDetailsComponent implements OnInit {
   constructor(
     private applicationApiService: ApplicationApiService,
     private router: Router,
+    private versionFormsModalService: VersionFormsModalService,
+    private versionModalService: VersionModalService,
     private dialog: MatDialog,
     private breadcrumbService: BreadcrumbService
   ) { }
@@ -202,13 +207,39 @@ export class AppDetailsComponent implements OnInit {
   openDetails(uuid: any) {
     this.router.navigate(['/web-services/details/' + uuid]);
   }
-  
+
   openEditPage() {
     this.router.navigate([`/application/details/${this.getIdFromUrl()}/edit`]);
   }
 
   openApiForm() {
     this.router.navigate([`/application/details/${this.getIdFromUrl()}/add-web-service`]);
+  }
+
+  openVersionModal(versionDetails?: any) {
+    this.versionFormsModalService.open({
+      appInfo: {
+        appName: this.applicationDetails?.appName,
+        appUuid: this.applicationDetails?.appUuid
+      },
+      details: versionDetails
+    }).subscribe(result => {
+      if (result) {
+        this.fetchAppVersions();
+      }
+    });
+  }
+
+  editVersion(i: number){
+    // console.log(this.versionData.results[i]);
+    this.versionModalService.getApplicationVersionDetails(this.versionData.results[i].appVersionUuid).subscribe({
+      next: (res: any) => {
+        // console.log(res.data);
+        this.openVersionModal(res.data);
+      },
+      error: (err) => console.error(err)
+    })
+    // 
   }
 
 }
