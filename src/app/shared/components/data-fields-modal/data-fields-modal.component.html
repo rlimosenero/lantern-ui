@@ -1,0 +1,139 @@
+<div class="overlay" *ngIf="config">
+  <div class="modal">
+
+    <!-- HEADER -->
+    <div class="header">
+      <h2>{{ config.title }}</h2>
+      <button (click)="close()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:100px;">Actions</th>
+            <th *ngFor="let col of config.columns" [style.width]="col.width || '150px'">{{ col.label }}</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <!-- EXISTING ROWS -->
+          <tr *ngFor="let row of rows; let i = index" [class.deleted]="deletedIndexes.has(i)">
+
+            <!-- EDIT MODE -->
+            <ng-container *ngIf="editingIndex === i; else viewMode">
+
+              <!-- ACTIONS FIRST -->
+              <td class="actions">
+                <button (click)="saveRow()">
+                  <mat-icon>check</mat-icon>
+                </button>
+                <button (click)="cancelEdit()">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </td>
+
+              <!-- FIELDS -->
+              <td *ngFor="let col of config.columns" [style.width]="col.width || '150px'">
+
+                <input *ngIf="col.type === 'boolean'" type="checkbox" [(ngModel)]="form[col.key]" />
+
+                <input *ngIf="!col.type" 
+                  [(ngModel)]="form[col.key]" 
+                  [class.error-glow]="col.required && !form[col.key] && validationError"
+                  [placeholder]="col.required ? 'Required...' : ''"
+                />
+
+              </td>
+
+            </ng-container>
+
+            <!-- VIEW MODE -->
+            <ng-template #viewMode>
+
+              <!-- ACTIONS FIRST -->
+              <td class="actions">
+
+                <ng-container *ngIf="!deletedIndexes.has(i); else deletedActions">
+
+                  <button (click)="editRow(row, i)" [disabled]="isEditing()">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+
+                  <button (click)="markDelete(i)" [disabled]="isEditing()">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+
+                </ng-container>
+
+                <ng-template #deletedActions>
+                  <button (click)="undoDelete(i)">
+                    <mat-icon>undo</mat-icon>
+                  </button>
+                </ng-template>
+
+              </td>
+
+              <!-- DATA -->
+              <td *ngFor="let col of config.columns">
+
+                <span *ngIf="col.key === 'description'" class="ellipsis">
+                  {{ row[col.key] }}
+                </span>
+
+                <span *ngIf="col.key !== 'description' && col.type !== 'boolean'">
+                  {{ row[col.key] }}
+                </span>
+
+                <span *ngIf="col.type === 'boolean'">
+                  {{ row[col.key] ? 'Yes' : 'No' }}
+                </span>
+
+              </td>
+
+            </ng-template>
+
+          </tr>
+
+          <!-- ADD ROW -->
+          <tr *ngIf="editingIndex === -1" class="new-row">
+
+            <!-- ACTIONS FIRST -->
+            <td class="actions">
+              <button (click)="saveRow()">
+                <mat-icon>check</mat-icon>
+              </button>
+              <button (click)="cancelEdit()">
+                <mat-icon>close</mat-icon>
+              </button>
+            </td>
+
+            <!-- FIELDS -->
+            <td *ngFor="let col of config.columns">
+
+              <input *ngIf="col.type === 'boolean'" type="checkbox" [(ngModel)]="form[col.key]" />
+
+              <input *ngIf="!col.type" [(ngModel)]="form[col.key]" 
+                [class.error-glow]="col.required && !form[col.key] && validationError" />
+
+            </td>
+
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      <app-button name="+ Add" (click)="addRow()" [disabled]="isEditing()" />
+      <app-button name="Save"  (click)="submit()" [disabled]="!hasChanges() || isEditing()" />
+
+    </div>
+
+  </div>
+</div>

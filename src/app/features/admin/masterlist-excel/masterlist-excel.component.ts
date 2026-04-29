@@ -73,6 +73,9 @@ export class MasterlistExcelComponent {
       next: (res) => {
         if (res.flag === 'S') {
           // alert('Success: ' + res.message);
+          localStorage.removeItem('app_search_state');
+          localStorage.removeItem('global_search_state');
+          localStorage.removeItem('web_services_search_state');
         } else {
           this.isError = true;
           // alert('Error: ' + res.message);

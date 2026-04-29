@@ -231,7 +231,15 @@
                 <div class="section-header">
                     <h3>Request Configuration</h3>
                 </div>
-                <div class="data-field"><label>URL Path Parameters</label></div>
+                <div class="data-field">
+                    <span class="header-container">
+                        <label>URL Path Parameters</label>
+                         @if (auth.isAdmin()) {
+                            <app-button name="Add Entries" (click)="openCrudModal('urlPathParameters', WSDetails.urlPathParameters)" />
+                         }
+                    </span>
+
+                </div>
                 <div class="table-container">
                     @if (WSDetails?.urlPathParameters?.length) {
                     <table mat-table [dataSource]="WSDetails.urlPathParameters"
@@ -292,8 +300,15 @@
                     }
                 </div>
 
-                <div class="data-field"><label>Request Headers</label></div>
-
+                <div class="data-field">
+                    <span class="header-container">
+                        <label>Request Header</label>
+                         @if (auth.isAdmin()) {
+                            <app-button name="Add Entries" (click)="openCrudModal('requestHeaders', WSDetails.requestHeaders)" />
+                         }
+                    </span>
+                </div>
+                
                 <div class="table-container">
                     @if (WSDetails?.requestHeaders?.length) {
                     <table mat-table [dataSource]="WSDetails.requestHeaders"
@@ -378,7 +393,14 @@
 
                 <div class="divider"></div>
 
-                <div class="data-field"><label>Request Body Fields</label></div>
+                <div class="data-field">
+                    <span class="header-container">
+                        <label>Request Body Fields</label>
+                         @if (auth.isAdmin()) {
+                            <app-button name="Add Entries" (click)="openCrudModal('requestBodyFields', WSDetails.requestBodyFields)" />
+                         }
+                    </span>
+                </div>
                 <div class="table-container">
                     @if (WSDetails?.requestBodyFields?.length) {
                     <table mat-table [dataSource]="WSDetails.requestBodyFields"
@@ -514,7 +536,14 @@
                 <div class="section-header">
                     <h3>Response Configuration</h3>
                 </div>
-                <div class="data-field"><label>Response Headers</label></div>
+                <div class="data-field">
+                    <span class="header-container">
+                        <label>Response Headers</label>
+                         @if (auth.isAdmin()) {
+                            <app-button name="Add Entries" (click)="openCrudModal('responseHeaders', WSDetails.responseHeaders)" />
+                         }
+                    </span>
+                </div>
 
                 <div class="table-container">
                     @if (WSDetails?.responseHeaders?.length) {
@@ -600,7 +629,14 @@
 
                 <div class="divider"> </div>
 
-                <div class="data-field"><label>Response Body Fields</label></div>
+                <div class="data-field">
+                    <span class="header-container">
+                        <label>Response Body Fields</label>
+                         @if (auth.isAdmin()) {
+                            <app-button name="Add Entries" (click)="openCrudModal('responseBodyFields', WSDetails.responseBodyFields)" />
+                         }
+                    </span>
+                </div>
 
                 <div class="table-container">
                     @if (WSDetails?.requestBodyFields?.length) {

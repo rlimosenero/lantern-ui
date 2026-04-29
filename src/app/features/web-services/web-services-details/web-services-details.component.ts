@@ -14,11 +14,13 @@ import { MatTableModule } from '@angular/material/table';
 import { VersionModalComponent } from '../../../shared/components/version-modal/version-modal.component';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
 import { environment } from '../../../../environments/environment';
-import { finalize } from 'rxjs';
+import { finalize, first } from 'rxjs';
 import { LoaderComponent } from '../../../shared/components/loader/loader.component';
 import { BreadcrumbService } from '../../../shared/components/breadcrumbs/breadcrumbs.service';
 import { ButtonComponent } from '../../../shared/components/button/button.component';
 import { AuthService } from '../../../core/auth/auth.service';
+import { DataFieldsModalService } from '../../../shared/components/data-fields-modal/data-fields-modal.service';
+import { DataFieldsModalComponent } from '../../../shared/components/data-fields-modal/data-fields-modal.component';
 
 @Component({
   selector: 'app-web-services-details',
@@ -56,11 +58,74 @@ export class WebServicesDetailsComponent implements OnInit {
   displayedVersionColumns: string[] = ['version', 'date', 'stage', 'env', 'build', 'documents', 'options'];
   public baseUrl = environment.baseUrl;
 
+  configMap: any = {
+    urlPathParameters: {
+      title: 'URL Path Parameters',
+      columns: [
+        { key: 'parameterName', label: 'Name', required: true },
+        { key: 'typeAndFormat', label: 'Data Type and Format' },
+        { key: 'isRequired', label: 'Required', type: 'boolean' },
+        { key: 'sampleValue', label: 'Sample Value' },
+        { key: 'description', label: 'Description' }
+      ]
+    },
+
+    requestHeaders: {
+      title: 'Request Header',
+      columns: [
+        { key: 'parameterName', label: 'Name', required: true },
+        { key: 'typeAndFormat', label: 'Data Type and Format' },
+        { key: 'isRequired', label: 'Required', type: 'boolean' },
+        { key: 'sampleValue', label: 'Sample Value' },
+        { key: 'description', label: 'Description' }
+      ]
+    },
+
+    requestBodyFields: {
+      title: 'Request Body',
+      columns: [
+        { key: 'fieldName', label: 'Field', required: true },
+        { key: 'typeAndFormat', label: 'Data Type and Format' },
+        { key: 'isRequired', label: 'Required', type: 'boolean' },
+        { key: 'sampleValue', label: 'Sample Value' },
+        { key: 'validationRules', label: 'Validation' },
+        { key: 'defaultValue', label: 'Default' }
+      ]
+    },
+
+    responseHeaders: {
+      title: 'Response Headers',
+      columns: [
+        { key: 'headerName', label: 'Header', required: true },
+        { key: 'typeAndFormat', label: 'Data Type and Format' },
+        { key: 'isRequired', label: 'Required', type: 'boolean' },
+        { key: 'sampleValue', label: 'Sample Value' },
+        { key: 'description', label: 'Description' }
+      ]
+    },
+
+    responseBodyFields: {
+      title: 'Response Body',
+      columns: [
+        { key: 'fieldName', label: 'Name', required: true },
+        { key: 'typeAndFormat', label: 'Data Type and Format' },
+        { key: 'description', label: 'Description' },
+        { key: 'isRequired', label: 'Required', type: 'boolean' },
+        { key: 'validationRules', label: 'Sample Value' },
+        { key: 'transformationLogic', label: 'Transformation Logic' },
+        { key: 'defaultValue', label: 'Default Value' },
+        { key: 'sourceOrDomainApplication', label: 'Source/Domain Application' },
+        { key: 'sourceOrDomainFieldName', label: 'Source/Domain Field Name' },
+      ]
+    }
+  };
+
   constructor(
     private webServiceApiService: WebServicesApiService,
     private router: Router,
     private dialog: MatDialog,
-    private breadcrumbService: BreadcrumbService
+    private breadcrumbService: BreadcrumbService,
+    private crudModalService: DataFieldsModalService
   ) { }
 
   ngOnInit(): void {
@@ -219,8 +284,54 @@ export class WebServicesDetailsComponent implements OnInit {
     return formatted.substring(1, formatted.length - 3);
   }
 
+  openCrudModal(type: any, data?: any[]) {
+    this.crudModalService.open({
+      ...this.configMap[type],
+      appApiUuid: this.WSDetails.uuid,
+      data: data,
+      unusedData: this.getUnusedDataFields(type)
+    }).pipe(first()).subscribe((result: any) => {
+      if (result) {
+        this.fetchWebServiceDetails();
+      }
+    });
+  }
+
   openEditPage() {
     this.router.navigate([`/web-services/details/${this.getIdFromUrl()}/edit`]);
+  }
+
+  private getUnusedDataFields(targetKey: string): any[] {
+    let unused: any[] = [];
+
+    if (targetKey !== 'urlPathParameters') unused = [...unused, ...this.mapToDTO(this.WSDetails.urlPathParameters, 'URL_PATH_PARAMETER')];
+    if (targetKey !== 'requestHeaders') unused = [...unused, ...this.mapToDTO(this.WSDetails.requestHeaders, 'REQUEST_HEADER')];
+    if (targetKey !== 'requestBodyFields') unused = [...unused, ...this.mapToDTO(this.WSDetails.requestBodyFields, 'REQUEST_BODY')];
+    if (targetKey !== 'responseHeaders') unused = [...unused, ...this.mapToDTO(this.WSDetails.responseHeaders, 'RESPONSE_HEADER')];
+    if (targetKey !== 'responseBodyFields') unused = [...unused, ...this.mapToDTO(this.WSDetails.responseBodyFields, 'RESPONSE_BODY')];
+
+    return unused;
+  }
+
+  private mapToDTO(rows: any[], payloadType: string): any[] {
+    if (!rows || rows.length === 0) return [];
+
+    return rows.map(row => ({
+      dataFieldUuid: row.dataFieldUuid || null,
+      appApiUuid: this.WSDetails.uuid,
+      payloadType: payloadType,
+      fieldName: row.fieldName || row.parameterName || row.headerName || '',
+      dataTypeFormat: row.typeAndFormat || '',
+      description: row.description || '',
+      isRequired: !!row.isRequired,
+      sampleValue: row.sampleValue || '',
+      validation: row.validationRules || '',
+      transformationLogic: row.transformationLogic || '',
+      defaultValue: row.defaultValue || '',
+      sourceApplicationName: row.sourceOrDomainApplication || '',
+      sourceFieldName: row.sourceOrDomainFieldName || '',
+      endpoint: row.endpoint || ''
+    }));
   }
 
 }

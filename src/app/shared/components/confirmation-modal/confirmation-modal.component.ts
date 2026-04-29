@@ -60,7 +60,6 @@ export class ConfirmationModalComponent implements OnInit, OnDestroy {
   confirm() {
     if (this.config?.loading) return;
 
-    // 🔥 set loading immediately
     this.modalService.update({ loading: true });
 
     this.modalService.close('confirm');
