@@ -1,9 +1,9 @@
 <div class="overlay">
     <div class="modal-wrapper">
-
         <div class="modal-container">
             <div class="modal-header">
-                <h2>{{ isEditMode ? 'Edit Version' : 'Add New Version' }}</h2>
+                <h2>{{ isEditMode ? (versionType === 'API' ? 'Edit API Version' : 'Edit Version') : (versionType ===
+                    'API' ? 'Add New API Version' : 'Add New Version') }}</h2>
             </div>
 
             <form #versionForm="ngForm">
@@ -11,12 +11,12 @@
 
                     <section>
                         <h2>Version Information</h2>
-                        <div class="grid two">
 
+                        <div class="grid two" *ngIf="versionType === 'APP'">
                             <div class="form-group">
                                 <label>Version Number <span class="required">*</span></label>
                                 <input type="text" name="appVersion" [(ngModel)]="payload.appVersion" required
-                                    #versionRef="ngModel" />
+                                    #versionRef="ngModel" placeholder="e.g. 1.0.0" />
                                 <div class="error" *ngIf="versionRef.touched && versionRef.invalid">
                                     Version number is required
                                 </div>
@@ -24,11 +24,36 @@
 
                             <div class="form-group">
                                 <label>Build Version</label>
-                                <input type="text" name="buildVersion" [(ngModel)]="payload.buildVersion" />
+                                <input type="text" name="buildVersion" [(ngModel)]="payload.buildVersion"
+                                    placeholder="e.g. b123" />
                             </div>
                         </div>
-                        <div class="grid two">
 
+                        <div class="grid two" *ngIf="versionType == 'API'">
+                            <div class="form-group">
+                                <label>App Version<span class="required">*</span></label>
+                                <select name="appVersionSelection" [(ngModel)]="selectedAppVersionObj"
+                                    (ngModelChange)="onAppVersionChange($event)" class="custom-dropdown" required
+                                    #appVerRef="ngModel">
+
+                                    <option [ngValue]="null">Select App Version</option>
+
+                                    <option *ngFor="let opt of dropdownOptions['APP_VERSIONS']" [ngValue]="opt">
+                                        {{ opt.version }}
+                                    </option>
+                                </select>
+                                <div class="error" *ngIf="appVerRef.touched && appVerRef.invalid">Required</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>API Version Number <span class="required">*</span></label>
+                                <input type="text" name="apiVersion" [(ngModel)]="payload.apiVersion" required
+                                    #apiVerRef="ngModel" placeholder="e.g. v1" />
+                                <div class="error" *ngIf="apiVerRef.touched && apiVerRef.invalid">Required</div>
+                            </div>
+                        </div>
+
+                        <div class="grid two">
                             <div class="form-group">
                                 <label>Release Stage <span class="required">*</span></label>
                                 <select name="releaseStage" [(ngModel)]="payload.releaseStage" class="custom-dropdown"
@@ -38,9 +63,7 @@
                                         {{ stage.value }}
                                     </option>
                                 </select>
-                                <div class="error" *ngIf="stageRef.touched && stageRef.invalid">
-                                    Required
-                                </div>
+                                <div class="error" *ngIf="stageRef.touched && stageRef.invalid">Required</div>
                             </div>
 
                             <div class="form-group">
@@ -52,11 +75,16 @@
                                         {{ env.value }}
                                     </option>
                                 </select>
-                                <div class="error" *ngIf="envRef.touched && envRef.invalid">
-                                    Required
-                                </div>
+                                <div class="error" *ngIf="envRef.touched && envRef.invalid">Required</div>
                             </div>
+                        </div>
 
+                        <div class="grid two" *ngIf="versionType === 'API'">
+                            <div class="form-group">
+                                <label>Build Version</label>
+                                <input type="text" name="buildVersion" [(ngModel)]="payload.buildVersion"
+                                    placeholder="e.g. b123" />
+                            </div>
                         </div>
                     </section>
 
@@ -65,7 +93,8 @@
 
                         <div class="form-group">
                             <label>Features</label>
-                            <textarea rows="3" name="features" [(ngModel)]="payload.features"></textarea>
+                            <textarea rows="3" name="features" [(ngModel)]="payload.features"
+                                placeholder="Describe new changes..."></textarea>
                         </div>
 
                         <div class="grid two">
@@ -96,6 +125,5 @@
                 </div>
             </form>
         </div>
-
     </div>
 </div>

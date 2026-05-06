@@ -51,4 +51,14 @@ export class VersionFormsModalService {
     return this.http.put(url, payload);
   }
 
+  addApiVersion(payload: any) {
+    const url = `${this.config.baseUrl}/web-services/versions/add`;
+    return this.http.post(url, payload);
+  }
+
+  updateApiVersion(payload: any, apiVersionUuid: string) {
+    const url = `${this.config.baseUrl}/web-services/versions/${apiVersionUuid}`;
+    return this.http.put(url, payload);
+  }
+
 }

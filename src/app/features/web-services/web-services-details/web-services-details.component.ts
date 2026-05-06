@@ -21,6 +21,8 @@ import { ButtonComponent } from '../../../shared/components/button/button.compon
 import { AuthService } from '../../../core/auth/auth.service';
 import { DataFieldsModalService } from '../../../shared/components/data-fields-modal/data-fields-modal.service';
 import { DataFieldsModalComponent } from '../../../shared/components/data-fields-modal/data-fields-modal.component';
+import { VersionFormsModalService } from '../../../shared/components/version-forms-modal/version-forms-modal.service';
+import { VersionModalService } from '../../../shared/components/version-modal/version-modal.service';
 
 @Component({
   selector: 'app-web-services-details',
@@ -124,6 +126,8 @@ export class WebServicesDetailsComponent implements OnInit {
     private webServiceApiService: WebServicesApiService,
     private router: Router,
     private dialog: MatDialog,
+    private versionFormsModalService: VersionFormsModalService,
+    private versionModalService: VersionModalService,
     private breadcrumbService: BreadcrumbService,
     private crudModalService: DataFieldsModalService
   ) { }
@@ -292,7 +296,7 @@ export class WebServicesDetailsComponent implements OnInit {
       unusedData: this.getUnusedDataFields(type)
     }).pipe(first()).subscribe((result: any) => {
       if (result) {
-        this.fetchWebServiceDetails();
+        this.fetchVersions();
       }
     });
   }
@@ -332,6 +336,32 @@ export class WebServicesDetailsComponent implements OnInit {
       sourceFieldName: row.sourceOrDomainFieldName || '',
       endpoint: row.endpoint || ''
     }));
+  }
+
+  openVersionModal(versionDetails?: any) {
+    this.versionFormsModalService.open({
+      appInfo: {
+        appApiUuid: this.WSDetails?.uuid,
+        appUuid: this.WSDetails?.serviceConfig[0].appUuid
+      },
+      versionType: 'API',
+      details: versionDetails
+    }).pipe(first()).subscribe(result => {
+      if (result) {
+        this.fetchWebServiceDetails();
+      }
+    });
+  }
+
+  editVersion(i: number) {
+    this.versionModalService.getApiVersionDetails(this.versionData.results[i].apiVersionUuid).pipe(first()).subscribe({
+      next: (res: any) => {
+        // console.log(res.data);
+        this.openVersionModal(res.data);
+      },
+      error: (err) => console.error(err)
+    })
+    
   }
 
 }

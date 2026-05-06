@@ -14,8 +14,8 @@ export class VersionModalService {
     return this.http.get(url);
   }
 
-  getApiVersionDetails(appVersionUuid: string) {
-    const url = `${this.config.baseUrl}/web-services/versions/${appVersionUuid}/details`;
+  getApiVersionDetails(apiVersionUuid: string) {
+    const url = `${this.config.baseUrl}/web-services/versions/${apiVersionUuid}/details`;
     return this.http.get(url);
   }
 

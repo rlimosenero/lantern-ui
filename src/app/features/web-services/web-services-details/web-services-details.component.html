@@ -20,7 +20,7 @@
                     </span>
 
                     @if (auth.isAdmin()) {
-                        <app-button name="Edit Details" (click)="openEditPage()"/>
+                    <app-button name="Edit Details" (click)="openEditPage()" />
                     }
 
                 </div>
@@ -234,9 +234,10 @@
                 <div class="data-field">
                     <span class="header-container">
                         <label>URL Path Parameters</label>
-                         @if (auth.isAdmin()) {
-                            <app-button name="Add Entries" (click)="openCrudModal('urlPathParameters', WSDetails.urlPathParameters)" />
-                         }
+                        @if (auth.isAdmin()) {
+                        <app-button name="Add Entries"
+                            (click)="openCrudModal('urlPathParameters', WSDetails.urlPathParameters)" />
+                        }
                     </span>
 
                 </div>
@@ -303,12 +304,13 @@
                 <div class="data-field">
                     <span class="header-container">
                         <label>Request Header</label>
-                         @if (auth.isAdmin()) {
-                            <app-button name="Add Entries" (click)="openCrudModal('requestHeaders', WSDetails.requestHeaders)" />
-                         }
+                        @if (auth.isAdmin()) {
+                        <app-button name="Add Entries"
+                            (click)="openCrudModal('requestHeaders', WSDetails.requestHeaders)" />
+                        }
                     </span>
                 </div>
-                
+
                 <div class="table-container">
                     @if (WSDetails?.requestHeaders?.length) {
                     <table mat-table [dataSource]="WSDetails.requestHeaders"
@@ -396,9 +398,10 @@
                 <div class="data-field">
                     <span class="header-container">
                         <label>Request Body Fields</label>
-                         @if (auth.isAdmin()) {
-                            <app-button name="Add Entries" (click)="openCrudModal('requestBodyFields', WSDetails.requestBodyFields)" />
-                         }
+                        @if (auth.isAdmin()) {
+                        <app-button name="Add Entries"
+                            (click)="openCrudModal('requestBodyFields', WSDetails.requestBodyFields)" />
+                        }
                     </span>
                 </div>
                 <div class="table-container">
@@ -539,9 +542,10 @@
                 <div class="data-field">
                     <span class="header-container">
                         <label>Response Headers</label>
-                         @if (auth.isAdmin()) {
-                            <app-button name="Add Entries" (click)="openCrudModal('responseHeaders', WSDetails.responseHeaders)" />
-                         }
+                        @if (auth.isAdmin()) {
+                        <app-button name="Add Entries"
+                            (click)="openCrudModal('responseHeaders', WSDetails.responseHeaders)" />
+                        }
                     </span>
                 </div>
 
@@ -632,9 +636,10 @@
                 <div class="data-field">
                     <span class="header-container">
                         <label>Response Body Fields</label>
-                         @if (auth.isAdmin()) {
-                            <app-button name="Add Entries" (click)="openCrudModal('responseBodyFields', WSDetails.responseBodyFields)" />
-                         }
+                        @if (auth.isAdmin()) {
+                        <app-button name="Add Entries"
+                            (click)="openCrudModal('responseBodyFields', WSDetails.responseBodyFields)" />
+                        }
                     </span>
                 </div>
 
@@ -986,6 +991,9 @@
             <section class="audit-section">
                 <div class="section-header">
                     <h3>Version History / Change Log</h3>
+                    @if (auth.isAdmin()) {
+                    <app-button name="Add Version" (click)="openVersionModal()" />
+                    }
                 </div>
                 @if (versionData?.results?.length) {
 
@@ -1062,11 +1070,13 @@
                         </ng-container>
 
                         <ng-container matColumnDef="options">
-                            <th mat-header-cell *matHeaderCellDef>Options</th>
-                            <td mat-cell *matCellDef="let v">
+                            <th mat-header-cell *matHeaderCellDef style="width: 120px;">Options</th>
+                            <td mat-cell *matCellDef="let v; let i = index">
                                 <button (click)="openDialog(v.apiVersionUuid)"><mat-icon
                                         class="action-icon">visibility</mat-icon></button>
-                                <!-- <mat-icon class="action-icon">edit</mat-icon> -->
+                                <button (click)="editVersion(i)">
+                                    <mat-icon class="action-icon">edit</mat-icon>
+                                </button>
                             </td>
                         </ng-container>
 

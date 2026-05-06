@@ -14,7 +14,7 @@ import { VersionModalComponent } from '../../../shared/components/version-modal/
 import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
 import { SplitPipe } from '../../../shared/pipes/split/split.pipe';
 import { LoaderComponent } from '../../../shared/components/loader/loader.component';
-import { finalize } from 'rxjs';
+import { finalize, first } from 'rxjs';
 import { BreadcrumbService } from '../../../shared/components/breadcrumbs/breadcrumbs.service';
 import { ButtonComponent } from '../../../shared/components/button/button.component';
 import { AuthService } from '../../../core/auth/auth.service';
@@ -222,8 +222,9 @@ export class AppDetailsComponent implements OnInit {
         appName: this.applicationDetails?.appName,
         appUuid: this.applicationDetails?.appUuid
       },
+      versionType: 'APP',
       details: versionDetails
-    }).subscribe(result => {
+    }).pipe(first()).subscribe(result => {
       if (result) {
         this.fetchAppVersions();
       }
@@ -232,7 +233,7 @@ export class AppDetailsComponent implements OnInit {
 
   editVersion(i: number){
     // console.log(this.versionData.results[i]);
-    this.versionModalService.getApplicationVersionDetails(this.versionData.results[i].appVersionUuid).subscribe({
+    this.versionModalService.getApplicationVersionDetails(this.versionData.results[i].appVersionUuid).pipe(first()).subscribe({
       next: (res: any) => {
         // console.log(res.data);
         this.openVersionModal(res.data);

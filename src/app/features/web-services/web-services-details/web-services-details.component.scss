@@ -19,26 +19,6 @@ mat-divider.mat-divider.mat-divider-horizontal {
   border-top-color: #a1a1a180 !important;
 }
 
-.urlParams {
-  width: 1000px !important;
-}
-
-.consumer-table {
-  width: 2000px !important;
-}
-
-.version-table {
-  width: 910px !important;
-}
-
-.req-body-field {
-  width: 1800px !important;
-}
-
-.res-body-field {
-  width: 2000px !important;
-}
-
 .version-table-container {
   margin-bottom: 0 !important;
 }
@@ -181,6 +161,14 @@ mat-divider.mat-divider.mat-divider-horizontal {
   position: relative;
 }
 
+th,
+td {
+  vertical-align: middle;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .card-container {
   display: flex;
   flex-wrap: wrap;
@@ -283,7 +271,7 @@ mat-divider.mat-divider.mat-divider-horizontal {
 }
 
 .data-field {
-  
+
   .header-container {
     display: flex;
     flex-direction: row;

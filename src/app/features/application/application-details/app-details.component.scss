@@ -107,6 +107,14 @@ span.custom-chip {
   border: 1px solid #0000001a;
 }
 
+th,
+td {
+  vertical-align: middle;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .card-container {
   display: flex;
   flex-wrap: wrap;

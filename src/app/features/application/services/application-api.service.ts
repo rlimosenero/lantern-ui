@@ -31,8 +31,10 @@ export class ApplicationApiService {
     return this.http.get(url);
   }
 
-  getVersionHistoryList(uuid: string, pagenumber?: number) {
-    const url = `${this.config.baseUrl}/applications/${uuid}/versions?size=5&page=${pagenumber}`;
+  getVersionHistoryList(uuid: string, pagenumber?: number, pageSize?: number) {
+    const size = pageSize || 5;
+    
+    const url = `${this.config.baseUrl}/applications/${uuid}/versions?size=${size}&page=${pagenumber}`;
     return this.http.get(url);
   }
 
