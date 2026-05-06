@@ -33,9 +33,9 @@
                         {{ WSDetails?.serviceConfig?.[0]?.status ?? 'UNKNOWN' }}
                     </span>
 
-                    <span class="version-text">
+                    <!-- <span class="version-text">
                         Version {{ WSDetails?.serviceConfig?.[0]?.version ?? 'N/A' }}
-                    </span>
+                    </span> -->
 
 
                     @if (WSDetails.serviceConfig[0].accessedViaGateway){
@@ -596,7 +596,7 @@
                 <div class="data-field"><label>Response Body Fields</label></div>
 
                 <div class="table-container">
-                    @if (WSDetails?.requestBodyFields?.length) {
+                    @if (WSDetails?.responseBodyFields?.length) {
                     <table mat-table [dataSource]="WSDetails.responseBodyFields"
                         class="mat-elevation-z0 border-table res-body-field">
 
