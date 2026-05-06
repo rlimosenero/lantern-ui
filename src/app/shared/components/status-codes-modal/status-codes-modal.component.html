@@ -1,0 +1,109 @@
+<div class="overlay" *ngIf="config">
+  <div class="modal">
+
+    <!-- HEADER -->
+    <div class="header">
+      <h2>Response Codes</h2>
+      <button (click)="close()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:100px;">Actions</th>
+            <th>Business Code</th>
+            <th>HTTP Code</th>
+            <th>Message</th>
+            <th>Type</th>
+            <th>Suggested Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <!-- EXISTING ROWS -->
+          <tr *ngFor="let row of rows; let i = index" [class.deleted]="deletedIndexes.has(i)">
+
+            <!-- EDIT MODE -->
+            <ng-container *ngIf="editingIndex === i; else viewMode">
+
+              <td class="actions">
+                <button (click)="saveRow()"><mat-icon>check</mat-icon></button>
+                <button (click)="cancelEdit()"><mat-icon>close</mat-icon></button>
+              </td>
+
+              <td><input [(ngModel)]="form.businessCode" /></td>
+              <td><input [(ngModel)]="form.httpcode" /></td>
+              <td><input [(ngModel)]="form.message" /></td>
+              <td><input [(ngModel)]="form.type" /></td>
+              <td><input [(ngModel)]="form.suggestedAction" /></td>
+
+            </ng-container>
+
+            <!-- VIEW MODE -->
+            <ng-template #viewMode>
+
+              <td class="actions">
+
+                <ng-container *ngIf="!deletedIndexes.has(i); else deletedActions">
+
+                  <button (click)="editRow(row, i)" [disabled]="isEditing()">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+
+                  <button (click)="markDelete(i)" [disabled]="isEditing()">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+
+                </ng-container>
+
+                <ng-template #deletedActions>
+                  <button (click)="undoDelete(i)">
+                    <mat-icon>undo</mat-icon>
+                  </button>
+                </ng-template>
+
+              </td>
+
+              <td>{{ row.businessCode }}</td>
+              <td>{{ row.httpcode }}</td>
+              <td class="ellipsis">{{ row.message }}</td>
+              <td>{{ row.type }}</td>
+              <td>{{ row.suggestedAction }}</td>
+
+            </ng-template>
+
+          </tr>
+
+          <!-- ADD ROW -->
+          <tr *ngIf="editingIndex === -1" class="new-row">
+
+            <td class="actions">
+              <button (click)="saveRow()"><mat-icon>check</mat-icon></button>
+              <button (click)="cancelEdit()"><mat-icon>close</mat-icon></button>
+            </td>
+
+            <td><input [(ngModel)]="form.businessCode" /></td>
+            <td><input [(ngModel)]="form.httpcode" /></td>
+            <td><input [(ngModel)]="form.message" /></td>
+            <td><input [(ngModel)]="form.type" /></td>
+            <td><input [(ngModel)]="form.suggestedAction" /></td>
+
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      <app-button name="+ Add" (click)="addRow()" [disabled]="isEditing()" />
+      <app-button name="Save" (click)="submit()" [disabled]="!hasChanges() || isEditing()" />
+    </div>
+
+  </div>
+</div>

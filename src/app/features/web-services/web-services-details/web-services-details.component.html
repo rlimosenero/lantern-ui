@@ -734,7 +734,14 @@
 
                 <div class="divider"> </div>
 
-                <div class="data-field"><label>Response Status Codes</label></div>
+                <div class="data-field">
+                    <span class="header-container">
+                        <label>Response Status Codes</label>
+                        @if (auth.isAdmin()) {
+                        <app-button name="Add/Edit Entries" (click)="openResponseCodesModal()" />
+                        }
+                    </span>
+                </div>
 
                 <div class="table-container">
                     @if (WSDetails?.responseStatusCodes?.length) {

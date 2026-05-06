@@ -10,7 +10,6 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTableModule } from '@angular/material/table';
-// import { ButtonComponent } from '../../../shared/components/button/button.component';
 import { VersionModalComponent } from '../../../shared/components/version-modal/version-modal.component';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
 import { environment } from '../../../../environments/environment';
@@ -20,9 +19,9 @@ import { BreadcrumbService } from '../../../shared/components/breadcrumbs/breadc
 import { ButtonComponent } from '../../../shared/components/button/button.component';
 import { AuthService } from '../../../core/auth/auth.service';
 import { DataFieldsModalService } from '../../../shared/components/data-fields-modal/data-fields-modal.service';
-import { DataFieldsModalComponent } from '../../../shared/components/data-fields-modal/data-fields-modal.component';
 import { VersionFormsModalService } from '../../../shared/components/version-forms-modal/version-forms-modal.service';
 import { VersionModalService } from '../../../shared/components/version-modal/version-modal.service';
+import { StatusCodesModalService } from '../../../shared/components/status-codes-modal/status-codes-modal.service';
 
 @Component({
   selector: 'app-web-services-details',
@@ -129,7 +128,8 @@ export class WebServicesDetailsComponent implements OnInit {
     private versionFormsModalService: VersionFormsModalService,
     private versionModalService: VersionModalService,
     private breadcrumbService: BreadcrumbService,
-    private crudModalService: DataFieldsModalService
+    private crudModalService: DataFieldsModalService,
+    private statusCodesModalService: StatusCodesModalService
   ) { }
 
   ngOnInit(): void {
@@ -361,7 +361,19 @@ export class WebServicesDetailsComponent implements OnInit {
       },
       error: (err) => console.error(err)
     })
-    
+
+  }
+
+  openResponseCodesModal() {
+    this.statusCodesModalService.open({
+      appApiUuid: this.WSDetails.uuid,
+      data: this.WSDetails.responseStatusCodes
+    }).pipe(first()).subscribe(res => {
+      if (res) {
+        // this.refreshData();
+        console.log(res)
+      }
+    });
   }
 
 }

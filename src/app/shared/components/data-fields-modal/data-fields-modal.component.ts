@@ -14,6 +14,7 @@ import { first } from 'rxjs';
   templateUrl: './data-fields-modal.component.html',
   styleUrl: './data-fields-modal.component.scss',
 })
+
 export class DataFieldsModalComponent {
   config: any;
   rows: any[] = [];
@@ -33,6 +34,7 @@ export class DataFieldsModalComponent {
     this.modal.getState().subscribe(cfg => {
       this.config = cfg;
       if (cfg) {
+        // get current data fields
         const activeDataLen = cfg.data ? cfg.data.length : 0;
         const unusedDataLen = cfg.unusedData ? cfg.unusedData.length : 0;
 
