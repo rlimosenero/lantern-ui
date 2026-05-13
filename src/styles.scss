@@ -11,6 +11,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+textarea {
+  font-family: var(--font-sans);
+}
+
 html {
   --mat-sys-body-large-font: var(--font-sans);
   --mat-sys-body-medium-font: var(--font-sans);

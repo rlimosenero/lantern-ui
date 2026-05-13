@@ -55,7 +55,6 @@ export class ConsumerAppFormsModalComponent {
   };
 
   payload: any = {
-    consumerAppUuid: null,
     appApiUuid: null,
     appName: '',
     description: '',
@@ -130,8 +129,8 @@ export class ConsumerAppFormsModalComponent {
       appName: this.payload.appName,
       description: this.payload.description,
       relationship: this.payload.relationship,
-      businessOwner: this.payload.businessOwner,
-      technicalOwner: this.payload.technicalOwner,
+      businessOwner: this.payload.appOwner,
+      technicalOwner: this.payload.techOwner,
       trigger: this.payload.trigger,
       appType: this.payload.appType,
       networkMode: this.payload.networkMode,
@@ -167,7 +166,7 @@ export class ConsumerAppFormsModalComponent {
         const request$ = this.isEditMode
           ? this.consumerModalService.updateConsumerApplication(
             payload,
-            this.payload.consumerAppUuid
+            this.payload.consumerUuid
           )
           : this.consumerModalService.addConsumerApplication(payload);
 
@@ -205,9 +204,8 @@ export class ConsumerAppFormsModalComponent {
   }
 
   closeModal(result: boolean = false) {
-
     this.payload = {
-      consumerAppUuid: null,
+      consumerUuid: null,
       appApiUuid: null,
       appName: '',
       description: '',

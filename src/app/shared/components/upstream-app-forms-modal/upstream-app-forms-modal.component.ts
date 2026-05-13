@@ -123,8 +123,8 @@ export class UpstreamAppFormsModalComponent {
       appName: this.payload.appName,
       description: this.payload.description,
       relationship: this.payload.relationship,
-      businessOwner: this.payload.businessOwner,
-      technicalOwner: this.payload.technicalOwner,
+      businessOwner: this.payload.appOwner,
+      technicalOwner: this.payload.techOwner,
       networkMode: this.payload.networkMode,
       tokenExpiry: this.payload.tokenExpiry || null
     };

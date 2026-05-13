@@ -942,17 +942,19 @@
                             <td mat-cell *matCellDef="let v" class="text-muted">{{ v.networkMode ?? '—' }}</td>
                         </ng-container>
 
+                        @if (auth.isAdmin()) {
                         <ng-container matColumnDef="options">
                             <th mat-header-cell *matHeaderCellDef>Options</th>
-                            <td mat-cell *matCellDef="let v" class="text-muted">
-                                <button>
+                            <td mat-cell *matCellDef="let v; let i = index" class="text-muted">
+                                <button (click)="openConsumerAppModal(i)">
                                     <mat-icon class="action-icon">edit</mat-icon>
                                 </button>
                             </td>
                         </ng-container>
+                        }
 
-                        <tr mat-header-row *matHeaderRowDef="consumersFields"></tr>
-                        <tr mat-row *matRowDef="let row; columns: consumersFields;"></tr>
+                        <tr mat-header-row *matHeaderRowDef="setConsumerTableColumns()"></tr>
+                        <tr mat-row *matRowDef="let row; columns: setConsumerTableColumns();"></tr>
                     </table>
                     } @else {
                     <div class="empty-container">
@@ -1003,8 +1005,19 @@
                             </td>
                         </ng-container>
 
-                        <tr mat-header-row *matHeaderRowDef="upstreamAppFields"></tr>
-                        <tr mat-row *matRowDef="let row; columns: upstreamAppFields;"></tr>
+                        @if (auth.isAdmin()) {
+                        <ng-container matColumnDef="options">
+                            <th mat-header-cell *matHeaderCellDef>Options</th>
+                            <td mat-cell *matCellDef="let v; let i = index" class="text-muted">
+                                <button (click)="openUpstreamAppModal(i)">
+                                    <mat-icon class="action-icon">edit</mat-icon>
+                                </button>
+                            </td>
+                        </ng-container>
+                        }
+
+                        <tr mat-header-row *matHeaderRowDef="setUpstreamTableColumns()"></tr>
+                        <tr mat-row *matRowDef="let row; columns: setUpstreamTableColumns();"></tr>
                     </table>
                     } @else {
                     <div class="empty-container">
@@ -1102,10 +1115,14 @@
                             <th mat-header-cell *matHeaderCellDef style="width: 120px;">Options</th>
                             <td mat-cell *matCellDef="let v; let i = index">
                                 <button (click)="openDialog(v.apiVersionUuid)"><mat-icon
-                                        class="action-icon">visibility</mat-icon></button>
+                                        class="action-icon">visibility</mat-icon>
+                                </button>
+                                @if (auth.isAdmin()) {
                                 <button (click)="editVersion(i)">
                                     <mat-icon class="action-icon">edit</mat-icon>
                                 </button>
+                                }
+
                             </td>
                         </ng-container>
 

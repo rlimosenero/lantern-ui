@@ -46,19 +46,20 @@ import { UpstreamAppFormsModalService } from '../../../shared/components/upstrea
 export class WebServicesDetailsComponent implements OnInit {
   public auth = inject(AuthService);
   private route = inject(ActivatedRoute);
+
   requestBodySampleString = '';
   responseBodySampleString = '';
   WSDetails: any = undefined;
+
   isLoading = true;
+
   genericColumn: string[] = ['paramName', 'typeAndFormat', 'isRequired', 'value', 'desc'];
   reqBodyFields: string[] = ['name', 'typeAndFormat', 'desc', 'isRequired', 'sampleValue', 'rules', 'logic', 'defaultValue'];
   resBodyFields: string[] = ['name', 'typeAndFormat', 'desc', 'isRequired', 'sampleValue', 'rules', 'logic', 'defaultValue', 'sourceOrDomainApplication', 'sourceOrDomainFieldName'];
   statusCodesFields: string[] = ['HTTPCode', 'businessCode', 'message', 'type', 'suggestedAction'];
-  consumersFields: string[] = ['appName', 'appOwner', 'dateOnboarded', 'status', 'trigger', 'appType', 'techOwner', 'tokenExpiryDate', 'networkMode', 'options'];
-  upstreamAppFields: string[] = ['appName', 'appOwner', 'tokenExpiryDate', 'techOwner']
+  displayedVersionColumns: string[] = ['version', 'date', 'stage', 'env', 'build', 'documents', 'options'];
 
   versionData: any = [];
-  displayedVersionColumns: string[] = ['version', 'date', 'stage', 'env', 'build', 'documents', 'options'];
   public baseUrl = environment.baseUrl;
 
   configMap: any = {
@@ -301,14 +302,14 @@ export class WebServicesDetailsComponent implements OnInit {
       unusedData: this.getUnusedDataFields(type)
 
     })
-    .pipe(first())
-    .subscribe((result: any) => {
-      if (result) {
-        this.fetchVersions();
+      .pipe(first())
+      .subscribe((result: any) => {
+        if (result) {
+          this.fetchVersions();
 
-      }
+        }
 
-    });
+      });
   }
 
   openEditPage() {
@@ -387,7 +388,12 @@ export class WebServicesDetailsComponent implements OnInit {
     });
   }
 
-  openConsumerAppModal(details?: any) {
+  openConsumerAppModal(index?: number) {
+    let details: any;
+    
+    if (index != undefined ) {
+      details = this.WSDetails.consumerApplications[index]
+    }
 
     this.consumerAppFormsModalService.open({
       appApiUuid: this.WSDetails.uuid,
@@ -403,7 +409,13 @@ export class WebServicesDetailsComponent implements OnInit {
       });
   }
 
-  openUpstreamAppModal(details?: any) {
+  openUpstreamAppModal(index?: number) {
+    let details;
+
+    if (index != undefined ) {
+      console.log(this.WSDetails.upstreamApplications[index])
+      details = this.WSDetails.upstreamApplications[index]
+    }
 
     this.upstreamAppFormsModalService.open({
       appApiUuid: this.WSDetails.uuid,
@@ -418,6 +430,22 @@ export class WebServicesDetailsComponent implements OnInit {
         }
 
       });
+  }
+
+  setConsumerTableColumns() {
+    if (this.auth.isAdmin()) {
+      return ['appName', 'appOwner', 'dateOnboarded', 'status', 'trigger', 'appType', 'techOwner', 'tokenExpiryDate', 'networkMode', 'options'];
+    } else {
+      return ['appName', 'appOwner', 'dateOnboarded', 'status', 'trigger', 'appType', 'techOwner', 'tokenExpiryDate', 'networkMode'];
+    }
+  }
+
+  setUpstreamTableColumns() {
+    if (this.auth.isAdmin()) {
+      return ['appName', 'appOwner', 'tokenExpiryDate', 'techOwner', 'options']
+    } else {
+      return ['appName', 'appOwner', 'tokenExpiryDate', 'techOwner']
+    }
   }
 
 }
