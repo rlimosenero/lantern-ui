@@ -380,7 +380,7 @@
 
                     <div class="data-field">
                         <label>Data Sensitivity Type</label>
-                        <span class="custom-chip alpha">{{ WSDetails?.dataSensitiveType ?? '—' }}</span>
+                        <span class="custom-chip alpha">{{ parseSensitivityType(WSDetails?.dataSensitiveType) }}</span>
                     </div>
                 </div>
 
@@ -617,8 +617,7 @@
 
                     <div class="data-field">
                         <label>Response Data Sensitivity Type</label>
-                        <span class="custom-chip alpha">{{ WSDetails?.responseDataSensitivityType ?? 'Not Classified'
-                            }}</span>
+                        <span class="custom-chip alpha">{{ parseSensitivityType(WSDetails?.responseDataSensitivityType) }}</span>
                     </div>
                 </div>
 

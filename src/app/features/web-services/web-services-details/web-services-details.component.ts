@@ -1,8 +1,9 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { WebServicesApiService } from '../services/web-services-api.service';
-import { MatDialog } from '@angular/material/dialog';
 import { Router, ActivatedRoute } from '@angular/router';
+import { finalize, first } from 'rxjs';
 import { CommonModule } from '@angular/common';
+
+import { MatDialog } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
@@ -10,13 +11,15 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTableModule } from '@angular/material/table';
+
 import { VersionModalComponent } from '../../../shared/components/version-modal/version-modal.component';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
 import { environment } from '../../../../environments/environment';
-import { finalize, first } from 'rxjs';
 import { LoaderComponent } from '../../../shared/components/loader/loader.component';
-import { BreadcrumbService } from '../../../shared/components/breadcrumbs/breadcrumbs.service';
 import { ButtonComponent } from '../../../shared/components/button/button.component';
+
+import { WebServicesApiService } from '../services/web-services-api.service';
+import { BreadcrumbService } from '../../../shared/components/breadcrumbs/breadcrumbs.service';
 import { AuthService } from '../../../core/auth/auth.service';
 import { DataFieldsModalService } from '../../../shared/components/data-fields-modal/data-fields-modal.service';
 import { VersionFormsModalService } from '../../../shared/components/version-forms-modal/version-forms-modal.service';
@@ -123,6 +126,19 @@ export class WebServicesDetailsComponent implements OnInit {
         { key: 'sourceOrDomainFieldName', label: 'Source/Domain Field Name' },
       ]
     }
+  };
+
+  private readonly sensitivityTypeMap: Record<string, string> = {
+    PUBLIC: 'Public',
+    INTERNAL: 'Internal',
+    CONFIDENTIAL: 'Confidential',
+    FINANCIAL_DATA: 'Financial Data',
+    PII: 'Restricted: Personally Identifiable Information (PII)',
+    SPI: 'Restricted: Sensitive Personal Information (SPI)',
+    PHI: 'Restricted: Protected Health Information (PHI)',
+    PCI: 'Restricted: Payment Card Information (PCI)',
+    SECURITY_SENSITIVE: 'Restricted: Security-Sensitive',
+    CUSTOMER_DATA_NON_PII: 'Customer Data (Non-PII)'
   };
 
   constructor(
@@ -390,8 +406,8 @@ export class WebServicesDetailsComponent implements OnInit {
 
   openConsumerAppModal(index?: number) {
     let details: any;
-    
-    if (index != undefined ) {
+
+    if (index != undefined) {
       details = this.WSDetails.consumerApplications[index]
     }
 
@@ -412,7 +428,7 @@ export class WebServicesDetailsComponent implements OnInit {
   openUpstreamAppModal(index?: number) {
     let details;
 
-    if (index != undefined ) {
+    if (index != undefined) {
       console.log(this.WSDetails.upstreamApplications[index])
       details = this.WSDetails.upstreamApplications[index]
     }
@@ -446,6 +462,12 @@ export class WebServicesDetailsComponent implements OnInit {
     } else {
       return ['appName', 'appOwner', 'tokenExpiryDate', 'techOwner']
     }
+  }
+
+  parseSensitivityType(type?: string | null): string {
+    if (!type) return 'N/A';
+
+    return this.sensitivityTypeMap[type] ?? 'N/A';
   }
 
 }
