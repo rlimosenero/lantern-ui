@@ -1,0 +1,64 @@
+<div class="wheel-datepicker">
+
+  <!-- INPUT -->
+  <div
+    class="date-input"
+    (click)="togglePicker()">
+
+    {{ displayValue || placeholder }}
+
+  </div>
+
+  <!-- PICKER -->
+  <div class="picker-popup" *ngIf="isOpen">
+
+    <div class="picker-columns">
+
+      <!-- MONTH -->
+      <div
+        class="wheel-column"
+        (wheel)="onWheel($event, 'month')"
+        (mousedown)="startDrag($event, 'month')">
+
+        <div class="faded">{{ getPrevMonth() }}</div>
+        <div class="active">{{ months[selectedMonth] }}</div>
+        <div class="faded">{{ getNextMonth() }}</div>
+
+      </div>
+
+      <!-- DAY -->
+      <div
+        class="wheel-column"
+        (wheel)="onWheel($event, 'day')"
+        (mousedown)="startDrag($event, 'day')">
+
+        <div class="faded">{{ getPrevDay() }}</div>
+        <div class="active">{{ days[selectedDay - 1] }}</div>
+        <div class="faded">{{ getNextDay() }}</div>
+
+      </div>
+
+      <!-- YEAR -->
+      <div
+        class="wheel-column"
+        (wheel)="onWheel($event, 'year')"
+        (mousedown)="startDrag($event, 'year')">
+
+        <div class="faded">{{ getPrevYear() }}</div>
+        <div class="active">{{ selectedYear }}</div>
+        <div class="faded">{{ getNextYear() }}</div>
+
+      </div>
+
+      <!-- CENTER LINE -->
+      <div class="selection-line"></div>
+
+    </div>
+
+    <div class="actions">
+      <button (click)="confirmDate()">OK</button>
+    </div>
+
+  </div>
+
+</div>

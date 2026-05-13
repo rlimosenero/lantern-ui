@@ -1,0 +1,146 @@
+
+:host {
+  display: block;
+  font-family: var(--font-sans) !important;
+  color: #364153;
+}
+
+$border-color: #e9ecef;
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-wrapper {
+  width: 800px;
+  max-width: 95%;
+  animation: fadeIn 0.2s ease;
+}
+
+.modal-container {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.modal-header {
+  padding: 1rem 1rem 1rem 1.5rem;
+  border-bottom: 1px solid $border-color;
+
+  h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: black;
+  }
+}
+
+.content-body {
+  padding: 1rem 2rem 0;
+  max-height: 65vh;
+  overflow-y: auto;
+
+  section {
+    margin-bottom: 2rem;
+
+    h2 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin: 0 0 1.5rem 0;
+      padding-bottom: 0.75rem;
+      color: black;
+      border-bottom: 1px solid #e5e7eb;
+    }
+  }
+}
+
+.grid {
+  display: grid;
+  gap: 20px;
+
+  &.two {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+
+  label {
+    font-size: 13px;
+    margin-bottom: 6px;
+    color: #374151;
+    font-weight: 500;
+  }
+
+  input,
+  textarea,
+  .custom-dropdown {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: .375rem;
+    font-size: .95rem;
+    transition: all .2s;
+
+    &:focus {
+      outline: none;
+      border-color: #0052cc;
+      box-shadow: 0 0 0 2px rgba(0, 82, 204, 0.1);
+    }
+  }
+
+  textarea {
+    resize: vertical;
+  }
+}
+
+.custom-dropdown {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+}
+
+.required {
+  color: #ba1a1a;
+}
+
+.error {
+  font-size: 12px;
+  color: #ef4444;
+  margin-top: 4px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 1rem;
+  border-top: 1px solid $border-color;
+  background: #fcfcfc;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

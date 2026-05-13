@@ -1,0 +1,163 @@
+<div class="overlay" *ngIf="isOpen">
+
+    <div class="modal-wrapper">
+
+        <div class="modal-container">
+
+            <div class="modal-header">
+                <h2>
+                    {{ isEditMode ? 'Edit Upstream Application' : 'Add Upstream Application' }}
+                </h2>
+            </div>
+
+            <form #upstreamForm="ngForm">
+
+                <div class="content-body">
+
+                    <!-- APPLICATION -->
+                    <section>
+
+                        <h2>Application Information</h2>
+                        <div class="form-group">
+
+                            <label>
+                                Application Name
+                                <span class="required">*</span>
+                            </label>
+
+                            <input type="text" name="appName" [(ngModel)]="payload.appName" required
+                                #appNameRef="ngModel" />
+
+                            <div class="error" *ngIf="appNameRef.touched && appNameRef.invalid">
+                                Required
+                            </div>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label>Description</label>
+
+                            <textarea rows="3" name="description" [(ngModel)]="payload.description">
+                            </textarea>
+
+                        </div>
+
+                    </section>
+
+                    <!-- OWNERSHIP -->
+                    <section>
+
+                        <h2>Ownership</h2>
+
+                        <div class="grid two">
+
+                            <div class="form-group">
+
+                                <label>Business Owner</label>
+
+                                <input type="text" name="businessOwner" [(ngModel)]="payload.businessOwner" />
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label>Technical Owner</label>
+
+                                <input type="text" name="technicalOwner" [(ngModel)]="payload.technicalOwner" />
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+                    <!-- TOKEN -->
+                    <section>
+
+                        <h2>Token</h2>
+
+                        <div class="grid two">
+
+                            <div class="form-group">
+
+                                <label>Token Expiry</label>
+
+                                <app-datepicker [(ngModel)]="payload.tokenExpiry" [value]="payload.tokenExpiry"
+                                    name="tokenExpiry">
+                                </app-datepicker>
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+                    <!-- CONNECTION -->
+                    <section>
+
+                        <h2>Connection Details</h2>
+
+                        <div class="grid two">
+
+                            <div class="form-group">
+
+                                <label>Relationship</label>
+
+                                <select name="relationship" [(ngModel)]="payload.relationship" class="custom-dropdown">
+
+                                    <option value="">Select Relationship</option>
+
+                                    <option *ngFor="let item of dropdowns.relationship" [value]="item">
+
+                                        {{ item | replaceUnderscore | titlecase }}
+
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label>Network Mode</label>
+
+                                <select name="networkMode" [(ngModel)]="payload.networkMode" class="custom-dropdown">
+
+                                    <option value="">Select Network Mode</option>
+
+                                    <option *ngFor="let item of dropdowns.networkMode" [value]="item">
+
+                                        {{ item | replaceUnderscore | titlecase }}
+
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+                </div>
+
+                <!-- ACTIONS -->
+                <div class="actions">
+
+                    <app-button name="Cancel" (click)="closeModal()">
+                    </app-button>
+
+                    <app-button [name]="isEditMode ? 'Update' : 'Save'" (click)="onSave()"
+                        [disabled]="isSaveDisabled(upstreamForm)">
+                    </app-button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>

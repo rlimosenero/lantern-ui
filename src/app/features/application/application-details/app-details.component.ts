@@ -196,7 +196,6 @@ export class AppDetailsComponent implements OnInit {
   }
 
   openUrl(url: string | null | undefined): void {
-    console.log('clicked')
     if (url) {
       window.open(url, '_blank', 'noopener,noreferrer');
     } else {

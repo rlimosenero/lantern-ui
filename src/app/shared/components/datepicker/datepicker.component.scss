@@ -1,0 +1,152 @@
+:host {
+  display: block;
+  width: 100%;
+  font-family: var(--font-sans);
+}
+
+.wheel-datepicker {
+  position: relative;
+  width: 100%;
+}
+
+.date-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: white;
+  cursor: pointer;
+  font-size: 14px;
+  box-sizing: border-box;
+  transition: .2s;
+
+  &:hover {
+    border-color: #9ca3af;
+  }
+}
+
+.picker-popup {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+
+  width: 100%;
+
+  background: white;
+  border-radius: 12px;
+
+  border: 1px solid #e5e7eb;
+
+  box-shadow:
+    0 10px 25px rgba(0,0,0,0.08);
+
+  z-index: 9999;
+
+  padding: 14px;
+
+  animation: fadeIn .15s ease;
+}
+
+.picker-columns {
+  position: relative;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  gap: 1rem;
+
+  height: 100px;
+
+  overflow: hidden;
+}
+
+.selection-line {
+  position: absolute;
+
+  left: 0;
+  right: 0;
+
+  top: 50%;
+  transform: translateY(-50%);
+
+  height: 38px;
+
+  border-top: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e5e7eb;
+
+  pointer-events: none;
+}
+
+.wheel-column {
+  width: 70px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 14px;
+
+  user-select: none;
+
+  cursor: grab;
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+.active {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+
+  line-height: 1;
+}
+
+.faded {
+  font-size: 1rem;
+  color: #d1d5db;
+
+  line-height: 1;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+
+  margin-top: 12px;
+
+  button {
+    border: none;
+
+    background: #111827;
+    color: white;
+
+    border-radius: 6px;
+
+    padding: 8px 16px;
+
+    font-size: 13px;
+    font-weight: 500;
+
+    cursor: pointer;
+
+    &:hover {
+      opacity: .92;
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

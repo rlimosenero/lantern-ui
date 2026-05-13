@@ -1,12 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { BehaviorSubject, Subject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { APP_CONFIG } from '../../../core/models/app.config.model';
 
 @Injectable({
   providedIn: 'root',
 })
-export class StatusCodesModalService {
+export class UpstreamAppFormsModalService {
+
   private http = inject(HttpClient);
   private config = inject(APP_CONFIG);
 
@@ -27,9 +28,13 @@ export class StatusCodesModalService {
     return this.state$.asObservable();
   }
 
-  postStatusCodes(payload: any, appApiUuid: string) {
-    const url = `${this.config.baseUrl}/response-codes`;
+  addUpstreamApplication(payload: any) {
+    const url = `${this.config.baseUrl}/upstream-applications/add`;
     return this.http.post(url, payload);
   }
 
+  updateUpstreamApplication(payload: any, uuid: string) {
+    const url = `${this.config.baseUrl}/upstream-applications/${uuid}`;
+    return this.http.put(url, payload);
+  }
 }

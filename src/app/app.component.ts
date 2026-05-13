@@ -4,6 +4,8 @@ import { ToastComponent } from './shared/components/toast/toast.component';
 import { ConfirmationModalComponent } from './shared/components/confirmation-modal/confirmation-modal.component';
 import { DataFieldsModalComponent } from './shared/components/data-fields-modal/data-fields-modal.component';
 import { StatusCodesModalComponent } from './shared/components/status-codes-modal/status-codes-modal.component';
+import { ConsumerAppFormsModalComponent } from './shared/components/consumer-app-forms-modal/consumer-app-forms-modal.component';
+import { UpstreamAppFormsModalComponent } from './shared/components/upstream-app-forms-modal/upstream-app-forms-modal.component';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +15,9 @@ import { StatusCodesModalComponent } from './shared/components/status-codes-moda
     ToastComponent, 
     ConfirmationModalComponent, 
     DataFieldsModalComponent,
-    StatusCodesModalComponent
+    StatusCodesModalComponent,
+    ConsumerAppFormsModalComponent,
+    UpstreamAppFormsModalComponent
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'

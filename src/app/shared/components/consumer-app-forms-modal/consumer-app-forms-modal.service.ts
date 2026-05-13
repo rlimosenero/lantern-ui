@@ -6,7 +6,8 @@ import { APP_CONFIG } from '../../../core/models/app.config.model';
 @Injectable({
   providedIn: 'root',
 })
-export class StatusCodesModalService {
+export class ConsumerAppFormsModalService {
+
   private http = inject(HttpClient);
   private config = inject(APP_CONFIG);
 
@@ -27,9 +28,13 @@ export class StatusCodesModalService {
     return this.state$.asObservable();
   }
 
-  postStatusCodes(payload: any, appApiUuid: string) {
-    const url = `${this.config.baseUrl}/response-codes`;
+  addConsumerApplication(payload: any) {
+    const url = `${this.config.baseUrl}/consumer-applications/add`;
     return this.http.post(url, payload);
   }
 
+  updateConsumerApplication(payload: any, uuid: string) {
+    const url = `${this.config.baseUrl}/consumer-applications/${uuid}`;
+    return this.http.put(url, payload);
+  }
 }

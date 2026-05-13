@@ -76,10 +76,8 @@ export class StatusCodesModalComponent {
     }
 
     if (this.editingIndex === -1) {
-      console.log('edited');
       this.rows.push({ ...this.form });
     } else if (this.editingIndex !== null) {
-      console.log('added');
       this.rows[this.editingIndex] = { ...this.form };
     }
 
@@ -149,7 +147,7 @@ export class StatusCodesModalComponent {
     this.modal.close(result);
   }
 
-   private generateUuid(): string {
+  private generateUuid(): string {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
       const r = crypto.getRandomValues(new Uint8Array(1))[0] & 15;
       const v = c === 'x' ? r : (r & 0x3) | 0x8;

@@ -22,6 +22,8 @@ import { DataFieldsModalService } from '../../../shared/components/data-fields-m
 import { VersionFormsModalService } from '../../../shared/components/version-forms-modal/version-forms-modal.service';
 import { VersionModalService } from '../../../shared/components/version-modal/version-modal.service';
 import { StatusCodesModalService } from '../../../shared/components/status-codes-modal/status-codes-modal.service';
+import { ConsumerAppFormsModalService } from '../../../shared/components/consumer-app-forms-modal/consumer-app-forms-modal.service';
+import { UpstreamAppFormsModalService } from '../../../shared/components/upstream-app-forms-modal/upstream-app-forms-modal.service';
 
 @Component({
   selector: 'app-web-services-details',
@@ -52,7 +54,7 @@ export class WebServicesDetailsComponent implements OnInit {
   reqBodyFields: string[] = ['name', 'typeAndFormat', 'desc', 'isRequired', 'sampleValue', 'rules', 'logic', 'defaultValue'];
   resBodyFields: string[] = ['name', 'typeAndFormat', 'desc', 'isRequired', 'sampleValue', 'rules', 'logic', 'defaultValue', 'sourceOrDomainApplication', 'sourceOrDomainFieldName'];
   statusCodesFields: string[] = ['HTTPCode', 'businessCode', 'message', 'type', 'suggestedAction'];
-  consumersFields: string[] = ['appName', 'appOwner', 'dateOnboarded', 'status', 'trigger', 'appType', 'techOwner', 'tokenExpiryDate', 'networkMode'];
+  consumersFields: string[] = ['appName', 'appOwner', 'dateOnboarded', 'status', 'trigger', 'appType', 'techOwner', 'tokenExpiryDate', 'networkMode', 'options'];
   upstreamAppFields: string[] = ['appName', 'appOwner', 'tokenExpiryDate', 'techOwner']
 
   versionData: any = [];
@@ -112,7 +114,8 @@ export class WebServicesDetailsComponent implements OnInit {
         { key: 'typeAndFormat', label: 'Data Type and Format' },
         { key: 'description', label: 'Description' },
         { key: 'isRequired', label: 'Required', type: 'boolean' },
-        { key: 'validationRules', label: 'Sample Value' },
+        { key: 'sampleValue', label: 'Sample Value' },
+        { key: 'validationRules', label: 'Validation Rules' },
         { key: 'transformationLogic', label: 'Transformation Logic' },
         { key: 'defaultValue', label: 'Default Value' },
         { key: 'sourceOrDomainApplication', label: 'Source/Domain Application' },
@@ -129,7 +132,9 @@ export class WebServicesDetailsComponent implements OnInit {
     private versionModalService: VersionModalService,
     private breadcrumbService: BreadcrumbService,
     private crudModalService: DataFieldsModalService,
-    private statusCodesModalService: StatusCodesModalService
+    private statusCodesModalService: StatusCodesModalService,
+    private consumerAppFormsModalService: ConsumerAppFormsModalService,
+    private upstreamAppFormsModalService: UpstreamAppFormsModalService
   ) { }
 
   ngOnInit(): void {
@@ -149,7 +154,6 @@ export class WebServicesDetailsComponent implements OnInit {
         const serviceName = res.data.serviceConfig?.[0]?.name || 'Service Details';
 
         if (keyword) {
-          console.log('true')
           this.breadcrumbService.setOverride('/search', 'Search');
         }
 
@@ -289,15 +293,21 @@ export class WebServicesDetailsComponent implements OnInit {
   }
 
   openCrudModal(type: any, data?: any[]) {
+
     this.crudModalService.open({
       ...this.configMap[type],
       appApiUuid: this.WSDetails.uuid,
       data: data,
       unusedData: this.getUnusedDataFields(type)
-    }).pipe(first()).subscribe((result: any) => {
+
+    })
+    .pipe(first())
+    .subscribe((result: any) => {
       if (result) {
         this.fetchVersions();
+
       }
+
     });
   }
 
@@ -336,6 +346,7 @@ export class WebServicesDetailsComponent implements OnInit {
       sourceFieldName: row.sourceOrDomainFieldName || '',
       endpoint: row.endpoint || ''
     }));
+
   }
 
   openVersionModal(versionDetails?: any) {
@@ -374,6 +385,39 @@ export class WebServicesDetailsComponent implements OnInit {
         console.log(res)
       }
     });
+  }
+
+  openConsumerAppModal(details?: any) {
+
+    this.consumerAppFormsModalService.open({
+      appApiUuid: this.WSDetails.uuid,
+      details
+    })
+      .pipe(first())
+      .subscribe((result: any) => {
+
+        if (result) {
+          this.fetchWebServiceDetails();
+        }
+
+      });
+  }
+
+  openUpstreamAppModal(details?: any) {
+
+    this.upstreamAppFormsModalService.open({
+      appApiUuid: this.WSDetails.uuid,
+      appUuid: this.WSDetails.serviceConfig[0].appUuid,
+      details
+    })
+      .pipe(first())
+      .subscribe((result: any) => {
+
+        if (result) {
+          this.fetchWebServiceDetails();
+        }
+
+      });
   }
 
 }
