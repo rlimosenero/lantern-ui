@@ -228,7 +228,7 @@
 
             <!-- Actions -->
             <div class="actions">
-                <app-button name="Cancel" />
+                <app-button name="Cancel" (click)="onCancel()" />
                 <app-button [inverted]="true" name="Save" (click)="onSave()" [disabled]="isSaveDisabled(form)" />
             </div>
         </form>

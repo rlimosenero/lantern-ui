@@ -76,10 +76,17 @@ export class UpstreamAppFormsModalComponent {
       this.isEditMode = !!cfg.details;
 
       this.payload.appApiUuid = cfg.appApiUuid;
-      this.payload.appUuid = cfg.appUuid
+      this.payload.appUuid = cfg.appUuid;
 
       if (cfg.details) {
+
         this.mapDetails(cfg.details);
+
+      } else {
+
+        this.payload.tokenExpiryDate =
+          this.formatDate(Date.now());
+
       }
 
       this.takeSnapshot();
@@ -126,7 +133,7 @@ export class UpstreamAppFormsModalComponent {
       businessOwner: this.payload.appOwner,
       technicalOwner: this.payload.techOwner,
       networkMode: this.payload.networkMode,
-      tokenExpiry: this.payload.tokenExpiry || null
+      tokenExpiry: this.payload.tokenExpiryDate || null
     };
   }
 
@@ -212,4 +219,22 @@ export class UpstreamAppFormsModalComponent {
 
     this.upstreamModalService.close(result);
   }
+
+  formatDate(date: number | Date): string {
+
+    const d = new Date(date);
+
+    const year = d.getFullYear();
+
+    const month = String(
+      d.getMonth() + 1
+    ).padStart(2, '0');
+
+    const day = String(
+      d.getDate()
+    ).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  }
+
 }

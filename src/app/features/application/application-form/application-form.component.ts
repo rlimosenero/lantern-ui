@@ -140,6 +140,15 @@ export class ApplicationFormComponent implements OnInit {
     this[key] = formattedValue;
   }
 
+  onCancel() {
+    if (this.isEditMode) {
+      const id = this.route.snapshot.paramMap.get('id');
+      this.router.navigate([`/application/details/${id}`])
+    } else {
+      this.router.navigate([`/application`])
+    }
+  }
+
   onSave() {
     const id = this.route.snapshot.paramMap.get('id');
 

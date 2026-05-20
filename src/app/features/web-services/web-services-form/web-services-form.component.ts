@@ -202,6 +202,17 @@ export class WebServicesFormComponent implements OnInit {
     return false;
   }
 
+  onCancel() {
+    const id = this.route.snapshot.paramMap.get('id');
+
+    if (this.isEditMode) {
+      this.router.navigate([`/web-services/details/${id}`])
+    } else {
+      this.router.navigate([`/application/details/${id}`])
+    }
+
+  }
+
   onSave() {
     const id = this.route.snapshot.paramMap.get('id');
 
@@ -282,7 +293,7 @@ export class WebServicesFormComponent implements OnInit {
             }
           })
         }
-        
+
       }
 
     })

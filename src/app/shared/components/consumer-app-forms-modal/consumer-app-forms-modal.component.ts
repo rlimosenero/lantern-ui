@@ -85,7 +85,16 @@ export class ConsumerAppFormsModalComponent {
       this.payload.appApiUuid = cfg.appApiUuid;
 
       if (cfg.details) {
+
         this.mapDetails(cfg.details);
+
+      } else {
+
+        const today = this.formatDate(Date.now());
+
+        this.payload.dateOnboarded = today;
+        this.payload.tokenExpiryDate = today;
+
       }
 
       this.takeSnapshot();
@@ -136,7 +145,7 @@ export class ConsumerAppFormsModalComponent {
       networkMode: this.payload.networkMode,
       dateOnboarded: this.payload.dateOnboarded || null,
       status: this.payload.status,
-      tokenExpiry: this.payload.tokenExpiry || null
+      tokenExpiry: this.payload.tokenExpiryDate || null
     };
   }
 
@@ -223,5 +232,22 @@ export class ConsumerAppFormsModalComponent {
     this.isEditMode = false;
 
     this.consumerModalService.close(result);
+  }
+
+  formatDate(date: number | Date): string {
+
+    const d = new Date(date);
+
+    const year = d.getFullYear();
+
+    const month = String(
+      d.getMonth() + 1
+    ).padStart(2, '0');
+
+    const day = String(
+      d.getDate()
+    ).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
   }
 }

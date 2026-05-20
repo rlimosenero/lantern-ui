@@ -1,3 +1,5 @@
+-- dropdown selections
+
 INSERT INTO tbl_reference_data (
     reference_data_uuid, type, code, value, group_name
 ) VALUES

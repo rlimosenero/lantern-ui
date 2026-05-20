@@ -1,9 +1,22 @@
-<div class="overlay">
+<div class="overlay" *ngIf="isOpen">
+
     <div class="modal-wrapper">
+
         <div class="modal-container">
+
             <div class="modal-header">
-                <h2>{{ isEditMode ? (versionType === 'API' ? 'Edit API Version' : 'Edit Version') : (versionType ===
-                    'API' ? 'Add New API Version' : 'Add New Version') }}</h2>
+                <h2>
+
+                    {{ isEditMode
+                    ? (versionType==='API'
+                    ? 'Edit API Version'
+                    : 'Edit Version')
+                    : (versionType==='API'
+                    ? 'Add API Version'
+                    : 'Add Version')
+                    }}
+
+                </h2>
             </div>
 
             <form #versionForm="ngForm">
@@ -119,11 +132,20 @@
                 </div>
 
                 <div class="actions">
-                    <app-button name="Cancel" (click)="onCancel()" />
-                    <app-button [name]="isEditMode ? 'Update' : 'Save'" (click)="onSave()"
-                        [disabled]="isSaveDisabled(versionForm)" />
+
+                    <app-button name="Cancel" (click)="closeModal()">
+                    </app-button>
+
+                    <app-button [name]="isEditMode ? 'Update':'Save'" (click)="onSave()"
+                        [disabled]="isSaveDisabled(versionForm)">
+                    </app-button>
+
                 </div>
+
             </form>
+
         </div>
+
     </div>
+
 </div>

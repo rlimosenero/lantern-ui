@@ -1,41 +1,49 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { first } from 'rxjs';
+
 import { ButtonComponent } from '../button/button.component';
+import { ModalService } from '../confirmation-modal/modal.service';
 import { ApplicationApiService } from '../../../features/application/services/application-api.service';
 import { VersionFormsModalService } from './version-forms-modal.service';
-import { ModalService } from '../confirmation-modal/modal.service';
-import { first } from 'rxjs';
 
 @Component({
   selector: 'app-version-forms-modal',
-  standalone: true,
   imports: [
     CommonModule,
     FormsModule,
     ButtonComponent
   ],
   templateUrl: './version-forms-modal.component.html',
-  styleUrl: './version-forms-modal.component.scss',
+  styleUrl: './version-forms-modal.component.scss'
 })
-export class VersionFormsModalComponent implements OnInit {
+export class VersionFormsModalComponent {
 
-  @Input() data: any;
-  @Output() close = new EventEmitter<any>();
-
+  isOpen = false;
   isEditMode = false;
+
   versionType: 'APP' | 'API' = 'APP';
+
   initialSnapshot = '';
+
   dropdownOptions: any = {};
+
   selectedAppVersionObj: any = null;
 
   payload: any = {
     appVersionUuid: null,
+    apiVersionUuid: null,
     appUuid: null,
+    appApiUuid: null,
+
     appName: '',
     appVersion: '',
+    apiVersion: '',
+
     releaseStage: '',
     environment: '',
+
     buildVersion: '',
     features: '',
     developers: '',
@@ -44,169 +52,225 @@ export class VersionFormsModalComponent implements OnInit {
   };
 
   constructor(
-    private applicationApiService: ApplicationApiService,
-    private versionFormsService: VersionFormsModalService,
-    private modalService: ModalService
-  ) { }
+    private modalService: ModalService,
+    private versionService: VersionFormsModalService,
+    private applicationApiService: ApplicationApiService
+  ) {
 
-  ngOnInit(): void {
-    this.versionType = this.data?.versionType || 'APP';
-    this.isEditMode = !!this.data?.details;
+    this.versionService.getState().subscribe(cfg => {
 
-    if (this.isEditMode && this.data.details) {
-      this.mapDetailstoData(this.data.details);
-    }
+      this.isOpen = !!cfg;
 
-    this.initializeData();
+      if (!cfg) return;
 
-    this.fetchDropdownOptions('VERSION_FORMS');
-    this.takeSnapshot();
-  }
+      this.resetPayload();
 
-  initializeData() {
-    if (this.data?.appInfo) {
-      if (this.versionType === 'APP') {
-        this.payload.appUuid = this.data.appInfo.appUuid;
-        this.payload.appName = this.data.appInfo.appName;
-      } else {
-        this.payload.appApiUuid = this.data.appInfo.appApiUuid;
-        this.payload.appUuid = this.data.appInfo.appUuid;
+      this.versionType = cfg.versionType ?? 'APP';
 
-        this.loadAppVersionOptions();
+      this.isEditMode = !!cfg.details;
+
+      if (cfg.appInfo) {
+
+        this.payload.appUuid = cfg.appInfo.appUuid;
+        this.payload.appApiUuid = cfg.appInfo.appApiUuid;
+        this.payload.appName = cfg.appInfo.appName;
       }
-    }
+
+      if (cfg.details) {
+        this.mapDetails(cfg.details);
+      }
+
+      this.fetchDropdownOptions();
+
+      if (this.versionType === 'API') {
+        this.loadAppVersions();
+      }
+
+      this.takeSnapshot();
+
+    });
+
   }
 
-  loadAppVersionOptions() {
+  loadAppVersions() {
+
     if (!this.payload.appUuid) return;
 
-    this.applicationApiService.getVersionHistoryList(this.payload.appUuid, 0, 1000)
+    this.applicationApiService
+      .getVersionHistoryList(
+        this.payload.appUuid,
+        0,
+        1000
+      )
       .pipe(first())
-      .subscribe({
-        next: (res: any) => {
-          if (res?.data?.results) {
-            this.dropdownOptions['APP_VERSIONS'] = res.data.results.map((item: any) => ({
-              version: item.appVersion,
-              uuid: item.appVersionUuid
-            }));
+      .subscribe((res: any) => {
 
-            if (this.isEditMode && this.payload.appVersionUuid) {
-              this.selectedAppVersionObj =
-                this.dropdownOptions['APP_VERSIONS'].find(
-                  (opt: any) => {
-                    return opt.version === this.payload.appVersion;
-                  }
-                ) || null;
-            }
-          }
-        },
-        error: (err) => console.error('Error loading app versions:', err)
+        this.dropdownOptions.APP_VERSIONS =
+          res?.data?.results?.map(
+            (x: any) => ({
+              version: x.appVersion,
+              uuid: x.appVersionUuid
+            })
+          ) || [];
+
       });
+
   }
 
   onAppVersionChange(selected: any) {
+
     this.selectedAppVersionObj = selected;
 
-    if (selected) {
-      this.payload.appVersion = selected.version;
-      this.payload.appVersionUuid = selected.uuid;
-    } else {
-      this.payload.appVersion = '';
-      this.payload.appVersionUuid = null;
-    }
+    this.payload.appVersion =
+      selected?.version || '';
+
+    this.payload.appVersionUuid =
+      selected?.uuid || null;
+
+  }
+
+  fetchDropdownOptions() {
+
+    this.applicationApiService
+      .getDropdownOptions('VERSION_FORMS')
+      .pipe(first())
+      .subscribe((res: any) => {
+
+        this.dropdownOptions = {
+          ...this.dropdownOptions,
+          ...res.data
+        };
+
+      });
+
+  }
+
+  mapDetails(data: any) {
+
+    this.payload = {
+      ...this.payload,
+      ...data
+    };
+
+    this.payload.devSquad =
+      data.devSquad ||
+      data.squadName ||
+      '';
+
   }
 
   takeSnapshot() {
-    this.initialSnapshot = JSON.stringify(this.payload);
+    this.initialSnapshot =
+      JSON.stringify(this.payload);
   }
 
-  hasChanges(): boolean {
-    return JSON.stringify(this.payload) !== this.initialSnapshot;
+  hasChanges() {
+
+    return JSON.stringify(
+      this.payload
+    ) !== this.initialSnapshot;
+
   }
 
-  fetchDropdownOptions(groupName: string) {
-    this.applicationApiService.getDropdownOptions(groupName).subscribe({
-      next: (res: any) => {
-        this.dropdownOptions = { ...this.dropdownOptions, ...res.data };
-      },
-      error: (err: any) => console.error('Error fetching dropdowns:', err)
-    });
-  }
+  isSaveDisabled(form: any) {
 
-  isSaveDisabled(form: any): boolean {
-    if (!form.valid) return true;
-    if (this.isEditMode) return !this.hasChanges();
-    return false;
+    if (!form.valid) {
+      return true;
+    }
+
+    return this.isEditMode
+      ? !this.hasChanges()
+      : false;
+
   }
 
   onSave() {
-    this.modalService.open({
-      title: 'Save',
-      body: 'Are you sure you want to save?',
-      icon: 'warning',
-      theme: 'warning',
-      showConfirm: true,
-      showCancel: true
-    }).pipe(first()).subscribe(res => {
 
-      if (res === 'confirm') {
-        this.modalService.update({ title: 'Processing...', loading: true, showConfirm: false });
+    this.modalService
+      .open({
+        title: 'Save',
+        body: 'Are you sure you want to save?',
+        icon: 'warning',
+        theme: 'warning',
+        showConfirm: true,
+        showCancel: true
+      })
+      .pipe(first())
+      .subscribe(res => {
 
-        const finalPayload = this.preparePayload();
+        if (res !== 'confirm') return;
 
-        this.getSaveObservable(finalPayload).subscribe({
-          next: () => {
-            if (!this.isEditMode) localStorage.removeItem('app_search_state');
-            this.modalService.update({
-              title: 'Success!', body: 'Saved successfully.', icon: 'check_circle',
-              theme: 'success', loading: false, autoClose: 1500, showCancel: false
-            });
-            setTimeout(() => this.close.emit('confirm'), 1600);
-          },
-          error: () => {
-            this.modalService.update({ title: 'Error', body: 'Request failed.', theme: 'warning', loading: false, autoClose: 1500 });
-          }
+        this.modalService.update({
+          title: 'Processing...',
+          loading: true,
+          showConfirm: false
         });
-      }
-    });
-  }
 
-  onCancel() {
-    this.close.emit('close');
-  }
+        const payload: any = this.preparePayload();
 
-  mapDetailstoData(data: any) {
-    this.payload = { ...this.payload, ...data };
+        const request$ =
+          this.versionType === 'API'
+            ? this.isEditMode
+              ? this.versionService.updateApiVersion(
+                payload,
+                payload.apiVersionUuid
+              )
+              : this.versionService.addApiVersion(payload)
 
-    this.payload.devSquad = data.devSquad || data.squadName || '';
+            : this.isEditMode
+              ? this.versionService.updateApplicationVersion(
+                payload,
+                payload.appVersionUuid
+              )
+              : this.versionService.addApplicationVersion(payload);
 
-    this.payload.appVersionUuid = data.appVersionUuid;
-    this.payload.apiVersionUuid = data.apiVersionUuid;
 
-    if (this.versionType === 'API' && this.payload.appVersion) {
-      this.selectedAppVersionObj = {
-        version: this.payload.appVersion,
-        uuid: this.payload.appVersionUuid
-      };
-    }
-  }
+        request$.subscribe({
 
-  private getSaveObservable(cleanPayload: any) {
-    if (this.versionType === 'API') {
-      return this.isEditMode
-        ? this.versionFormsService.updateApiVersion(cleanPayload, cleanPayload.apiVersionUuid)
-        : this.versionFormsService.addApiVersion(cleanPayload);
-    } else {
-      return this.isEditMode
-        ? this.versionFormsService.updateApplicationVersion(cleanPayload, cleanPayload.appVersionUuid)
-        : this.versionFormsService.addApplicationVersion(cleanPayload);
-    }
+          next: () => {
+
+            this.modalService.update({
+
+              title: 'Success!',
+              body: 'Saved successfully',
+              icon: 'check_circle',
+              theme: 'success',
+              loading: false,
+              autoClose: 1500,
+              showCancel: false
+
+            });
+
+            setTimeout(() => {
+              this.closeModal(true);
+            }, 1600);
+
+          },
+
+          error: () => {
+
+            this.modalService.update({
+
+              title: 'Error',
+              body: 'Request failed',
+              theme: 'warning',
+              loading: false,
+              autoClose: 1500
+
+            });
+
+          }
+
+        });
+
+      });
+
   }
 
   preparePayload() {
-    // Shared fields for both payloads
-    const commonFields = {
-      appVersion: this.payload.appVersion,
+
+    const common = {
+
       buildVersion: this.payload.buildVersion,
       releaseStage: this.payload.releaseStage,
       environment: this.payload.environment,
@@ -214,26 +278,71 @@ export class VersionFormsModalComponent implements OnInit {
       developers: this.payload.developers,
       devSquad: this.payload.devSquad,
       docsUrl: this.payload.docsUrl
+
     };
 
-    if (this.versionType === 'API') {
-      return {
-        ...commonFields,
+    return this.versionType === 'API'
+      ? {
+
+        ...common,
+
         apiVersionUuid: this.payload.apiVersionUuid,
         appVersionUuid: this.payload.appVersionUuid,
         appApiUuid: this.payload.appApiUuid,
-        apiVersion: this.payload.apiVersion
-      };
-    } else {
-      return {
-        ...commonFields,
+        apiVersion: this.payload.apiVersion,
+        appVersion: this.payload.appVersion
+
+      }
+
+      : {
+
+        ...common,
+
         appVersionUuid: this.payload.appVersionUuid,
         appUuid: this.payload.appUuid,
-        appName: this.payload.appName
+        appName: this.payload.appName,
+        appVersion: this.payload.appVersion
+
       };
-    }
+
   }
 
+  resetPayload() {
 
+    this.payload = {
+
+      appVersionUuid: null,
+      apiVersionUuid: null,
+      appUuid: null,
+      appApiUuid: null,
+
+      appName: '',
+      appVersion: '',
+      apiVersion: '',
+
+      releaseStage: '',
+      environment: '',
+
+      buildVersion: '',
+      features: '',
+      developers: '',
+      devSquad: '',
+      docsUrl: ''
+
+    };
+
+  }
+
+  closeModal(result = false) {
+
+    this.resetPayload();
+
+    this.selectedAppVersionObj = null;
+
+    this.isEditMode = false;
+
+    this.versionService.close(result);
+
+  }
 
 }

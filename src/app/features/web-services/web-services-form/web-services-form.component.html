@@ -278,16 +278,12 @@
                             <option [ngValue]="false">No</option>
                         </select>
                     </div>
-<!-- 
-                    <div class="form-group full">
-                        <label>Response Body Sample</label>
-                        <textarea rows="4" name="responseBodySample" [(ngModel)]="payload.responseBodySample" placeholder="{ ... }"></textarea>
-                    </div> -->
+
                 </div>
             </section>
 
             <div class="actions">
-                <app-button name="Cancel" />
+                <app-button name="Cancel" (click)="onCancel()" />
                 <app-button [inverted]="true" name="Save" (click)="onSave()" [disabled]="isSaveDisabled(form)" />
             </div>
         </form>

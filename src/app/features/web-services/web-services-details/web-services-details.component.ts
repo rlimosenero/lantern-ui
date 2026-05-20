@@ -376,7 +376,7 @@ export class WebServicesDetailsComponent implements OnInit {
       details: versionDetails
     }).pipe(first()).subscribe(result => {
       if (result) {
-        this.fetchWebServiceDetails();
+        this.fetchVersions();
       }
     });
   }

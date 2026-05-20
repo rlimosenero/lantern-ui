@@ -1,62 +1,116 @@
-<div class="wheel-datepicker">
+<div class="custom-datepicker">
 
-  <!-- INPUT -->
+  <!-- INPUT DISPLAY -->
   <div
     class="date-input"
+    [class.disabled]="disabled"
     (click)="togglePicker()">
 
     {{ displayValue || placeholder }}
 
   </div>
 
-  <!-- PICKER -->
-  <div class="picker-popup" *ngIf="isOpen">
+  <!-- EXPANDED PICKER -->
+  <div
+    class="picker-panel"
+    *ngIf="isOpen">
 
-    <div class="picker-columns">
+    <div class="picker-grid">
 
       <!-- MONTH -->
-      <div
-        class="wheel-column"
-        (wheel)="onWheel($event, 'month')"
-        (mousedown)="startDrag($event, 'month')">
+      <div class="form-group">
 
-        <div class="faded">{{ getPrevMonth() }}</div>
-        <div class="active">{{ months[selectedMonth] }}</div>
-        <div class="faded">{{ getNextMonth() }}</div>
+        <label>Month</label>
+
+        <select
+          class="custom-dropdown"
+          [(ngModel)]="selectedMonth"
+          (ngModelChange)="onMonthChange()">
+
+          <option [ngValue]="null">
+            MM
+          </option>
+
+          <option
+            *ngFor="let month of months; let i = index"
+            [ngValue]="i">
+
+            {{ month }}
+
+          </option>
+
+        </select>
 
       </div>
 
       <!-- DAY -->
-      <div
-        class="wheel-column"
-        (wheel)="onWheel($event, 'day')"
-        (mousedown)="startDrag($event, 'day')">
+      <div class="form-group">
 
-        <div class="faded">{{ getPrevDay() }}</div>
-        <div class="active">{{ days[selectedDay - 1] }}</div>
-        <div class="faded">{{ getNextDay() }}</div>
+        <label>Day</label>
+
+        <select
+          class="custom-dropdown"
+          [(ngModel)]="selectedDay"
+          [disabled]="selectedMonth === null"
+          (ngModelChange)="onDayChange()">
+
+          <option [ngValue]="null">
+            dd
+          </option>
+
+          <option
+            *ngFor="let day of days"
+            [ngValue]="day">
+
+            {{ day }}
+
+          </option>
+
+        </select>
 
       </div>
 
       <!-- YEAR -->
-      <div
-        class="wheel-column"
-        (wheel)="onWheel($event, 'year')"
-        (mousedown)="startDrag($event, 'year')">
+      <div class="form-group">
 
-        <div class="faded">{{ getPrevYear() }}</div>
-        <div class="active">{{ selectedYear }}</div>
-        <div class="faded">{{ getNextYear() }}</div>
+        <label>Year</label>
+
+        <select
+          class="custom-dropdown"
+          [(ngModel)]="selectedYear"
+          (ngModelChange)="onYearChange()">
+
+          <option [ngValue]="null">
+            yyyy
+          </option>
+
+          <option
+            *ngFor="let year of years"
+            [ngValue]="year">
+
+            {{ year }}
+
+          </option>
+
+        </select>
 
       </div>
 
-      <!-- CENTER LINE -->
-      <div class="selection-line"></div>
-
     </div>
 
+    <!-- ACTIONS -->
     <div class="actions">
-      <button (click)="confirmDate()">OK</button>
+
+      <button
+        type="button"
+        class="confirm-btn"
+        [disabled]="!canConfirm()"
+        (click)="confirmDate()">
+
+        Confirm
+
+      </button>
+
     </div>
 
   </div>

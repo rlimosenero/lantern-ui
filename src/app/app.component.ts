@@ -6,6 +6,7 @@ import { DataFieldsModalComponent } from './shared/components/data-fields-modal/
 import { StatusCodesModalComponent } from './shared/components/status-codes-modal/status-codes-modal.component';
 import { ConsumerAppFormsModalComponent } from './shared/components/consumer-app-forms-modal/consumer-app-forms-modal.component';
 import { UpstreamAppFormsModalComponent } from './shared/components/upstream-app-forms-modal/upstream-app-forms-modal.component';
+import { VersionFormsModalComponent } from './shared/components/version-forms-modal/version-forms-modal.component';
 
 @Component({
   selector: 'app-root',
@@ -17,7 +18,8 @@ import { UpstreamAppFormsModalComponent } from './shared/components/upstream-app
     DataFieldsModalComponent,
     StatusCodesModalComponent,
     ConsumerAppFormsModalComponent,
-    UpstreamAppFormsModalComponent
+    UpstreamAppFormsModalComponent,
+    VersionFormsModalComponent
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
