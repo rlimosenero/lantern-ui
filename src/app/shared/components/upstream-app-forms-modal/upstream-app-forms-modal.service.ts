@@ -37,4 +37,9 @@ export class UpstreamAppFormsModalService {
     const url = `${this.config.baseUrl}/upstream-applications/${uuid}`;
     return this.http.put(url, payload);
   }
+
+  deleteUpstreamApplication(uuid: string) {
+    const url = `${this.config.baseUrl}/upstream-applications/${uuid}`;
+    return this.http.delete(url);
+  }
 }

@@ -8,6 +8,9 @@
                 <h2>
                     {{ isEditMode ? 'Edit Upstream Application' : 'Add Upstream Application' }}
                 </h2>
+                @if(isEditMode){
+                <app-button name="Delete" (click)="onDelete()" />
+                }
             </div>
 
             <form #upstreamForm="ngForm">
@@ -149,7 +152,7 @@
                     </app-button>
 
                     <app-button [name]="isEditMode ? 'Update' : 'Save'" (click)="onSave()"
-                        [disabled]="isSaveDisabled(upstreamForm)">
+                        [disabled]="isSaveDisabled(upstreamForm)" [inverted]="true">
                     </app-button>
 
                 </div>

@@ -257,12 +257,6 @@ export class ConsumerAppFormsModalComponent {
       });
   }
 
-  /*
-  |--------------------------------------------------------------------------
-  | REQUEST HANDLER
-  |--------------------------------------------------------------------------
-  */
-
   private handleRequest(
     request$: any,
     successMessage: string
@@ -294,7 +288,8 @@ export class ConsumerAppFormsModalComponent {
           body: 'Request failed.',
           theme: 'warning',
           loading: false,
-          autoClose: 1500
+          autoClose: 1500,
+          showCancel: false
         });
       }
     });

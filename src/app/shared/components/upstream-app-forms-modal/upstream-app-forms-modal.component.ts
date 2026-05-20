@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Output } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { first } from 'rxjs';
 
 import { ButtonComponent } from '../button/button.component';
@@ -25,14 +25,9 @@ import { UpstreamAppFormsModalService } from './upstream-app-forms-modal.service
 })
 export class UpstreamAppFormsModalComponent {
 
-  @Output() close = new EventEmitter<any>();
+  @Output() close = new EventEmitter<boolean>();
 
-  isOpen = false;
-  isEditMode = false;
-
-  initialSnapshot = '';
-
-  dropdowns = {
+  readonly dropdowns = {
 
     relationship: [
       'INTERNAL_APPLICATION',
@@ -50,70 +45,104 @@ export class UpstreamAppFormsModalComponent {
     ]
   };
 
-  payload: any = {
+  readonly initialPayload = {
     appApiUuid: null,
     appUuid: null,
     appName: '',
     description: '',
     relationship: '',
-    businessOwner: '',
-    technicalOwner: '',
+    appOwner: '',
+    techOwner: '',
     networkMode: '',
-    tokenExpiry: ''
+    tokenExpiryDate: '',
+    upstreamAppUuid: null
   };
+
+  payload: any = { ...this.initialPayload };
+
+  isOpen = false;
+  isEditMode = false;
+
+  private initialSnapshot = '';
 
   constructor(
     private modalService: ModalService,
     private upstreamModalService: UpstreamAppFormsModalService
   ) {
-
-    this.upstreamModalService.getState().subscribe((cfg: any) => {
-
-      this.isOpen = !!cfg;
-
-      if (!cfg) return;
-
-      this.isEditMode = !!cfg.details;
-
-      this.payload.appApiUuid = cfg.appApiUuid;
-      this.payload.appUuid = cfg.appUuid;
-
-      if (cfg.details) {
-
-        this.mapDetails(cfg.details);
-
-      } else {
-
-        this.payload.tokenExpiryDate =
-          this.formatDate(Date.now());
-
-      }
-
-      this.takeSnapshot();
-    });
+    this.listenToModalState();
   }
 
-  mapDetails(data: any) {
+  private listenToModalState(): void {
+
+    this.upstreamModalService
+      .getState()
+      .subscribe((cfg: any) => {
+
+        this.isOpen = !!cfg;
+
+        if (!cfg) return;
+
+        this.initializeModal(cfg);
+      });
+  }
+
+  private initializeModal(cfg: any): void {
+
+    this.isEditMode = !!cfg.details;
+
+    this.payload = {
+      ...this.initialPayload,
+      appApiUuid: cfg.appApiUuid,
+      appUuid: cfg.appUuid
+    };
+
+    if (this.isEditMode) {
+
+      this.mapDetails(cfg.details);
+
+    } else {
+
+      this.setDefaultDates();
+    }
+
+    this.takeSnapshot();
+  }
+
+  private setDefaultDates(): void {
+
+    this.payload.tokenExpiryDate =
+      this.formatDate(Date.now());
+  }
+
+  private mapDetails(data: any): void {
 
     this.payload = {
       ...this.payload,
       ...data,
 
-      tokenExpiry: data.tokenExpiry || ''
+      tokenExpiryDate:
+        data.tokenExpiryDate ||
+        data.tokenExpiry ||
+        ''
     };
   }
 
-  takeSnapshot() {
-    this.initialSnapshot = JSON.stringify(this.payload);
+
+  takeSnapshot(): void {
+    this.initialSnapshot =
+      JSON.stringify(this.payload);
   }
 
   hasChanges(): boolean {
-    return JSON.stringify(this.payload) !== this.initialSnapshot;
+    return JSON.stringify(this.payload)
+      !== this.initialSnapshot;
   }
 
-  isSaveDisabled(form: any): boolean {
+  isSaveDisabled(form: NgForm): boolean {
 
-    if (!form.valid) return true;
+    if (!form.valid) {
+      return true;
+    }
 
     if (this.isEditMode) {
       return !this.hasChanges();
@@ -137,26 +166,17 @@ export class UpstreamAppFormsModalComponent {
     };
   }
 
-  onSave() {
+  onSave(): void {
 
-    this.modalService.open({
-      title: 'Save',
-      body: 'Are you sure you want to save?',
-      icon: 'warning',
-      theme: 'warning',
-      showConfirm: true,
-      showCancel: true
-    })
-      .pipe(first())
-      .subscribe(res => {
+    this.openConfirmationModal(
+      'Save',
+      'Are you sure you want to save?'
+    )
+      .subscribe((res) => {
 
         if (res !== 'confirm') return;
 
-        this.modalService.update({
-          title: 'Processing...',
-          loading: true,
-          showConfirm: false
-        });
+        this.setLoadingState();
 
         const payload = this.preparePayload();
 
@@ -165,54 +185,113 @@ export class UpstreamAppFormsModalComponent {
             payload,
             this.payload.upstreamAppUuid
           )
-          : this.upstreamModalService.addUpstreamApplication(payload);
+          : this.upstreamModalService.addUpstreamApplication(
+            payload
+          );
 
         request$.subscribe({
 
           next: () => {
-
-            this.modalService.update({
-              title: 'Success!',
-              body: 'Saved successfully.',
-              icon: 'check_circle',
-              theme: 'success',
-              loading: false,
-              autoClose: 1500,
-              showCancel: false
-            });
-
-            setTimeout(() => {
-              this.closeModal(true);
-            }, 1600);
+            this.handleSuccess('Saved successfully.');
           },
 
           error: () => {
-
-            this.modalService.update({
-              title: 'Error',
-              body: 'Request failed.',
-              theme: 'warning',
-              loading: false,
-              autoClose: 1500
-            });
+            this.handleError();
           }
         });
-
       });
   }
 
-  closeModal(result: boolean = false) {
+
+  onDelete(): void {
+
+    this.openConfirmationModal(
+      'Delete',
+      'Are you sure you want to delete?'
+    )
+      .subscribe((res) => {
+
+        if (res !== 'confirm') return;
+
+        this.setLoadingState();
+
+        this.upstreamModalService
+          .deleteUpstreamApplication(
+            this.payload.upstreamAppUuid
+          )
+          .subscribe({
+
+            next: () => {
+              this.handleSuccess(
+                'Deleted successfully.'
+              );
+            },
+
+            error: () => {
+              this.handleError();
+            }
+          });
+      });
+  }
+
+  private openConfirmationModal(
+    title: string,
+    body: string
+  ) {
+
+    return this.modalService.open({
+      title,
+      body,
+      icon: 'warning',
+      theme: 'warning',
+      showConfirm: true,
+      showCancel: true
+    }).pipe(first());
+  }
+
+  private setLoadingState(): void {
+
+    this.modalService.update({
+      title: 'Processing...',
+      loading: true,
+      showConfirm: false
+    });
+  }
+
+  private handleSuccess(message: string): void {
+
+    this.modalService.update({
+      title: 'Success!',
+      body: message,
+      icon: 'check_circle',
+      theme: 'success',
+      loading: false,
+      autoClose: 1500,
+      showCancel: false
+    });
+
+    setTimeout(() => {
+      this.closeModal(true);
+    }, 1600);
+  }
+
+  private handleError(): void {
+
+    this.modalService.update({
+      title: 'Error',
+      body: 'Request failed.',
+      theme: 'warning',
+      loading: false,
+      autoClose: 1500,
+      showCancel: false
+    });
+  }
+
+
+  closeModal(result: boolean = false): void {
 
     this.payload = {
-      appApiUuid: null,
-      appUuid: null,
-      appName: '',
-      description: '',
-      relationship: '',
-      businessOwner: '',
-      technicalOwner: '',
-      networkMode: '',
-      tokenExpiry: ''
+      ...this.initialPayload
     };
 
     this.isEditMode = false;
@@ -236,5 +315,4 @@ export class UpstreamAppFormsModalComponent {
 
     return `${year}-${month}-${day}`;
   }
-
 }
