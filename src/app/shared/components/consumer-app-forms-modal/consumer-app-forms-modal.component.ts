@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { first } from 'rxjs';
+
 import { ButtonComponent } from '../button/button.component';
 import { ModalService } from '../confirmation-modal/modal.service';
 import { ConsumerAppFormsModalService } from './consumer-app-forms-modal.service';
@@ -29,7 +30,7 @@ export class ConsumerAppFormsModalComponent {
 
   initialSnapshot = '';
 
-  dropdowns = {
+  readonly dropdowns = {
     relationship: [
       'INTERNAL_APPLICATION',
       'PARTNER_COMPANY_APPLICATION',
@@ -54,121 +55,165 @@ export class ConsumerAppFormsModalComponent {
     ]
   };
 
-  payload: any = {
-    appApiUuid: null,
-    appName: '',
-    description: '',
-    relationship: '',
-    businessOwner: '',
-    technicalOwner: '',
-    trigger: '',
-    appType: '',
-    networkMode: '',
-    dateOnboarded: '',
-    status: '',
-    tokenExpiry: ''
-  };
+  payload: any = this.createEmptyPayload();
 
   constructor(
     private modalService: ModalService,
     private consumerModalService: ConsumerAppFormsModalService
   ) {
 
-    this.consumerModalService.getState().subscribe((cfg: any) => {
+    this.consumerModalService
+      .getState()
+      .subscribe((cfg: any) => this.handleModalState(cfg));
 
-      this.isOpen = !!cfg;
-
-      if (!cfg) return;
-
-      this.isEditMode = !!cfg.details;
-
-      this.payload.appApiUuid = cfg.appApiUuid;
-
-      if (cfg.details) {
-
-        this.mapDetails(cfg.details);
-
-      } else {
-
-        const today = this.formatDate(Date.now());
-
-        this.payload.dateOnboarded = today;
-        this.payload.tokenExpiryDate = today;
-
-      }
-
-      this.takeSnapshot();
-    });
   }
 
-  mapDetails(data: any) {
+
+  private handleModalState(cfg: any): void {
+
+    this.isOpen = !!cfg;
+
+    if (!cfg) {
+      return;
+    }
+
+    this.isEditMode = !!cfg.details;
+
+    this.initializePayload(cfg);
+
+    this.takeSnapshot();
+  }
+
+  private initializePayload(cfg: any): void {
+
+    this.payload = {
+      ...this.createEmptyPayload(),
+      appApiUuid: cfg.appApiUuid
+    };
+
+    if (cfg.details) {
+
+      this.mapDetails(cfg.details);
+
+      return;
+    }
+
+    this.initializeDefaultDates();
+  }
+
+  private initializeDefaultDates(): void {
+
+    const today = this.formatDate(new Date());
+
+    this.payload.dateOnboarded = today;
+    this.payload.tokenExpiryDate = today;
+  }
+
+
+  private createEmptyPayload() {
+
+    return {
+      consumerUuid: null,
+      appApiUuid: null,
+
+      appName: '',
+      description: '',
+
+      relationship: '',
+
+      appOwner: '',
+      techOwner: '',
+
+      trigger: '',
+      appType: '',
+      networkMode: '',
+
+      dateOnboarded: '',
+      tokenExpiryDate: '',
+
+      status: ''
+    };
+  }
+
+  mapDetails(data: any): void {
 
     this.payload = {
       ...this.payload,
       ...data,
 
       dateOnboarded: data.dateOnboarded || '',
-      tokenExpiry: data.tokenExpiry || ''
+      tokenExpiryDate:
+        data.tokenExpiryDate ||
+        data.tokenExpiry ||
+        ''
     };
-  }
-
-  takeSnapshot() {
-    this.initialSnapshot = JSON.stringify(this.payload);
-  }
-
-  hasChanges(): boolean {
-    return JSON.stringify(this.payload) !== this.initialSnapshot;
-  }
-
-  isSaveDisabled(form: any): boolean {
-
-    if (!form.valid) return true;
-
-    if (this.isEditMode) {
-      return !this.hasChanges();
-    }
-
-    return false;
   }
 
   preparePayload() {
 
     return {
       appApiUuid: this.payload.appApiUuid,
+
       appName: this.payload.appName,
       description: this.payload.description,
+
       relationship: this.payload.relationship,
+
       businessOwner: this.payload.appOwner,
       technicalOwner: this.payload.techOwner,
+
       trigger: this.payload.trigger,
       appType: this.payload.appType,
       networkMode: this.payload.networkMode,
-      dateOnboarded: this.payload.dateOnboarded || null,
-      status: this.payload.status,
-      tokenExpiry: this.payload.tokenExpiryDate || null
+
+      dateOnboarded:
+        this.payload.dateOnboarded || null,
+
+      tokenExpiry:
+        this.payload.tokenExpiryDate || null,
+
+      status: this.payload.status
     };
   }
 
-  onSave() {
 
-    this.modalService.open({
-      title: 'Save',
-      body: 'Are you sure you want to save?',
-      icon: 'warning',
-      theme: 'warning',
-      showConfirm: true,
-      showCancel: true
-    })
-      .pipe(first())
-      .subscribe(res => {
+  takeSnapshot(): void {
 
-        if (res !== 'confirm') return;
+    this.initialSnapshot =
+      JSON.stringify(this.payload);
+  }
 
-        this.modalService.update({
-          title: 'Processing...',
-          loading: true,
-          showConfirm: false
-        });
+  hasChanges(): boolean {
+
+    return JSON.stringify(this.payload)
+      !== this.initialSnapshot;
+  }
+
+  isSaveDisabled(form: any): boolean {
+
+    if (!form.valid) {
+      return true;
+    }
+
+    return this.isEditMode
+      ? !this.hasChanges()
+      : false;
+  }
+
+
+  onSave(): void {
+
+    this.openConfirmationModal(
+      'Save',
+      'Are you sure you want to save?'
+    )
+      .subscribe((res) => {
+
+        if (res !== 'confirm') {
+          return;
+        }
+
+        this.showProcessingState();
 
         const payload = this.preparePayload();
 
@@ -177,62 +222,121 @@ export class ConsumerAppFormsModalComponent {
             payload,
             this.payload.consumerUuid
           )
-          : this.consumerModalService.addConsumerApplication(payload);
+          : this.consumerModalService.addConsumerApplication(
+            payload
+          );
 
-        request$.subscribe({
-          next: () => {
-
-            this.modalService.update({
-              title: 'Success!',
-              body: 'Saved successfully.',
-              icon: 'check_circle',
-              theme: 'success',
-              loading: false,
-              autoClose: 1500,
-              showCancel: false
-            });
-
-            setTimeout(() => {
-              this.closeModal(true);
-            }, 1600);
-          },
-
-          error: () => {
-
-            this.modalService.update({
-              title: 'Error',
-              body: 'Request failed.',
-              theme: 'warning',
-              loading: false,
-              autoClose: 1500
-            });
-          }
-        });
-
+        this.handleRequest(request$, 'Saved successfully.');
       });
   }
 
-  closeModal(result: boolean = false) {
-    this.payload = {
-      consumerUuid: null,
-      appApiUuid: null,
-      appName: '',
-      description: '',
-      relationship: '',
-      businessOwner: '',
-      technicalOwner: '',
-      trigger: '',
-      appType: '',
-      networkMode: '',
-      dateOnboarded: '',
-      status: '',
-      tokenExpiry: ''
-    };
+
+  onDelete(): void {
+
+    this.openConfirmationModal(
+      'Delete',
+      'Are you sure you want to delete?'
+    )
+      .subscribe((res) => {
+
+        if (res !== 'confirm') {
+          return;
+        }
+
+        this.showProcessingState();
+
+        const request$ =
+          this.consumerModalService.deleteConsumerApplication(
+            this.payload.consumerUuid
+          );
+
+        this.handleRequest(
+          request$,
+          'Deleted successfully.'
+        );
+      });
+  }
+
+  /*
+  |--------------------------------------------------------------------------
+  | REQUEST HANDLER
+  |--------------------------------------------------------------------------
+  */
+
+  private handleRequest(
+    request$: any,
+    successMessage: string
+  ): void {
+
+    request$.subscribe({
+
+      next: () => {
+
+        this.modalService.update({
+          title: 'Success!',
+          body: successMessage,
+          icon: 'check_circle',
+          theme: 'success',
+          loading: false,
+          autoClose: 1500,
+          showCancel: false
+        });
+
+        setTimeout(() => {
+          this.closeModal(true);
+        }, 1600);
+      },
+
+      error: () => {
+
+        this.modalService.update({
+          title: 'Error',
+          body: 'Request failed.',
+          theme: 'warning',
+          loading: false,
+          autoClose: 1500
+        });
+      }
+    });
+  }
+
+
+  private openConfirmationModal(
+    title: string,
+    body: string
+  ) {
+
+    return this.modalService
+      .open({
+        title,
+        body,
+        icon: 'warning',
+        theme: 'warning',
+        showConfirm: true,
+        showCancel: true
+      })
+      .pipe(first());
+  }
+
+  private showProcessingState(): void {
+
+    this.modalService.update({
+      title: 'Processing...',
+      loading: true,
+      showConfirm: false
+    });
+  }
+
+
+  closeModal(result: boolean = false): void {
+
+    this.payload = this.createEmptyPayload();
 
     this.isEditMode = false;
 
     this.consumerModalService.close(result);
   }
+
 
   formatDate(date: number | Date): string {
 
@@ -250,4 +354,5 @@ export class ConsumerAppFormsModalComponent {
 
     return `${year}-${month}-${day}`;
   }
+
 }

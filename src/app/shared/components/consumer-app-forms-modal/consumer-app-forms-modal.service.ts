@@ -37,4 +37,9 @@ export class ConsumerAppFormsModalService {
     const url = `${this.config.baseUrl}/consumer-applications/${uuid}`;
     return this.http.put(url, payload);
   }
+
+  deleteConsumerApplication(uuid: string) {
+    const url = `${this.config.baseUrl}/consumer-applications/${uuid}`;
+    return this.http.delete(url);
+  }
 }

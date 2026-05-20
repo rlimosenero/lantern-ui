@@ -35,6 +35,9 @@ $text-muted: #6c757d;
 .modal-header {
   padding: 1rem 1rem 1rem 1.5rem;
   border-bottom: 1px solid $border-color;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 
   h2 {
     margin: 0;

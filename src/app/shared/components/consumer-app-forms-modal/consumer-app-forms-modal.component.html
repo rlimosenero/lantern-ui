@@ -9,6 +9,9 @@
                 <h2>
                     {{ isEditMode ? 'Edit Consumer Application' : 'Add Consumer Application' }}
                 </h2>
+                @if(isEditMode){
+                <app-button name="Delete" (click)="onDelete()" />
+                }
             </div>
 
             <form #consumerForm="ngForm">
@@ -65,7 +68,8 @@
 
                                 <label>Date Onboarded</label>
 
-                                <app-datepicker [(ngModel)]="payload.dateOnboarded" [value]="payload.dateOnboarded" name="dateOnboarded">
+                                <app-datepicker [(ngModel)]="payload.dateOnboarded" [value]="payload.dateOnboarded"
+                                    name="dateOnboarded">
                                 </app-datepicker>
 
                             </div>
@@ -74,7 +78,8 @@
 
                                 <label>Token Expiry</label>
 
-                                <app-datepicker [(ngModel)]="payload.tokenExpiryDate" [value]="payload.tokenExpiryDate" name="tokenExpiry">
+                                <app-datepicker [(ngModel)]="payload.tokenExpiryDate" [value]="payload.tokenExpiryDate"
+                                    name="tokenExpiry">
                                 </app-datepicker>
 
                             </div>
@@ -192,7 +197,7 @@
                     </app-button>
 
                     <app-button [name]="isEditMode ? 'Update' : 'Save'" (click)="onSave()"
-                        [disabled]="isSaveDisabled(consumerForm)">
+                        [disabled]="isSaveDisabled(consumerForm)" [inverted]="true">
                     </app-button>
 
                 </div>
