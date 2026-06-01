@@ -32,7 +32,9 @@ INSERT INTO tbl_reference_data (
 
 ('c2a9f8e1-3d4b-4c7a-8f94-2e6d5b4a3c31', 'SERVICE_TYPE', 'UI', 'UI', 'APPLICATION_DETAILS'),
 ('c2a9f8e1-3d4b-4c7a-8f93-2e6d5b4a3c32', 'SERVICE_TYPE', 'BATCH', 'Batch', 'APPLICATION_DETAILS'),
-('c2a9f8e1-3d4b-4c7a-8f92-2e6d5b4a3c33', 'SERVICE_TYPE', 'LIBRARY', 'Library', 'APPLICATION_DETAILS');
+('c2a9f8e1-3d4b-4c7a-8f92-2e6d5b4a3c33', 'SERVICE_TYPE', 'LIBRARY', 'Library', 'APPLICATION_DETAILS'),
+('c2a9f8e1-3d4b-4c7a-8f91-2e6d5b4a3c34', 'SERVICE_TYPE', 'WORKER', 'Worker', 'APPLICATION_DETAILS'),
+('c2a9f8e1-3d4b-4c7a-8f90-2e6d5b4a3c35', 'SERVICE_TYPE', 'API', 'API', 'APPLICATION_DETAILS');
 
 INSERT INTO tbl_reference_data
 (reference_data_uuid, type, code, value, group_name)

@@ -5,7 +5,12 @@
         <form #form="ngForm">
             <!-- Basic Info -->
             <section>
-                <h2>Basic Information</h2>
+                <div class="header-container">
+                    <h1>Basic Information</h1>
+                    @if (isEditMode) {
+                    <app-button name="Delete" (click)="deleteApplication()" />
+                    }
+                </div>
 
                 <div class="grid two">
                     <div class="form-group">
@@ -13,7 +18,7 @@
                         <input 
                             type="text" 
                             name="appName"
-                            [(ngModel)]="appName" 
+                            [(ngModel)]="payload.appName" 
                             required 
                             #appNameRef="ngModel"
                             placeholder="Enter application name" 
@@ -27,7 +32,7 @@
                         <label>Service Type <span class="required">*</span></label>
                         <select 
                             class="custom-dropdown" 
-                            [(ngModel)]="serviceType" 
+                            [(ngModel)]="payload.serviceType" 
                             name="serviceType"
                             #serviceTypeRef="ngModel"
                             required
@@ -50,7 +55,7 @@
                         <textarea 
                             rows="3" 
                             name="desc"
-                            [(ngModel)]="desc"
+                            [(ngModel)]="payload.desc"
                             #descRef="ngModel"
                             required
                             placeholder="Describe the application's purpose and functionality"
@@ -66,7 +71,7 @@
                         <select 
                             class="custom-dropdown" 
                             name="lifecycleStatus"
-                            [(ngModel)]="lifecycleStatus" 
+                            [(ngModel)]="payload.lifecycleStatus" 
                             #lifecycleStatusRef="ngModel"
                             required
                         >
@@ -94,7 +99,7 @@
                         <input 
                             type="text" 
                             name="ownerName"
-                            [(ngModel)]="ownerName"
+                            [(ngModel)]="payload.ownerName"
                             #ownerNameRef="ngModel"
                             required 
                             placeholder="Enter owner's full name" 
@@ -109,7 +114,7 @@
                         <input 
                             type="text" 
                             name="ownerDept"
-                            [(ngModel)]="ownerDept" 
+                            [(ngModel)]="payload.ownerDept" 
                             #ownerDeptRef="ngModel"
                             required
                             placeholder="Enter department name" 
@@ -124,7 +129,7 @@
                         <input 
                             type="text" 
                             name="bauSupportName"
-                            [(ngModel)]="bauSupportName" 
+                            [(ngModel)]="payload.bauSupportName" 
                             #bauSupportNameRef="ngModel"
                             required
                             placeholder="Enter BAU support contact name" 
@@ -139,7 +144,7 @@
                         <input 
                             type="text" 
                             name="bauSupportDept"
-                            [(ngModel)]="bauSupportDept" 
+                            [(ngModel)]="payload.bauSupportDept" 
                             #bauSupportDeptRef="ngModel"
                             required
                             placeholder="Enter BAU support department" 
@@ -161,7 +166,7 @@
                         <input 
                             name="repoUrl"
                             type="url" 
-                            [(ngModel)]="repoUrl" 
+                            [(ngModel)]="payload.repoUrl" 
                             #repoUrlRef="ngModel"
                             pattern="https?://.+"
                             placeholder="https://gitlab.com/company/repository" 
@@ -173,7 +178,7 @@
                         <input 
                             name="swaggerUrl"
                             type="url" 
-                            [(ngModel)]="swaggerUrl" 
+                            [(ngModel)]="payload.swaggerUrl" 
                             #swaggerUrlRef="ngModel"
                             pattern="https?://.+"
                             placeholder="https://api.company.com/docs"
@@ -185,7 +190,7 @@
                         <input 
                             name="docsUrl"
                             type="url" 
-                            [(ngModel)]="docsUrl"
+                            [(ngModel)]="payload.docsUrl"
                             #docsUrlRef="ngModel"
                             pattern="https?://.+"
                             placeholder="https://company.sharepoint.com/sites/docs" 
@@ -197,7 +202,7 @@
             <section>
                 <h2>Techstack - Platform</h2>
                 <app-multi-select [data]="dropdownOptions['TECH_STACK_PLATFORM'] || []"
-                    [initialValue]="isEditMode ? techStackPlatform : ''"
+                    [initialValue]="isEditMode ? payload.techStackPlatform : ''"
                     (selectionChange)="onTechStackChange($event, 'techStackPlatform')">
                 </app-multi-select>
             </section>
@@ -205,7 +210,7 @@
             <section>
                 <h2>Techstack - Application</h2>
                 <app-multi-select [data]="dropdownOptions['TECH_STACK_APP'] || []"
-                    [initialValue]="isEditMode ? techStackApp : ''"
+                    [initialValue]="isEditMode ? payload.techStackApp : ''"
                     (selectionChange)="onTechStackChange($event, 'techStackApp')">
                 </app-multi-select>
             </section>
@@ -213,7 +218,7 @@
             <section>
                 <h2>Techstack - Storage</h2>
                 <app-multi-select [data]="dropdownOptions['TECH_STACK_STORAGE'] || []"
-                    [initialValue]="isEditMode ? techStackStorage : ''"
+                    [initialValue]="isEditMode ? payload.techStackStorage : ''"
                     (selectionChange)="onTechStackChange($event, 'techStackStorage')">
                 </app-multi-select>
             </section>
@@ -221,7 +226,7 @@
             <section>
                 <h2>Techstack - Security</h2>
                 <app-multi-select [data]="dropdownOptions['TECH_STACK_SECURITY'] || []"
-                    [initialValue]="isEditMode ? techStackSecurity : ''"
+                    [initialValue]="isEditMode ? payload.techStackSecurity : ''"
                     (selectionChange)="onTechStackChange($event, 'techStackSecurity')">
                 </app-multi-select>
             </section>

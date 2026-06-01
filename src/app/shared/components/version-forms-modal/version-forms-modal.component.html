@@ -17,6 +17,9 @@
                     }}
 
                 </h2>
+                @if(isEditMode){
+                <app-button name="Delete" (click)="onDelete()" />
+                }
             </div>
 
             <form #versionForm="ngForm">
@@ -90,6 +93,32 @@
                                 </select>
                                 <div class="error" *ngIf="envRef.touched && envRef.invalid">Required</div>
                             </div>
+                        </div>
+
+                        <div class="grid two">
+
+                            <div class="form-group">
+
+                                <label>
+                                    Modified Date
+                                    <span class="required">*</span>
+                                </label>
+
+                                <!-- <input type="date" name="modifiedDateTime" [(ngModel)]="payload.modifiedDateTime"
+                                    required #modifiedRef="ngModel" /> -->
+
+                                <app-datepicker name="modifiedDateTime" [(ngModel)]="payload.modifiedDateTime"
+                                    [value]="payload.modifiedDateTime" required #modifiedRef="ngModel">
+                                </app-datepicker>
+
+                                <div class="error" *ngIf="modifiedRef.touched && modifiedRef.invalid">
+
+                                    Required
+
+                                </div>
+
+                            </div>
+
                         </div>
 
                         <div class="grid two" *ngIf="versionType === 'API'">

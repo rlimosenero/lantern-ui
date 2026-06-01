@@ -41,4 +41,9 @@ export class WebServicesApiService {
     return this.http.put(url, payload);
   }
 
+  deleteApiDetails(apiUuid: string) {
+    const url = `${this.config.baseUrl}/web-services/${apiUuid}`;
+    return this.http.delete(url);
+  }
+
 }

@@ -16,6 +16,24 @@ $warning-text: #856404;
   width: 100%;
   margin: 0 auto;
 
+  .header-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 0 0 1.5rem 0;
+    padding-bottom: 0.75rem;
+    align-items: center;
+    color: black;
+    border-bottom: 1px solid #e5e7eb;
+
+    h1 {
+      font-size: 1.25rem;
+      line-height: 1.4rem;
+      font-weight: 600;
+      margin: 0;
+    }
+  }
+
   section {
     margin-bottom: 2rem;
 
@@ -185,15 +203,21 @@ textarea.ng-invalid.ng-touched {
 }
 
 @container (min-width: 1280px) {
-  .page-layout { width: 1024px; }
+  .page-layout {
+    width: 1024px;
+  }
 }
 
 @container (max-width: 1279px) {
-  .page-layout { width: 1024px; }
+  .page-layout {
+    width: 1024px;
+  }
 }
 
 @container (max-width: 1023px) {
-  .page-layout { width: 720px; }
+  .page-layout {
+    width: 720px;
+  }
 }
 
 @container (max-width: 767px) {

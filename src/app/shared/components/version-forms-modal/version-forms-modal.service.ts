@@ -35,10 +35,16 @@ export class VersionFormsModalService {
     );
   }
 
-  updateApplicationVersion(payload: any, uuid: string) {
+  updateApplicationVersion(payload: any, appVersionUuid: string) {
     return this.http.put(
-      `${this.config.baseUrl}/applications/versions/${uuid}`,
+      `${this.config.baseUrl}/applications/versions/${appVersionUuid}`,
       payload
+    );
+  }
+
+  deleteApplicationVersion(appVersionUuid: string) {
+    return this.http.delete(
+      `${this.config.baseUrl}/applications/versions/${appVersionUuid}`
     );
   }
 
@@ -49,10 +55,16 @@ export class VersionFormsModalService {
     );
   }
 
-  updateApiVersion(payload: any, uuid: string) {
+  updateApiVersion(payload: any, apiVersionUuid: string) {
     return this.http.put(
-      `${this.config.baseUrl}/web-services/versions/${uuid}`,
+      `${this.config.baseUrl}/web-services/versions/${apiVersionUuid}`,
       payload
+    );
+  }
+
+  deleteApiVersion(apiVersionUuid: string) {
+    return this.http.delete(
+      `${this.config.baseUrl}/web-services/versions/${apiVersionUuid}`
     );
   }
 }

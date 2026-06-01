@@ -7,13 +7,15 @@ import { ButtonComponent } from '../button/button.component';
 import { ModalService } from '../confirmation-modal/modal.service';
 import { ApplicationApiService } from '../../../features/application/services/application-api.service';
 import { VersionFormsModalService } from './version-forms-modal.service';
+import { DatepickerComponent } from '../datepicker/datepicker.component';
 
 @Component({
   selector: 'app-version-forms-modal',
   imports: [
     CommonModule,
     FormsModule,
-    ButtonComponent
+    ButtonComponent,
+    DatepickerComponent
   ],
   templateUrl: './version-forms-modal.component.html',
   styleUrl: './version-forms-modal.component.scss'
@@ -48,7 +50,8 @@ export class VersionFormsModalComponent {
     features: '',
     developers: '',
     devSquad: '',
-    docsUrl: ''
+    docsUrl: '',
+    modifiedDateTime: ''
   };
 
   constructor(
@@ -77,7 +80,11 @@ export class VersionFormsModalComponent {
       }
 
       if (cfg.details) {
+        console.log(cfg)
+
         this.mapDetails(cfg.details);
+      } else {
+        this.payload.modifiedDateTime = this.formatDate(new Date());
       }
 
       this.fetchDropdownOptions();
@@ -89,6 +96,24 @@ export class VersionFormsModalComponent {
       this.takeSnapshot();
 
     });
+
+  }
+
+  initializeVersionDropdown() {
+
+    if (!this.isEditMode) return;
+
+    const selected =
+      this.dropdownOptions.APP_VERSIONS?.find(
+        (item: any) =>
+          item.uuid === this.payload.appVersionUuid
+      );
+
+    if (!selected) return;
+
+    this.selectedAppVersionObj = selected;
+
+    this.onAppVersionChange(selected);
 
   }
 
@@ -113,12 +138,17 @@ export class VersionFormsModalComponent {
             })
           ) || [];
 
+
+        console.log(this.dropdownOptions.APP_VERSIONS)
+        console.log(this.payload)
+        this.initializeVersionDropdown();
+
       });
 
   }
 
   onAppVersionChange(selected: any) {
-
+    console.log(selected)
     this.selectedAppVersionObj = selected;
 
     this.payload.appVersion =
@@ -156,6 +186,11 @@ export class VersionFormsModalComponent {
       data.devSquad ||
       data.squadName ||
       '';
+
+    this.payload.modifiedDateTime =
+      data.modifiedDateTime
+        ? this.formatDate(data.modifiedDateTime)
+        : '';
 
   }
 
@@ -267,6 +302,79 @@ export class VersionFormsModalComponent {
 
   }
 
+  onDelete() {
+
+    this.modalService
+      .open({
+        title: 'Delete',
+        body: 'Are you sure you want to delete?',
+        icon: 'warning',
+        theme: 'warning',
+        showConfirm: true,
+        showCancel: true
+      })
+      .pipe(first())
+      .subscribe(res => {
+
+        if (res !== 'confirm') return;
+
+        this.modalService.update({
+          title: 'Processing...',
+          loading: true,
+          showConfirm: false
+        });
+
+        const request$ =
+          this.versionType === 'API'
+            ? this.versionService.deleteApiVersion(
+              this.payload.apiVersionUuid
+            )
+            : this.versionService.deleteApplicationVersion(
+              this.payload.appVersionUuid
+            );
+
+        request$.subscribe({
+
+          next: () => {
+
+            this.modalService.update({
+
+              title: 'Success!',
+              body: 'Deleted successfully.',
+              icon: 'check_circle',
+              theme: 'success',
+              loading: false,
+              autoClose: 1500,
+              showCancel: false
+
+            });
+
+            setTimeout(() => {
+              this.closeModal(true);
+            }, 1600);
+
+          },
+
+          error: () => {
+
+            this.modalService.update({
+
+              title: 'Error',
+              body: 'Delete request failed.',
+              theme: 'warning',
+              loading: false,
+              autoClose: 1500
+
+            });
+
+          }
+
+        });
+
+      });
+
+  }
+
   preparePayload() {
 
     const common = {
@@ -277,7 +385,8 @@ export class VersionFormsModalComponent {
       features: this.payload.features,
       developers: this.payload.developers,
       devSquad: this.payload.devSquad,
-      docsUrl: this.payload.docsUrl
+      docsUrl: this.payload.docsUrl,
+      modifiedDateTime: this.payload.modifiedDateTime + 'T00:00:00.000Z'
 
     };
 
@@ -327,7 +436,8 @@ export class VersionFormsModalComponent {
       features: '',
       developers: '',
       devSquad: '',
-      docsUrl: ''
+      docsUrl: '',
+      modifiedDateTime: ''
 
     };
 
@@ -342,6 +452,24 @@ export class VersionFormsModalComponent {
     this.isEditMode = false;
 
     this.versionService.close(result);
+
+  }
+
+  formatDate(date: string | Date): string {
+
+    const d = new Date(date);
+
+    const year = d.getFullYear();
+
+    const month = String(
+      d.getMonth() + 1
+    ).padStart(2, '0');
+
+    const day = String(
+      d.getDate()
+    ).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
 
   }
 

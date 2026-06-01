@@ -16,6 +16,24 @@ $warning-text: #856404;
   width: 100%;
   margin: 0 auto;
 
+  .header-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 0 0 1.5rem 0;
+    padding-bottom: 0.75rem;
+    align-items: center;
+    color: black;
+    border-bottom: 1px solid #e5e7eb;
+
+    h1 {
+      font-size: 1.25rem;
+      line-height: 1.4rem;
+      font-weight: 600;
+      margin: 0;
+    }
+  }
+
   section {
     margin-bottom: 2rem;
 
@@ -138,7 +156,7 @@ $warning-text: #856404;
 }
 
 .custom-dropdown {
-  appearance: none; 
+  appearance: none;
   width: 100%;
   padding: 10px 12px;
   font-size: 14px;

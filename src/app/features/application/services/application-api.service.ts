@@ -48,6 +48,11 @@ export class ApplicationApiService {
     return this.http.post(url, payload);
   }
 
+  deleteAppDetails(uuid: string) {
+    const url = `${this.config.baseUrl}/applications/${uuid}`;
+    return this.http.delete(url);
+  }
+
   getDropdownOptions(groupName: string) {
     const url = `${this.config.baseUrl}/reference-data/group/${groupName}`;
     return this.http.get(url);
