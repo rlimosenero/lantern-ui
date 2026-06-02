@@ -870,7 +870,9 @@
                 <div class="data-field">
                     <div class="section-header">
                         <label>Consumers</label>
+                        @if (auth.isAdmin()) {
                         <app-button name="Add Consumer" (click)="openConsumerAppModal()" />
+                        }
                     </div>
 
 
@@ -968,7 +970,9 @@
                 <div class="data-field">
                     <div class="section-header">
                         <label>Upstream/Source Applications</label>
+                        @if (auth.isAdmin()) {
                         <app-button name="Add Upstream" (click)="openUpstreamAppModal()" />
+                        }
                     </div>
 
                 </div>

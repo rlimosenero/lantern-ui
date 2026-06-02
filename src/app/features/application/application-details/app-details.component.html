@@ -414,9 +414,11 @@
                 <button (click)="openDialog(v.appVersionUuid)">
                   <mat-icon class="action-icon">visibility</mat-icon>
                 </button>
+                @if (auth.isAdmin()) {
                 <button (click)="editVersion(i)">
                   <mat-icon class="action-icon">edit</mat-icon>  
                 </button>
+                }
               </td>
             </ng-container>
 
