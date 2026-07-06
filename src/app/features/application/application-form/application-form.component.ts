@@ -35,6 +35,7 @@ export class ApplicationFormComponent implements OnInit {
   isEditMode = false;
   initialSnapshot = '';
   dropdownOptions: any = {};
+  validations: any = {};
 
   payload: any = this.createInitialPayload();
 
@@ -52,6 +53,7 @@ export class ApplicationFormComponent implements OnInit {
 
   initializeComponent(): void {
     this.fetchDropdownOptions();
+    this.initializeValidations();
 
     const id = this.getIdFromUrl();
 
@@ -127,48 +129,63 @@ export class ApplicationFormComponent implements OnInit {
 
   }
 
+  // isSaveDisabled(form: any): boolean {
+  //   if (!form.valid) {
+  //     return true;
+  //   }
+
+  //   return this.isEditMode
+  //     ? !this.hasChanges()
+  //     : false;
+
+  // }
+
   isSaveDisabled(form: any): boolean {
+
     if (!form.valid) {
+      return true;
+    }
+
+    const techStackFields = [
+      'techStackPlatform',
+      'techStackApp',
+      'techStackStorage',
+      'techStackSecurity'
+    ];
+
+    const invalidTechStack =
+      techStackFields.some(
+        field => !this.isTechStackValid(field)
+      );
+
+    if (invalidTechStack) {
       return true;
     }
 
     return this.isEditMode
       ? !this.hasChanges()
       : false;
-
   }
 
   clearSearchState(): void {
-
-    localStorage.removeItem(
-      'app_search_state'
-    );
+    localStorage.removeItem('app_search_state');
 
   }
 
   fetchDropdownOptions(): void {
 
     this.applicationApiService
-      .getDropdownOptions(
-        'APPLICATION_DETAILS'
-      )
+      .getDropdownOptions('APPLICATION_DETAILS')
       .pipe(first())
       .subscribe({
 
         next: (res: any) => {
-
-          this.dropdownOptions = {
-            ...res.data
-          };
+          this.dropdownOptions = { ...res.data };
 
         },
 
         error: (err: any) => {
-
-          console.error(
-            'Dropdown Error:',
-            err
-          );
+          console.error('Dropdown Error:', err);
 
         }
 
@@ -200,53 +217,22 @@ export class ApplicationFormComponent implements OnInit {
 
             ...this.payload,
 
-            appName:
-              data.appName,
-
-            desc:
-              data.appDesc,
-
-            ownerName:
-              data.ownerName,
-
-            ownerDept:
-              data.ownerDept,
-
-            serviceType:
-              data.serviceType,
-
-            lifecycleStatus:
-              data.lifecycleStatus,
-
-            bauSupportName:
-              data.bauSupportName,
-
-            bauSupportDept:
-              data.bauSupportDept,
-
-            repoUrl:
-              data.repoUrl,
-
-            swaggerUrl:
-              data.swaggerUrl,
-
-            docsUrl:
-              data.docsUrl,
-
-            techStackPlatform:
-              data.techStackPlatform,
-
-            techStackApp:
-              data.techStackApp,
-
-            techStackStorage:
-              data.techStackStorage,
-
-            techStackSecurity:
-              data.techStackSecurity,
-
-            techStackMessage:
-              data.techStackMessage
+            appName: data.appName,
+            desc: data.appDesc,
+            ownerName: data.ownerName,
+            ownerDept: data.ownerDept,
+            serviceType: data.serviceType,
+            lifecycleStatus: data.lifecycleStatus,
+            bauSupportName: data.bauSupportName,
+            bauSupportDept: data.bauSupportDept,
+            repoUrl: data.repoUrl,
+            swaggerUrl: data.swaggerUrl,
+            docsUrl: data.docsUrl,
+            techStackPlatform: data.techStackPlatform,
+            techStackApp: data.techStackApp,
+            techStackStorage: data.techStackStorage,
+            techStackSecurity: data.techStackSecurity,
+            techStackMessage: data.techStackMessage
 
           };
 
@@ -378,11 +364,7 @@ export class ApplicationFormComponent implements OnInit {
 
               setTimeout(() => {
 
-                /**
-                 * prevent stale state
-                 */
-                this.payload =
-                  this.createInitialPayload();
+                this.payload = this.createInitialPayload();
 
                 this.takeSnapshot();
 
@@ -531,5 +513,42 @@ export class ApplicationFormComponent implements OnInit {
     });
 
   }
+
+  initializeValidations(): void {
+    this.applicationApiService
+      .getValidationProperties()
+      .pipe(first())
+      .subscribe({
+        next: (res: any) => {
+          this.validations = res.data;
+        },
+        error: (err) => {
+          console.error('Validation Error:', err);
+        }
+      });
+  }
+
+  getRule(field: string, rule: string): any {
+    return this.validations?.[field]?.[rule];
+  }
+
+  hasError(control: any, error: string): boolean {
+    return !!control?.touched && !!control?.errors?.[error];
+  }
+
+  isFieldRequired(field: string): boolean {
+    return !!this.getRule(field, 'required');
+  }
+
+  isTechStackValid(field: string): boolean {
+    const required = this.isFieldRequired(field);
+
+    if (!required) {
+      return true;
+    }
+
+    return !!this.payload[field]?.trim();
+  }
+
 
 }

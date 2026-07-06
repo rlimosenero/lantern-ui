@@ -26,6 +26,8 @@ export class WebServicesFormComponent implements OnInit {
   isEditMode = false;
   initialSnapshot = '';
   dropdownOptions: any = {};
+  validations: any = {};
+
   payload: any = this.createInitialPayload();
 
   constructor(
@@ -41,6 +43,8 @@ export class WebServicesFormComponent implements OnInit {
 
   initializeComponent(): void {
     this.fetchDropdownOptions();
+    this.initializeValidations();
+
     const id = this.getIdFromUrl();
 
     const urlSegments =
@@ -148,9 +152,7 @@ export class WebServicesFormComponent implements OnInit {
   }
 
   clearSearchState(): void {
-    localStorage.removeItem(
-      'web_services_search_state'
-    );
+    localStorage.removeItem('web_services_search_state');
 
   }
 
@@ -197,22 +199,15 @@ export class WebServicesFormComponent implements OnInit {
         next: (res: any) => {
 
           this.dropdownOptions = {
-
             ...this.dropdownOptions,
-
-            LIFECYCLE_STATUS:
-              res.data?.LIFECYCLE_STATUS || []
+            LIFECYCLE_STATUS: res.data?.LIFECYCLE_STATUS || []
 
           };
 
         },
 
         error: (err: any) => {
-
-          console.error(
-            'Lifecycle Error:',
-            err
-          );
+          console.error('Lifecycle Error:', err);
 
         }
 
@@ -265,154 +260,52 @@ export class WebServicesFormComponent implements OnInit {
         next: (res: any) => {
 
           const data = res.data;
-
-          const serviceConfig =
-            data.serviceConfig?.[0] || {};
-
-          const security =
-            data.securityAndAuth?.[0] || {};
-
-          const environment =
-            data.environmentUrls?.[0] || {};
+          const serviceConfig = data.serviceConfig?.[0] || {};
+          const security = data.securityAndAuth?.[0] || {};
+          const environment = data.environmentUrls?.[0] || {};
 
           this.payload = {
 
             ...this.payload,
 
-            /**
-             * app
-             */
-            appUuid:
-              serviceConfig.appUuid,
-
-            appName:
-              serviceConfig.appName,
-
-            /**
-             * service
-             */
-            apiName:
-              serviceConfig.name,
-
-            category:
-              serviceConfig.category,
-
-            description:
-              serviceConfig.description,
-
-            layer:
-              data.layer,
-
-            webServiceType:
-              serviceConfig.type,
-
-            httpMethod:
-              serviceConfig.method,
-
-            lifecycleStatus:
-              serviceConfig.status,
-
-            accessedViaGateway:
-              serviceConfig.accessedViaGateway,
-
-            exposure:
-              data.exposure,
-
-            /**
-             * security
-             */
-            authenticationMethod:
-              security.authMethod,
-
-            authorizationName:
-              security.authorization,
-
-            /**
-             * urls
-             */
-            urlProd:
-              environment.prodURL,
-
-            urlDr:
-              environment.drURL,
-
-            urlUat:
-              environment.uatURL,
-
-            urlSit:
-              environment.sitURL,
-
-            docsUrl:
-              data.documentsURL,
-
-            swaggerUrl:
-              data.swaggerURL,
-
-            /**
-             * request
-             */
-            requestDataFormat:
-              data.requestDataFormat,
-
-            requestDataSensitivityType:
-              data.dataSensitiveType,
-
-            requestDataInTransitEnc:
-              data.dataInTransitEncryption,
-
-            requestAveSize:
-              data.aveReqSize,
-
-            requestMaxSize:
-              data.maxReqSize,
-
-            requestDataLogged:
-              data.requestDataLogged,
-
-            requestDataCached:
-              data.reqDataCached,
-
-            requestDuplicateAllowed:
-              data.reqDuplicateAllowed,
-
-            requestThrottlingSupported:
-              data.reqThrottlingSupported,
-
-            requestBodySample:
-              data.requestBodySample,
-
-            /**
-             * response
-             */
-            responseDataFormat:
-              data.responseDataFormat,
-
-            responseDataSensitivityType:
-              data.responseDataSensitivityType,
-
-            responseDataInTransitEnc:
-              data.responseDataInTransitEncryption,
-
-            responseAveSize:
-              data.averageResponseSize,
-
-            responseMaxSize:
-              data.maxResponseSize,
-
-            responseDataLogged:
-              data.responseDataLogged,
-
-            responseDataCached:
-              data.responseDataCached,
-
-            responseBodySample:
-              data.responseBodySample,
-
-            /**
-             * misc
-             */
-            rateLimitInfo:
-              data.rateLimitInfo
+            appUuid: serviceConfig.appUuid,
+            appName: serviceConfig.appName,
+            apiName: serviceConfig.name,
+            category: serviceConfig.category,
+            description: serviceConfig.description,
+            layer: data.layer,
+            webServiceType: serviceConfig.type,
+            httpMethod: serviceConfig.method,
+            lifecycleStatus: serviceConfig.status,
+            accessedViaGateway: serviceConfig.accessedViaGateway,
+            exposure: data.exposure,
+            authenticationMethod: security.authMethod,
+            authorizationName: security.authorization,
+            urlProd: environment.prodURL,
+            urlDr: environment.drURL,
+            urlUat: environment.uatURL,
+            urlSit: environment.sitURL,
+            docsUrl: data.documentsURL,
+            swaggerUrl: data.swaggerURL,
+            requestDataFormat: data.requestDataFormat,
+            requestDataSensitivityType: data.dataSensitiveType,
+            requestDataInTransitEnc: data.dataInTransitEncryption,
+            requestAveSize: data.aveReqSize,
+            requestMaxSize: data.maxReqSize,
+            requestDataLogged: data.requestDataLogged,
+            requestDataCached: data.reqDataCached,
+            requestDuplicateAllowed: data.reqDuplicateAllowed,
+            requestThrottlingSupported: data.reqThrottlingSupported,
+            requestBodySample: data.requestBodySample,
+            responseDataFormat: data.responseDataFormat,
+            responseDataSensitivityType: data.responseDataSensitivityType,
+            responseDataInTransitEnc: data.responseDataInTransitEncryption,
+            responseAveSize: data.averageResponseSize,
+            responseMaxSize: data.maxResponseSize,
+            responseDataLogged: data.responseDataLogged,
+            responseDataCached: data.responseDataCached,
+            responseBodySample: data.responseBodySample,
+            rateLimitInfo: data.rateLimitInfo
 
           };
 
@@ -662,6 +555,67 @@ export class WebServicesFormComponent implements OnInit {
 
     });
 
+  }
+
+  initializeValidations(): void {
+    this.webServiceApiService
+      .getValidationProperties()
+      .pipe(first())
+      .subscribe({
+        next: (res: any) => {
+          this.validations = res.data;
+          console.log(JSON.stringify(res.data))
+        },
+        error: (err) => {
+          console.error('Validation Error:', err);
+        }
+      });
+  }
+
+  getValidation(field: string): any {
+    return this.validations?.[field] || {};
+  }
+
+  isRequired(field: string): boolean {
+    return this.getValidation(field)?.required === true;
+  }
+
+  getMinLength(field: string): number | null {
+    return this.getValidation(field)?.minLength;
+  }
+
+  getMaxLength(field: string): number | null {
+    return this.getValidation(field)?.maxLength;
+  }
+
+  getPattern(field: string): string | null {
+    return this.getValidation(field)?.pattern;
+  }
+
+  getErrorMessage(field: string, control: any): string {
+    const validation = this.getValidation(field);
+
+    if (!control?.errors) {
+      return '';
+    }
+
+    if (control.errors['required']) {
+      return `${field} is required`;
+    }
+
+    if (control.errors['minlength']) {
+      return `Minimum length is ${validation.minLength}`;
+    }
+
+    if (control.errors['maxlength']) {
+      return `Maximum length is ${validation.maxLength}`;
+    }
+
+    if (control.errors['pattern']) {
+      return 'Invalid format';
+    }
+
+    return 'Invalid value';
   }
 
 }

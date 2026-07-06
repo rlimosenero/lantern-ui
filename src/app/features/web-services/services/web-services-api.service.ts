@@ -46,4 +46,9 @@ export class WebServicesApiService {
     return this.http.delete(url);
   }
 
+  getValidationProperties() {
+    const url = `${this.config.baseUrl}/validation/record/application-api-record/form/applicationApi`;
+    return this.http.get(url);
+  }
+
 }

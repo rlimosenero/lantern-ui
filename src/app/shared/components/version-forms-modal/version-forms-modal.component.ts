@@ -21,7 +21,7 @@ import { DatepickerComponent } from '../datepicker/datepicker.component';
   styleUrl: './version-forms-modal.component.scss'
 })
 export class VersionFormsModalComponent {
-
+  validations: any = {};
   isOpen = false;
   isEditMode = false;
 
@@ -88,6 +88,7 @@ export class VersionFormsModalComponent {
       }
 
       this.fetchDropdownOptions();
+      this.initializeValidations();
 
       if (this.versionType === 'API') {
         this.loadAppVersions();
@@ -138,9 +139,6 @@ export class VersionFormsModalComponent {
             })
           ) || [];
 
-
-        console.log(this.dropdownOptions.APP_VERSIONS)
-        console.log(this.payload)
         this.initializeVersionDropdown();
 
       });
@@ -148,14 +146,9 @@ export class VersionFormsModalComponent {
   }
 
   onAppVersionChange(selected: any) {
-    console.log(selected)
     this.selectedAppVersionObj = selected;
-
-    this.payload.appVersion =
-      selected?.version || '';
-
-    this.payload.appVersionUuid =
-      selected?.uuid || null;
+    this.payload.appVersion = selected?.version || '';
+    this.payload.appVersionUuid = selected?.uuid || null;
 
   }
 
@@ -246,17 +239,11 @@ export class VersionFormsModalComponent {
         const request$ =
           this.versionType === 'API'
             ? this.isEditMode
-              ? this.versionService.updateApiVersion(
-                payload,
-                payload.apiVersionUuid
-              )
+              ? this.versionService.updateApiVersion(payload, payload.apiVersionUuid)
               : this.versionService.addApiVersion(payload)
 
             : this.isEditMode
-              ? this.versionService.updateApplicationVersion(
-                payload,
-                payload.appVersionUuid
-              )
+              ? this.versionService.updateApplicationVersion(payload, payload.appVersionUuid)
               : this.versionService.addApplicationVersion(payload);
 
 
@@ -326,12 +313,8 @@ export class VersionFormsModalComponent {
 
         const request$ =
           this.versionType === 'API'
-            ? this.versionService.deleteApiVersion(
-              this.payload.apiVersionUuid
-            )
-            : this.versionService.deleteApplicationVersion(
-              this.payload.appVersionUuid
-            );
+            ? this.versionService.deleteApiVersion(this.payload.apiVersionUuid)
+            : this.versionService.deleteApplicationVersion(this.payload.appVersionUuid);
 
         request$.subscribe({
 
@@ -444,13 +427,9 @@ export class VersionFormsModalComponent {
   }
 
   closeModal(result = false) {
-
     this.resetPayload();
-
     this.selectedAppVersionObj = null;
-
     this.isEditMode = false;
-
     this.versionService.close(result);
 
   }
@@ -458,18 +437,41 @@ export class VersionFormsModalComponent {
   formatDate(date: string | Date): string {
 
     const d = new Date(date);
-
     const year = d.getFullYear();
-
-    const month = String(
-      d.getMonth() + 1
-    ).padStart(2, '0');
-
-    const day = String(
-      d.getDate()
-    ).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
 
     return `${year}-${month}-${day}`;
+
+  }
+
+  initializeValidations(): void {
+    let validationRequest$;
+
+    switch (this.versionType) {
+      case 'API':
+        validationRequest$ = this.versionService.getApplicationApiVersionValidationProperties();
+        break;
+
+      case 'APP':
+        validationRequest$ = this.versionService.getApplicationVersionValidationProperties();
+        break;
+
+      default:
+        console.warn(`Unknown version type: ${this.versionType}`);
+        return;
+    }
+
+    validationRequest$
+      .pipe(first())
+      .subscribe({
+        next: ({ data }: any) => {
+          this.validations = data;
+        },
+        error: (err) => {
+          console.error('Validation Error:', err);
+        }
+      });
 
   }
 

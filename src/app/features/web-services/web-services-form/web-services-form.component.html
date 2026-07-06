@@ -13,10 +13,12 @@
                 <div class="grid two">
                     <div class="form-group">
                         <label>API Name <span class="required">*</span></label>
-                        <input type="text" name="apiName" [(ngModel)]="payload.apiName" required #apiNameRef="ngModel"
-                            placeholder="Enter API name" />
+                        <input type="text" name="apiName" [(ngModel)]="payload.apiName"
+                            [required]="isRequired('apiName')" [minlength]="getMinLength('apiName')"
+                            [maxlength]="getMaxLength('apiName')" #apiNameRef="ngModel" placeholder="Enter API name" />
+
                         <div class="error" *ngIf="apiNameRef.touched && apiNameRef.invalid">
-                            API name is required
+                            {{ getErrorMessage('apiName', apiNameRef) }}
                         </div>
                     </div>
 
@@ -37,13 +39,25 @@
                     <div class="form-group">
                         <label>Category</label>
                         <input type="text" name="category" [(ngModel)]="payload.category"
+                            [required]="isRequired('category')" [minlength]="getMinLength('category')"
+                            [maxlength]="getMaxLength('category')" #categoryRef="ngModel"
                             placeholder="Enter category" />
+
+                        <div class="error" *ngIf="categoryRef.touched && categoryRef.invalid">
+                            {{ getErrorMessage('category', categoryRef) }}
+                        </div>
                     </div>
 
                     <div class="form-group full">
                         <label>Description</label>
                         <textarea rows="3" name="description" [(ngModel)]="payload.description"
+                            [required]="isRequired('description')" [maxlength]="getMaxLength('description')"
+                            #descriptionRef="ngModel"
                             placeholder="Describe the API's purpose and functionality"></textarea>
+
+                        <div class="error" *ngIf="descriptionRef.touched && descriptionRef.invalid">
+                            {{ getErrorMessage('description', descriptionRef) }}
+                        </div>
                     </div>
                 </div>
             </section>
@@ -54,54 +68,109 @@
                 <div class="grid two">
                     <div class="form-group">
                         <label>API Layer</label>
-                        <select class="custom-dropdown" name="layer" [(ngModel)]="payload.layer">
+
+                        <select class="custom-dropdown" name="layer" [(ngModel)]="payload.layer"
+                            [required]="isRequired('layer')" #layerRef="ngModel">
+
                             <option value="" disabled selected>Select Layer</option>
-                            <option *ngFor="let opt of dropdownOptions['API_LAYER']" [value]="opt.code">{{ opt.value }}
+
+                            <option *ngFor="let opt of dropdownOptions['API_LAYER']" [value]="opt.code">
+                                {{ opt.value }}
                             </option>
+
                         </select>
+
+                        <div class="error" *ngIf="layerRef.touched && layerRef.invalid">
+                            {{ getErrorMessage('layer', layerRef) }}
+                        </div>
                     </div>
 
                     <div class="form-group">
                         <label>Web Service Type</label>
-                        <select class="custom-dropdown" name="webServiceType" [(ngModel)]="payload.webServiceType">
+
+                        <select class="custom-dropdown" name="webServiceType" [(ngModel)]="payload.webServiceType"
+                            [required]="isRequired('webServiceType')" #webServiceTypeRef="ngModel">
+
                             <option value="" disabled selected>Select Service Type</option>
-                            <option *ngFor="let opt of dropdownOptions['API_TYPE']" [value]="opt.code">{{ opt.value }}
+
+                            <option *ngFor="let opt of dropdownOptions['API_TYPE']" [value]="opt.code">
+                                {{ opt.value }}
                             </option>
+
                         </select>
+
+                        <div class="error" *ngIf="webServiceTypeRef.touched && webServiceTypeRef.invalid">
+                            {{ getErrorMessage('webServiceType', webServiceTypeRef) }}
+                        </div>
                     </div>
 
                     <div class="form-group">
                         <label>HTTP Method</label>
-                        <select class="custom-dropdown" name="httpMethod" [(ngModel)]="payload.httpMethod">
+
+                        <select class="custom-dropdown" name="httpMethod" [(ngModel)]="payload.httpMethod"
+                            [required]="isRequired('httpMethod')" #httpMethodRef="ngModel">
+
                             <option value="" disabled selected>Select HTTP Method</option>
-                            <option *ngFor="let opt of dropdownOptions['HTTP_METHOD']" [value]="opt.code">{{ opt.value
-                                }}</option>
+
+                            <option *ngFor="let opt of dropdownOptions['HTTP_METHOD']" [value]="opt.code">
+                                {{ opt.value }}
+                            </option>
+
                         </select>
+
+                        <div class="error" *ngIf="httpMethodRef.touched && httpMethodRef.invalid">
+                            {{ getErrorMessage('httpMethod', httpMethodRef) }}
+                        </div>
                     </div>
 
                     <div class="form-group">
                         <label>Lifecycle Status</label>
-                        <select class="custom-dropdown" name="lifecycleStatus" [(ngModel)]="payload.lifecycleStatus">
+
+                        <select class="custom-dropdown" name="lifecycleStatus" [(ngModel)]="payload.lifecycleStatus"
+                            [required]="isRequired('lifecycleStatus')" #lifecycleStatusRef="ngModel">
+
                             <option value="" disabled selected>Select Status</option>
-                            <option *ngFor="let opt of dropdownOptions['LIFECYCLE_STATUS']" [value]="opt.code">{{
-                                opt.value }}</option>
+
+                            <option *ngFor="let opt of dropdownOptions['LIFECYCLE_STATUS']" [value]="opt.code">
+                                {{ opt.value }}
+                            </option>
+
                         </select>
+
+                        <div class="error" *ngIf="lifecycleStatusRef.touched && lifecycleStatusRef.invalid">
+                            {{ getErrorMessage('lifecycleStatus', lifecycleStatusRef) }}
+                        </div>
                     </div>
 
                     <div class="form-group">
                         <label>Authentication Method</label>
+
                         <select class="custom-dropdown" name="authenticationMethod"
-                            [(ngModel)]="payload.authenticationMethod">
+                            [(ngModel)]="payload.authenticationMethod" [required]="isRequired('authenticationMethod')"
+                            #authenticationMethodRef="ngModel">
+
                             <option value="" disabled selected>Select Auth Method</option>
-                            <option *ngFor="let opt of dropdownOptions['AUTH_METHOD']" [value]="opt.code">{{ opt.value
-                                }}</option>
+
+                            <option *ngFor="let opt of dropdownOptions['AUTH_METHOD']" [value]="opt.code">
+                                {{ opt.value }}
+                            </option>
+
                         </select>
+
+                        <div class="error" *ngIf="authenticationMethodRef.touched && authenticationMethodRef.invalid">
+                            {{ getErrorMessage('authenticationMethod', authenticationMethodRef) }}
+                        </div>
                     </div>
 
                     <div class="form-group">
                         <label>Authorization Name</label>
                         <input type="text" name="authorizationName" [(ngModel)]="payload.authorizationName"
-                            placeholder="e.g. Bearer Token" />
+                            [required]="isRequired('authorizationName')" [maxlength]="getMaxLength('authorizationName')"
+                            #authorizationNameRef="ngModel" placeholder="e.g. Bearer Token" />
+
+                        <div class="error" *ngIf="authorizationNameRef.touched && authorizationNameRef.invalid">
+                            {{ getErrorMessage('authorizationName', authorizationNameRef) }}
+                        </div>
                     </div>
 
                     <div class="form-group">
@@ -116,8 +185,14 @@
 
                     <div class="form-group">
                         <label>Exposure</label>
+
                         <input type="text" name="exposure" [(ngModel)]="payload.exposure"
+                            [required]="isRequired('exposure')" #exposureRef="ngModel"
                             placeholder="Enter exposure level" />
+
+                        <div class="error" *ngIf="exposureRef.touched && exposureRef.invalid">
+                            {{ getErrorMessage('exposure', exposureRef) }}
+                        </div>
                     </div>
                 </div>
             </section>
@@ -165,46 +240,88 @@
                 <div class="grid two">
                     <div class="form-group">
                         <label>Payload Data Format</label>
-                        <select class="custom-dropdown" name="requestDataFormat"
-                            [(ngModel)]="payload.requestDataFormat">
+                        <select class="custom-dropdown" name="requestDataFormat" [(ngModel)]="payload.requestDataFormat"
+                            [required]="isRequired('requestDataFormat')" #requestDataFormatRef="ngModel">
+
                             <option value="" disabled selected>Select Format</option>
-                            <option *ngFor="let opt of dropdownOptions['DATA_FORMAT']" [value]="opt.code">{{ opt.value
-                                }}</option>
+
+                            <option *ngFor="let opt of dropdownOptions['DATA_FORMAT']" [value]="opt.code">
+                                {{ opt.value }}
+                            </option>
                         </select>
+
+                        <div class="error" *ngIf="requestDataFormatRef.touched && requestDataFormatRef.invalid">
+                            {{ getErrorMessage('requestDataFormat', requestDataFormatRef) }}
+                        </div>
                     </div>
 
                     <div class="form-group">
                         <label>Data Sensitivity</label>
                         <select class="custom-dropdown" name="requestDataSensitivityType"
-                            [(ngModel)]="payload.requestDataSensitivityType">
+                            [(ngModel)]="payload.requestDataSensitivityType"
+                            [required]="isRequired('requestDataSensitivityType')"
+                            #requestDataSensitivityTypeRef="ngModel">
+
                             <option value="" disabled selected>Select Sensitivity</option>
-                            <option *ngFor="let opt of dropdownOptions['DATA_SENSITIVITY_TYPE']" [value]="opt.code">{{
-                                opt.value }}</option>
+
+                            <option *ngFor="let opt of dropdownOptions['DATA_SENSITIVITY_TYPE']" [value]="opt.code">
+                                {{ opt.value }}
+                            </option>
                         </select>
+
+                        <div class="error"
+                            *ngIf="requestDataSensitivityTypeRef.touched && requestDataSensitivityTypeRef.invalid">
+                            {{ getErrorMessage('requestDataSensitivityType', requestDataSensitivityTypeRef) }}
+                        </div>
                     </div>
 
                     <div class="form-group">
                         <label>Data In-Transit Encryption</label>
                         <input type="text" name="requestDataInTransitEnc" [(ngModel)]="payload.requestDataInTransitEnc"
+                            [maxlength]="getMaxLength('requestDataInTransitEnc')" #requestDataInTransitEncRef="ngModel"
                             placeholder="e.g. TLS 1.2" />
+
+                        <div class="error"
+                            *ngIf="requestDataInTransitEncRef.touched && requestDataInTransitEncRef.invalid">
+                            {{ getErrorMessage('requestDataInTransitEnc',
+                            requestDataInTransitEncRef) }}
+                        </div>
                     </div>
 
                     <div class="form-group">
                         <label>Rate Limit Info</label>
                         <input type="text" name="rateLimitInfo" [(ngModel)]="payload.rateLimitInfo"
+                            [maxlength]="getMaxLength('rateLimitInfo')" #rateLimitInfoRef="ngModel"
                             placeholder="e.g. 100/min" />
+
+                        <div class="error" *ngIf="rateLimitInfoRef.touched && rateLimitInfoRef.invalid">
+                            {{ getErrorMessage('rateLimitInfo',
+                            rateLimitInfoRef) }}
+                        </div>
                     </div>
 
                     <div class="form-group">
                         <label>Average Size</label>
                         <input type="text" name="requestAveSize" [(ngModel)]="payload.requestAveSize"
+                            [maxlength]="getMaxLength('requestAveSize')" #requestAveSizeRef="ngModel"
                             placeholder="e.g. 1KB" />
+
+                        <div class="error" *ngIf="requestAveSizeRef.touched && requestAveSizeRef.invalid">
+                            {{ getErrorMessage('requestAveSize',
+                            requestAveSizeRef) }}
+                        </div>
                     </div>
 
                     <div class="form-group">
                         <label>Max Size</label>
                         <input type="text" name="requestMaxSize" [(ngModel)]="payload.requestMaxSize"
+                            [maxlength]="getMaxLength('requestMaxSize')" #requestMaxSizeRef="ngModel"
                             placeholder="e.g. 5KB" />
+
+                        <div class="error" *ngIf="requestMaxSizeRef.touched && requestMaxSizeRef.invalid">
+                            {{ getErrorMessage('requestMaxSize',
+                            requestMaxSizeRef) }}
+                        </div>
                     </div>
 
                     <div class="form-group">
@@ -261,39 +378,74 @@
                     <div class="form-group">
                         <label>Payload Data Format</label>
                         <select class="custom-dropdown" name="responseDataFormat"
-                            [(ngModel)]="payload.responseDataFormat">
+                            [(ngModel)]="payload.responseDataFormat" [required]="isRequired('responseDataFormat')"
+                            #responseDataFormatRef="ngModel">
+
                             <option value="" disabled selected>Select Format</option>
-                            <option *ngFor="let opt of dropdownOptions['DATA_FORMAT']" [value]="opt.code">{{ opt.value
-                                }}</option>
+
+                            <option *ngFor="let opt of dropdownOptions['DATA_FORMAT']" [value]="opt.code">
+                                {{ opt.value }}
+                            </option>
                         </select>
+
+                        <div class="error" *ngIf="responseDataFormatRef.touched && responseDataFormatRef.invalid">
+                            {{ getErrorMessage('responseDataFormat', responseDataFormatRef) }}
+                        </div>
                     </div>
 
                     <div class="form-group">
                         <label>Data Sensitivity</label>
                         <select class="custom-dropdown" name="responseDataSensitivityType"
-                            [(ngModel)]="payload.responseDataSensitivityType">
+                            [(ngModel)]="payload.responseDataSensitivityType"
+                            [required]="isRequired('responseDataSensitivityType')"
+                            #responseDataSensitivityTypeRef="ngModel">
+
                             <option value="" disabled selected>Select Sensitivity</option>
-                            <option *ngFor="let opt of dropdownOptions['DATA_SENSITIVITY_TYPE']" [value]="opt.code">{{
-                                opt.value }}</option>
+
+                            <option *ngFor="let opt of dropdownOptions['DATA_SENSITIVITY_TYPE']" [value]="opt.code">
+                                {{ opt.value }}
+                            </option>
                         </select>
+
+                        <div class="error"
+                            *ngIf="responseDataSensitivityTypeRef.touched && responseDataSensitivityTypeRef.invalid">
+                            {{ getErrorMessage('responseDataSensitivityType', responseDataSensitivityTypeRef) }}
+                        </div>
                     </div>
 
                     <div class="form-group">
                         <label>Data In-Transit Encryption</label>
                         <input type="text" name="responseDataInTransitEnc"
-                            [(ngModel)]="payload.responseDataInTransitEnc" placeholder="e.g. TLS 1.2" />
+                            [(ngModel)]="payload.responseDataInTransitEnc"
+                            [maxlength]="getMaxLength('responseDataInTransitEnc')"
+                            #responseDataInTransitEncRef="ngModel" placeholder="e.g. TLS 1.2" />
+
+                        <div class="error"
+                            *ngIf="responseDataInTransitEncRef.touched && responseDataInTransitEncRef.invalid">
+                            {{ getErrorMessage('responseDataInTransitEnc', responseDataInTransitEncRef) }}
+                        </div>
                     </div>
 
                     <div class="form-group">
                         <label>Average Size</label>
                         <input type="text" name="responseAveSize" [(ngModel)]="payload.responseAveSize"
+                            [maxlength]="getMaxLength('responseAveSize')" #responseAveSizeRef="ngModel"
                             placeholder="e.g. 1KB" />
+
+                        <div class="error" *ngIf="responseAveSizeRef.touched && responseAveSizeRef.invalid">
+                            {{ getErrorMessage('responseAveSize', responseAveSizeRef) }}
+                        </div>
                     </div>
 
                     <div class="form-group">
                         <label>Max Size</label>
                         <input type="text" name="responseMaxSize" [(ngModel)]="payload.responseMaxSize"
+                            [maxlength]="getMaxLength('responseMaxSize')" #responseMaxSizeRef="ngModel"
                             placeholder="e.g. 5KB" />
+
+                        <div class="error" *ngIf="responseMaxSizeRef.touched && responseMaxSizeRef.invalid">
+                            {{ getErrorMessage('responseMaxSize', responseMaxSizeRef) }}
+                        </div>
                     </div>
 
                     <div class="form-group">

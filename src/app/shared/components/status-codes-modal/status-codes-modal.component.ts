@@ -31,7 +31,7 @@ export class StatusCodesModalComponent {
   ) {
     this.modal.getState().subscribe(cfg => {
       this.config = cfg;
-      console.log(cfg)
+      // console.log(cfg)
       if (cfg) {
         this.rows = JSON.parse(JSON.stringify(cfg.data || []));
         this.originalRows = JSON.parse(JSON.stringify(cfg.data || []));

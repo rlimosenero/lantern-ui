@@ -15,73 +15,75 @@
                 <div class="grid two">
                     <div class="form-group">
                         <label>Application Name <span class="required">*</span></label>
-                        <input 
-                            type="text" 
-                            name="appName"
-                            [(ngModel)]="payload.appName" 
-                            required 
-                            #appNameRef="ngModel"
-                            placeholder="Enter application name" 
-                        />
-                        <div class="error" *ngIf="appNameRef.touched && appNameRef.invalid">
-                            Application name is required
+                        <input type="text" name="appName" [(ngModel)]="payload.appName"
+                            [required]="getRule('appName','required')" [minlength]="getRule('appName','minLength')"
+                            [maxlength]="getRule('appName','maxLength')" #appNameRef="ngModel"
+                            placeholder="Enter application name" />
+
+                        <div class="error" *ngIf="appNameRef.touched">
+
+                            <span *ngIf="hasError(appNameRef,'required')">
+                                Application name is required
+                            </span>
+
+                            <span *ngIf="hasError(appNameRef,'minlength')">
+                                Minimum {{ getRule('appName','minLength') }} characters required
+                            </span>
+
+                            <span *ngIf="hasError(appNameRef,'maxlength')">
+                                Maximum {{ getRule('appName','maxLength') }} characters allowed
+                            </span>
+
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label>Service Type <span class="required">*</span></label>
-                        <select 
-                            class="custom-dropdown" 
-                            [(ngModel)]="payload.serviceType" 
-                            name="serviceType"
-                            #serviceTypeRef="ngModel"
-                            required
-                        >
+                        <select class="custom-dropdown" [(ngModel)]="payload.serviceType" name="serviceType"
+                            #serviceTypeRef="ngModel" [required]="getRule('serviceType','required')">
                             <option value="" disabled selected>Select Service Type</option>
 
                             @for (opt of dropdownOptions['SERVICE_TYPE']; track opt.code) {
-                                <option [value]="opt.code">{{ opt.value }}</option>
+                            <option [value]="opt.code">{{ opt.value }}</option>
                             }
 
                         </select>
 
-                        <div class="error" *ngIf="serviceTypeRef.touched && serviceTypeRef.invalid">
+                        <div class="error" *ngIf="hasError(serviceTypeRef,'required')">
                             Service type is required
                         </div>
                     </div>
 
                     <div class="form-group full">
                         <label>Description <span class="required">*</span></label>
-                        <textarea 
-                            rows="3" 
-                            name="desc"
-                            [(ngModel)]="payload.desc"
-                            #descRef="ngModel"
-                            required
-                            placeholder="Describe the application's purpose and functionality"
-                        >
-                        </textarea>
-                        <div class="error" *ngIf="descRef.touched && descRef.invalid">
-                            Description is required
+                        <textarea rows="3" name="desc" [(ngModel)]="payload.desc"
+                            [required]="getRule('appDesc','required')" [maxlength]="getRule('appDesc','maxLength')"
+                            #descRef="ngModel"></textarea>
+
+                        <div class="error" *ngIf="descRef.touched">
+
+                            <span *ngIf="hasError(descRef,'required')">
+                                Description is required
+                            </span>
+
+                            <span *ngIf="hasError(descRef,'maxlength')">
+                                Maximum {{ getRule('appDesc','maxLength') }} characters allowed
+                            </span>
+
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label>Status <span class="required">*</span></label>
-                        <select 
-                            class="custom-dropdown" 
-                            name="lifecycleStatus"
-                            [(ngModel)]="payload.lifecycleStatus" 
-                            #lifecycleStatusRef="ngModel"
-                            required
-                        >
+                        <select class="custom-dropdown" name="lifecycleStatus" [(ngModel)]="payload.lifecycleStatus"
+                            #lifecycleStatusRef="ngModel" [required]="getRule('lifecycleStatus','required')">
                             <option value="" disabled selected>Select Status</option>
                             @for (opt of dropdownOptions['LIFECYCLE_STATUS']; track opt.code) {
-                                <option [value]="opt.code">{{ opt.value }}</option>
+                            <option [value]="opt.code">{{ opt.value }}</option>
                             }
                         </select>
 
-                        <div class="error" *ngIf="lifecycleStatusRef.touched && lifecycleStatusRef.invalid">
+                        <div class="error" *ngIf="hasError(lifecycleStatusRef,'required')">
                             Status is required
                         </div>
                     </div>
@@ -96,44 +98,36 @@
                 <div class="grid two">
                     <div class="form-group">
                         <label>Owner Name <span class="required">*</span></label>
-                        <input 
-                            type="text" 
-                            name="ownerName"
-                            [(ngModel)]="payload.ownerName"
-                            #ownerNameRef="ngModel"
-                            required 
-                            placeholder="Enter owner's full name" 
-                        />
-                        <div class="error" *ngIf="ownerNameRef.touched && ownerNameRef.invalid">
-                            Owner name is required
+                        <input type="text" name="ownerName" [(ngModel)]="payload.ownerName"
+                            [required]="getRule('ownerName','required')" [minlength]="getRule('ownerName','minLength')"
+                            #ownerNameRef="ngModel" placeholder="Enter owner name" />
+
+                        <div class="error" *ngIf="ownerNameRef.touched">
+
+                            <span *ngIf="hasError(ownerNameRef,'required')">
+                                Owner name is required
+                            </span>
+
+                            <span *ngIf="hasError(ownerNameRef,'minlength')">
+                                Minimum {{ getRule('ownerName','minLength') }} characters required
+                            </span>
+
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label>Owner Department <span class="required">*</span></label>
-                        <input 
-                            type="text" 
-                            name="ownerDept"
-                            [(ngModel)]="payload.ownerDept" 
-                            #ownerDeptRef="ngModel"
-                            required
-                            placeholder="Enter department name" 
-                        />
+                        <input type="text" name="ownerDept" [(ngModel)]="payload.ownerDept" #ownerDeptRef="ngModel"
+                            required placeholder="Enter department name" />
                         <div class="error" *ngIf="ownerDeptRef.touched && ownerDeptRef.invalid">
-                            Owner name is required
+                            Owner Department is required
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label>BAU Support Name <span class="required">*</span></label>
-                        <input 
-                            type="text" 
-                            name="bauSupportName"
-                            [(ngModel)]="payload.bauSupportName" 
-                            #bauSupportNameRef="ngModel"
-                            required
-                            placeholder="Enter BAU support contact name" 
-                        />
+                        <input type="text" name="bauSupportName" [(ngModel)]="payload.bauSupportName"
+                            #bauSupportNameRef="ngModel" required placeholder="Enter BAU support contact name" />
                         <div class="error" *ngIf="bauSupportNameRef.touched && bauSupportNameRef.invalid">
                             BAU Support Name is required
                         </div>
@@ -141,14 +135,8 @@
 
                     <div class="form-group">
                         <label>BAU Support Department <span class="required">*</span></label>
-                        <input 
-                            type="text" 
-                            name="bauSupportDept"
-                            [(ngModel)]="payload.bauSupportDept" 
-                            #bauSupportDeptRef="ngModel"
-                            required
-                            placeholder="Enter BAU support department" 
-                        />
+                        <input type="text" name="bauSupportDept" [(ngModel)]="payload.bauSupportDept"
+                            #bauSupportDeptRef="ngModel" required placeholder="Enter BAU support department" />
                         <div class="error" *ngIf="bauSupportDeptRef.touched && bauSupportDeptRef.invalid">
                             BAU Support Department is required
                         </div>
@@ -163,38 +151,29 @@
                 <div class="grid one">
                     <div class="form-group">
                         <label>Git Repository URL</label>
-                        <input 
-                            name="repoUrl"
-                            type="url" 
-                            [(ngModel)]="payload.repoUrl" 
-                            #repoUrlRef="ngModel"
-                            pattern="https?://.+"
-                            placeholder="https://gitlab.com/company/repository" 
-                        />
+                        <input name="repoUrl" type="url" [(ngModel)]="payload.repoUrl" #repoUrlRef="ngModel"
+                            [pattern]="getRule('repoUrl','pattern')" placeholder="https://gitlab.com/company/repository" />
+                        <div class="error" *ngIf="hasError(repoUrlRef,'pattern')">
+                            Invalid URL format
+                        </div>
                     </div>
 
                     <div class="form-group">
                         <label>Swagger URL</label>
-                        <input 
-                            name="swaggerUrl"
-                            type="url" 
-                            [(ngModel)]="payload.swaggerUrl" 
-                            #swaggerUrlRef="ngModel"
-                            pattern="https?://.+"
-                            placeholder="https://api.company.com/docs"
-                        />
+                        <input name="swaggerUrl" type="url" [(ngModel)]="payload.swaggerUrl" #swaggerUrlRef="ngModel"
+                            [pattern]="getRule('swaggerUrl','pattern')" placeholder="https://api.company.com/docs" />
+                        <div class="error" *ngIf="hasError(swaggerUrlRef,'pattern')">
+                            Invalid URL format
+                        </div>
                     </div>
 
                     <div class="form-group">
                         <label>Documents URL</label>
-                        <input 
-                            name="docsUrl"
-                            type="url" 
-                            [(ngModel)]="payload.docsUrl"
-                            #docsUrlRef="ngModel"
-                            pattern="https?://.+"
-                            placeholder="https://company.sharepoint.com/sites/docs" 
-                        />
+                        <input name="docsUrl" type="url" [(ngModel)]="payload.docsUrl" #docsUrlRef="ngModel"
+                            [pattern]="getRule('docsUrl','pattern')" placeholder="https://company.sharepoint.com/sites/docs" />
+                        <div class="error" *ngIf="hasError(docsUrlRef,'pattern')">
+                            Invalid URL format
+                        </div>
                     </div>
                 </div>
             </section>

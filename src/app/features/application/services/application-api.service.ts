@@ -58,4 +58,9 @@ export class ApplicationApiService {
     return this.http.get(url);
   }
 
+  getValidationProperties() {
+    const url = `${this.config.baseUrl}/validation/record/application-record/form/application`;
+    return this.http.get(url);
+  }
+
 }
