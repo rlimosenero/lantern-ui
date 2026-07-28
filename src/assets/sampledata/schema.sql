@@ -3,16 +3,19 @@
 -- ==========================================
 -- 1. CLEAN SLATE
 -- ==========================================
-DROP TABLE IF EXISTS tbl_application_versions_audit CASCADE;
-DROP TABLE IF EXISTS tbl_upstream_applications CASCADE;
-DROP TABLE IF EXISTS tbl_consumer_applications CASCADE;
-DROP TABLE IF EXISTS tbl_response_codes CASCADE;
-DROP TABLE IF EXISTS tbl_data_fields CASCADE;
-DROP TABLE IF EXISTS tbl_http_apis_versions CASCADE;
-DROP TABLE IF EXISTS tbl_application_http_apis CASCADE;
-DROP TABLE IF EXISTS tbl_application_versions CASCADE;
-DROP TABLE IF EXISTS tbl_applications CASCADE;
-DROP TABLE IF EXISTS tbl_reference_data CASCADE;
+DROP TABLE IF EXISTS application_catalog.tbl_application_versions_audit CASCADE;
+DROP TABLE IF EXISTS application_catalog.tbl_upstream_applications CASCADE;
+DROP TABLE IF EXISTS application_catalog.tbl_consumer_applications CASCADE;
+DROP TABLE IF EXISTS application_catalog.tbl_response_codes CASCADE;
+DROP TABLE IF EXISTS application_catalog.tbl_data_fields CASCADE;
+DROP TABLE IF EXISTS application_catalog.tbl_http_apis_versions CASCADE;
+DROP TABLE IF EXISTS application_catalog.tbl_application_http_apis CASCADE;
+DROP TABLE IF EXISTS application_catalog.tbl_application_versions CASCADE;
+DROP TABLE IF EXISTS application_catalog.tbl_applications CASCADE;
+DROP TABLE IF EXISTS application_catalog.tbl_reference_data CASCADE;
+DROP TABLE IF EXISTS application_catalog.user_roles CASCADE;
+DROP TABLE IF EXISTS application_catalog.users CASCADE;
+DROP TABLE IF EXISTS application_catalog.roles CASCADE;
 
 -- ==========================================
 -- 2. SCHEMA

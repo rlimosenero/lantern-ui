@@ -132,6 +132,13 @@
                     </div>
 
                     <div class="data-field">
+                        <label>Pass through</label>
+                        <p [class.text-success]="WSDetails?.passThrough" [class.text-danger]="!WSDetails?.passThrough">
+                            {{ WSDetails?.passThrough ? '✓ Yes' : '✘ No' }}
+                        </p>
+                    </div>
+
+                    <div class="data-field">
                         <label>API Layer</label>
                         <p>{{ (WSDetails?.layer | titlecase) ?? '—' }}</p>
                     </div>
@@ -617,7 +624,7 @@
 
                     <div class="data-field">
                         <label>Response Data Sensitivity Type</label>
-                        <span class="custom-chip alpha">{{ parseSensitivityType(WSDetails?.responseDataSensitivityType) }}</span>
+                        <span class="custom-chip alpha">{{ parseSensitivityType(WSDetails?.responseDataSensitivityType)}}</span>
                     </div>
                 </div>
 
