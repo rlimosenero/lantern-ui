@@ -94,12 +94,13 @@ mat-divider.mat-divider.mat-divider-horizontal {
         display: flex;
         align-items: center;
         justify-content: space-between;
+        gap: 0.8rem;
 
         h1 {
           margin: 0;
           font-size: 1.875rem;
           font-weight: 500;
-          line-height: 1.2rem;
+          // line-height: 1.2rem;
         }
 
         span {
@@ -403,6 +404,8 @@ span.custom-chip {
   line-height: calc(1rem);
   margin: 0.1rem 0;
   border: 1px solid #0000001a;
+  height: 22px;
+  white-space: nowrap;
 }
 
 .info-bar {

@@ -59,9 +59,11 @@ VALUES
 INSERT INTO tbl_reference_data (
     reference_data_uuid, type, code, value, group_name
 ) VALUES
-('6f1c2d6e-8a9b-4c2d-9e1f-7b6a5c4d3e21', 'API_LAYER', 'EXPERIENCE', 'Experience', 'API_DETAILS'),
-('5a1c2d6e-8a9b-4c2d-9e1f-7b6a5c4d3e21', 'API_LAYER', 'JOURNEY', 'Journey', 'API_DETAILS'),
-('4b1c2d6e-8a9b-4c2d-9e1f-7b6a5c4d3e21', 'API_LAYER', 'CORE', 'Core', 'API_DETAILS'),
+('6f1c2d6e-8a9b-4c2d-9e1f-7b6a5c4d3e21', 'API_LAYER', 'Digital Core', 'Digital Core', 'API_DETAILS'),
+('5a1c2d6e-8a9b-4c2d-9e1f-7b6a5c4d3e21', 'API_LAYER', 'API Connect', 'API Connect', 'API_DETAILS'),
+('4b1c2d6e-8a9b-4c2d-9e1f-7b6a5c4d3e21', 'API_LAYER', 'Core Service', 'Core Service', 'API_DETAILS'),
+('3a1c2d6e-8a9b-4c2d-9e1f-7b6a5c4d3e21', 'API_LAYER', 'Journey Service', 'Journey Service', 'API_DETAILS'),
+('2b1c2d6e-8a9b-4c2d-9e1f-7b6a5c4d3e21', 'API_LAYER', 'API', 'API', 'API_DETAILS'),
 
 ('5a142d6e-8a9b-5c2d-9e1f-7b6a5c4d3e21', 'API_TYPE', 'REST', 'Rest', 'API_DETAILS'),
 ('5b3c2d6e-8a9b-6c2d-9e1f-7b6a5c4d3e21', 'API_TYPE', 'SOAP', 'Soap', 'API_DETAILS'),

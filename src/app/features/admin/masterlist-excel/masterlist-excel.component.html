@@ -4,14 +4,16 @@
             <h2>Masterlist Excel Upload/Download</h2>
         </div>
 
-        <button class="btn-dl" (click)="downloadMasterExcel()" [disabled]="isLoading">
+        <button class="btn-dl" 
+            [disabled]="isLoading"
+        >
             <span class="content">
-                <h3>Download Template:</h3>
+                <!-- <h3>Download Template:</h3> -->
                 <p>Get the standard Excel template, fill it with the required data, and ensure the format is followed.
                 </p>
             </span>
 
-            <span class="icon-container">
+            <!-- <span class="icon-container">
                 @if (isLoading) {
                 <div class="test-spinner"></div>
                 } @else if (isDownloaded) {
@@ -19,7 +21,7 @@
                 } @else {
                 <mat-icon>download</mat-icon>
                 }
-            </span>
+            </span> -->
         </button>
 
         <div class="upload-section">
