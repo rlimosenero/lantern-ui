@@ -30,10 +30,11 @@
 
         <div class="status-row">
           <span class="badge" [ngClass]="{
-            'active': applicationDetails?.lifecycleStatus == 'ACTIVE',
-            'for-deprecation': applicationDetails?.lifecycleStatus == 'FOR_DEPRECATION',
-            'deprecated': applicationDetails?.lifecycleStatus == 'DEPRECATED',
-            'for-retirement': applicationDetails?.lifecycleStatus == 'FOR_RETIREMENT'
+           'operational': applicationDetails?.lifecycleStatus == 'Operational',
+            'in-maintenance': applicationDetails?.lifecycleStatus == 'In Maintenance',
+            'nonoperational': applicationDetails?.lifecycleStatus == 'Non-operational',
+            'repair-in-progress': applicationDetails?.lifecycleStatus == 'Repair in progress',
+            'retired': applicationDetails?.lifecycleStatus == 'RETIRED'
           }">
             {{ applicationDetails?.lifecycleStatus ?? 'UNKNOWN' }}
           </span>
@@ -293,10 +294,11 @@
               <th mat-header-cell *matHeaderCellDef>Status</th>
               <td mat-cell *matCellDef="let s">
                 <span class="custom-chip" [ngClass]="{
-                'active': s.lifecycleStatus === 'ACTIVE',
-                'for-deprecation': s.lifecycleStatus === 'FOR_DEPRECATION',
-                'deprecated': s.lifecycleStatus === 'DEPRECATED',
-                'for-retirement': s.lifecycleStatus === 'FOR_RETIREMENT'
+                  'operational': s.lifecycleStatus == 'Operational',
+                  'in-maintenance': s.lifecycleStatus == 'In Maintenance',
+                  'nonoperational': s.lifecycleStatus == 'Non-operational',
+                  'repair-in-progress': s.lifecycleStatus == 'Repair in progress',
+                  'retired': s.lifecycleStatus == 'RETIRED'
               }">
                   {{s.lifecycleStatus}}
                 </span>
@@ -329,7 +331,7 @@
         }
       </section>
 
-      @if (applicationDetails.lifecycleStatus == 'ACTIVE') {
+      @if (applicationDetails.lifecycleStatus !== 'RETIRED' && applicationDetails.lifecycleStatus !== 'Non-operational') {
       <section class="audit-section">
         <div class="section-header">
           <h3>Version History / Change Log</h3>
@@ -451,29 +453,14 @@
         </div>
         }
 
-        @if (applicationDetails.lifecycleStatus == 'FOR_DEPRECATION'){
-        <div class="sec-warn for-deprecation">
+        @if (applicationDetails.lifecycleStatus == 'Non-operational'){
+        <div class="sec-warn nonoperational">
           <span class="msg-warn">
-            🚫 This service is for deprecation. It should not be used for new projects.
+            🚫 This service is Non-operational. It should not be used for new projects.
           </span>
         </div>
         }
 
-        @if (applicationDetails.lifecycleStatus == 'DEPRECATED'){
-        <div class="sec-warn deprecated">
-          <span class="msg-warn">
-            🚫 This service is deprecated. It should not be used for new projects.
-          </span>
-        </div>
-        }
-
-        @if (applicationDetails.lifecycleStatus == 'FOR_RETIREMENT'){
-        <div class="sec-warn for-retirement">
-          <span class="msg-warn">
-            🚫 This service is fore retirement. It should not be used for new projects.
-          </span>
-        </div>
-        }
       </section>
 
 

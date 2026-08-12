@@ -57,3 +57,8 @@ html {
 .patch     { background-color: #f0f9ff; color: #0369a1; } /* Sky Blue */
 .minor     { background-color: #faf5ff; color: #7e22ce; } /* Purple */
 .major     { background-color: #eef2ff; color: #4338ca; border: 1px solid #c7d2fe; } /* Indigo */
+
+.operational { background-color: #dcfce7; color: #016630; }
+.repair-in-progress { background-color: #fef9c2; color: #894b00; }
+.in-maintenance { background-color: #fef9c2; color: #894b00; }
+.nonoperational { background-color: #ffe2e2; color: #9f0712; }

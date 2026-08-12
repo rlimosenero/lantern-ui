@@ -42,10 +42,11 @@
       <td mat-cell *matCellDef="let list">
         @if (list.status) {
           <span class="status-pill" [ngClass]="{
-            'active': list.status == 'ACTIVE',
-            'for-deprecation': list.status == 'FOR_DEPRECATION',
-            'deprecated': list.status == 'DEPRECATED',
-            'for-retirement': list.status == 'FOR_RETIREMENT'
+            'operational': list.status == 'Operational',
+            'in-maintenance': list.status == 'In Maintenance',
+            'nonoperational': list.status == 'Non-operational',
+            'repair-in-progress': list.status == 'Repair in progress',
+            'retired': list.status == 'RETIRED'
           }">
             {{ list.status | lowercase | replaceUnderscore | titlecase }}
           </span>
