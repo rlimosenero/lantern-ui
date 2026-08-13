@@ -186,14 +186,32 @@
                     <div class="form-group">
                         <label>Exposure</label>
 
-                        <input type="text" name="exposure" [(ngModel)]="payload.exposure"
-                            [required]="isRequired('exposure')" #exposureRef="ngModel"
-                            placeholder="Enter exposure level" />
+                        <select class="custom-dropdown" name="exposure" [(ngModel)]="payload.exposure"
+                            [required]="isRequired('exposure')" #exposureRef="ngModel">
+
+                            <option value="" disabled selected>Select Exposure</option>
+
+                            <option *ngFor="let opt of dropdownOptions['EXPOSURE']" [value]="opt.code">
+                                {{ opt.value }}
+                            </option>
+
+                        </select>
 
                         <div class="error" *ngIf="exposureRef.touched && exposureRef.invalid">
                             {{ getErrorMessage('exposure', exposureRef) }}
                         </div>
                     </div>
+
+                    <div class="form-group">
+                        <label>Pass Through</label>
+                        <select class="custom-dropdown" name="passThrough"
+                            [(ngModel)]="payload.passThrough">
+                            <option [ngValue]="null" disabled selected>Select Option</option>
+                            <option [ngValue]="true">Yes</option>
+                            <option [ngValue]="false">No</option>
+                        </select>
+                    </div>
+
                 </div>
             </section>
 

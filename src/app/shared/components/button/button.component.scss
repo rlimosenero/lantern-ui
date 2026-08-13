@@ -16,6 +16,7 @@
   flex-direction: row;
   justify-content: center;
   gap: 0.5rem;
+  white-space: nowrap;
 
   &:hover:not(:disabled):not(.btn-disabled) {
     background-color: #e9ebef;

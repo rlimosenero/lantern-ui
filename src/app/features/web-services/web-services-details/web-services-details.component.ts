@@ -322,7 +322,7 @@ export class WebServicesDetailsComponent implements OnInit {
       .subscribe((result: any) => {
         if (result) {
           this.fetchVersions();
-
+          this.fetchWebServiceDetails();
         }
 
       });

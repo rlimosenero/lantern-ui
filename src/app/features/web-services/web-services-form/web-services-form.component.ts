@@ -117,8 +117,8 @@ export class WebServicesFormComponent implements OnInit {
       responseDataCached: null,
 
       rateLimitInfo: '',
-      exposure: ''
-
+      exposure: '',
+      passThrough: null
     };
 
   }
@@ -305,7 +305,8 @@ export class WebServicesFormComponent implements OnInit {
             responseDataLogged: data.responseDataLogged,
             responseDataCached: data.responseDataCached,
             responseBodySample: data.responseBodySample,
-            rateLimitInfo: data.rateLimitInfo
+            rateLimitInfo: data.rateLimitInfo,
+            passThrough: data.passThrough
 
           };
 
