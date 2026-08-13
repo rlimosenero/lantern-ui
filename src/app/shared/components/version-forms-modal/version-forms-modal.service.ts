@@ -74,7 +74,7 @@ export class VersionFormsModalService {
   }
 
   getApplicationApiVersionValidationProperties() {
-    const url = `${this.config.baseUrl}/validation/record/application-api-version-record/form/application-api-version`;
+    const url = `${this.config.baseUrl}/validation/record/application-api-version-record/form/applicationApiVersion`;
     return this.http.get(url);
   }
 }
