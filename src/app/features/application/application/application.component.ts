@@ -197,24 +197,37 @@ export class ApplicationComponent implements OnInit {
     this.applyFilters();
   }
 
-  fetchFilterOptions() {
+  fetchFilterOptions(): void {
     this.applicationApiService.getFilterOptions().subscribe({
       next: (res: any) => {
-        this.filterData = res.data.map((filter: any) => ({
+        this.filterData = (res.data || []).map((filter: any) => ({
           ...filter,
+          options: (filter.options || []).filter(
+            (option: any) => option !== null && option !== undefined
+          ),
           isOpen: false,
           searchTerm: ''
         }));
       },
-      error: (err) => console.error(err)
+      error: (err) => {
+        console.error('Error fetching filter options:', err);
+      }
     });
   }
 
   getFilteredOptions(filter: any): string[] {
-    if (!filter.searchTerm) return filter.options[0];
+    const searchTerm = (filter.searchTerm || '').toLowerCase().trim();
 
-    return filter.options[0].filter((option: string) =>
-      option.toLowerCase().includes(filter.searchTerm.toLowerCase())
+    const options = (filter.options || [])
+      .filter((option: any) => option !== null && option !== undefined)
+      .map((option: any) => String(option));
+
+    if (!searchTerm) {
+      return options;
+    }
+
+    return options.filter((option: string) =>
+      option.toLowerCase().includes(searchTerm)
     );
   }
 
@@ -255,7 +268,7 @@ export class ApplicationComponent implements OnInit {
     return false;
   }
 
-  openFormPage(){
+  openFormPage() {
     this.router.navigate(['/application/new']);
     // this.router.navigate(['/application/new']);
   }
