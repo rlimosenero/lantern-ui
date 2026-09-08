@@ -262,6 +262,7 @@ td {
   div {
     display: flex;
     gap: 0.5rem;
+    flex-wrap: wrap;
   }
 
   span.custom-chip {
@@ -396,7 +397,7 @@ table,
   border-radius: 0.25rem;
   border-color: $border-color;
 
-  .msg-warn{
+  .msg-warn {
     font-size: 14px;
   }
 }

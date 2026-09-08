@@ -12,7 +12,7 @@ export class AdminAnalyticsService {
   private config = inject(APP_CONFIG);
 
   private readonly baseUrl =
-    `${this.config.baseUrl}/analytics/completeness`;
+    `${this.config.baseUrl}/api/v1/analytics/completeness`;
 
   getCompletenessSummary() {
     const url = `${this.baseUrl}/summary`;

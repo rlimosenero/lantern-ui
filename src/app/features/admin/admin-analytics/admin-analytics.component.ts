@@ -1,11 +1,22 @@
-import { Component, inject, computed, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule, KeyValuePipe } from '@angular/common';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-import { KeyValuePipe } from '@angular/common';
+
 import { LoaderComponent } from '../../../shared/components/loader/loader.component';
 import { AdminAnalyticsService } from './admin-analytics.service';
+import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
+
+interface CompletenessData {
+  applicationId: string;
+  applicationName: string;
+  completenessRate: number;
+  status: string;
+  completedFields: number;
+  requiredFields: number;
+  missingFields: string[];
+}
 
 @Component({
   selector: 'app-admin-analytics',
@@ -16,61 +27,32 @@ import { AdminAnalyticsService } from './admin-analytics.service';
     MatCardModule,
     MatIconModule,
     KeyValuePipe,
-    LoaderComponent
+    LoaderComponent,
+    PaginationComponent
   ],
   templateUrl: './admin-analytics.component.html',
   styleUrl: './admin-analytics.component.scss'
 })
 export class AdminAnalyticsComponent implements OnInit {
+
   activeTab: 'applications' | 'webServices' = 'applications';
+
   isCompletenessLoading = false;
 
-  summaryData = {
-    // "totalApplications": 10,
-    // "overallCompleteness": 78.00,
-    "applicationsAddedThisMonth": 2,
-    "completenessChangeVsLastMonth": 4.20,
-    "fullyComplete": 4,
-    "needsAttention": 3
-  }
+  summaryData: any = {};
 
-  applications = [
-    {
-      name: 'User Authentication API',
-      overallCompletenessRate: 100,
-      mandatoryCompletenessRate: 100,
-      status: 'COMPLETE'
-    },
-    {
-      name: 'Payment Gateway',
-      overallCompletenessRate: 93.33,
-      mandatoryCompletenessRate: 80,
-      status: 'PARTIAL'
-    }
-  ];
+  list: any = [];
 
-  webServices = [
-    {
-      name: 'User Service',
-      overallCompletenessRate: 95,
-      mandatoryCompletenessRate: 90,
-      status: 'COMPLETE'
-    },
-    {
-      name: 'Payment Service',
-      overallCompletenessRate: 72,
-      mandatoryCompletenessRate: 65,
-      status: 'PARTIAL'
-    }
-  ];
+  webServices: CompletenessData[] = [];
+
+  activeCompletenessData: CompletenessData[] = [];
 
   constructor(
-    private adminAnalyticsService: AdminAnalyticsService,
+    private adminAnalyticsService: AdminAnalyticsService
   ) { }
 
-  ngOnInit() {
-    this.loadCompletenessData();
-    this.loadApplicationList();
+  ngOnInit(): void {
+    this.loadApplicationCompletenessData();
   }
 
   formatLabel(key: string): string {
@@ -80,24 +62,57 @@ export class AdminAnalyticsComponent implements OnInit {
   }
 
   switchTab(tab: 'applications' | 'webServices'): void {
+
     if (this.activeTab === tab) {
       return;
     }
 
     this.activeTab = tab;
+
+    if (tab === 'applications') {
+      this.loadApplicationCompletenessData();
+    } else {
+      this.loadWebServicesCompletenessData();
+    }
   }
 
-  getActiveCompletenessData() {
-    return this.activeTab === 'applications'
-      ? this.applications
-      : this.webServices;
+  loadApplicationCompletenessData(): void {
+    this.loadApplicationSummary();
+    this.loadApplicationList(0);
+
   }
 
-  loadCompletenessData() {
-    this.adminAnalyticsService.getCompletenessSummary().subscribe({
-      next: (res) => {
-        console.log('summary')
+  loadApplicationList(page: number) {
+    this.isCompletenessLoading = true;
+
+    this.adminAnalyticsService.getApplicationCompleteness(page, 10).subscribe({
+      next: (res: any) => {
+        console.log('applicationlist');
         console.log(res);
+
+        this.list = res.data;
+
+        this.activeCompletenessData = res.data.results;
+
+        this.isCompletenessLoading = false;
+      },
+      error: (err) => {
+        console.error('Error fetching application completeness:', err);
+
+        this.isCompletenessLoading = false;
+      }
+    });
+  }
+
+  loadApplicationSummary() {
+    this.isCompletenessLoading = true;
+
+    this.adminAnalyticsService.getCompletenessSummary().subscribe({
+      next: (res: any) => {
+        console.log('summary');
+        console.log(res);
+
+        this.summaryData = res.data;
       },
       error: (err) => {
         console.error('Error fetching completeness summary:', err);
@@ -105,16 +120,30 @@ export class AdminAnalyticsComponent implements OnInit {
     });
   }
 
-  loadApplicationList() {
-    this.adminAnalyticsService.getApplicationCompleteness().subscribe({
-      next: (res) => {
-        console.log('applicationlist')
-        console.log(res)
-      },
-      error: (err) => {
-        console.error('Error fetching application completeness:', err);
-      }
-    });
+  loadWebServicesCompletenessData(): void {
+    this.loadWebServiceSummary();
+    this.loadWebServiceList(0);
+    //API call for WS
+    this.activeCompletenessData = this.webServices;
+  }
+
+  loadWebServiceSummary() {
+    console.log('test');
+  }
+
+  loadWebServiceList(page: number) {
+    console.log(page);
+  }
+
+
+  onHandlePage(newPage: number) {
+    console.log(newPage)
+    if (this.activeTab == 'applications') {
+      this.loadApplicationList(newPage);
+
+    } else {
+      this.loadWebServiceList(newPage);
+    }
   }
 
 }

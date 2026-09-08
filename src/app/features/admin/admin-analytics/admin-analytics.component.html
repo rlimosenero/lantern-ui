@@ -8,6 +8,23 @@
     </p>
   </section>
 
+  <section class="toggle-bar-container">
+    <!-- Toggle -->
+    <div class="table-tabs">
+
+      <button type="button" class="table-tab" [class.active]="activeTab === 'applications'"
+        (click)="switchTab('applications')">
+        Applications
+      </button>
+
+      <button type="button" class="table-tab" [class.active]="activeTab === 'webServices'"
+        (click)="switchTab('webServices')">
+        Web Services
+      </button>
+
+    </div>
+  </section>
+
   <section class="summary-cards-container">
 
     @for (item of summaryData | keyvalue; track item.key) {
@@ -16,7 +33,7 @@
 
       <div class="summary-card-header">
         <span class="summary-card-title">
-          {{ formatLabel(item.key) }}
+          {{ formatLabel(item.key.toString()) }}
         </span>
 
         <div class="summary-card-icon">
@@ -37,125 +54,115 @@
   </section>
 
   <!-- Completeness Table -->
-  <section class="table-container">
+<section class="table-container">
 
-    <!-- Toggle -->
-    <div class="table-tabs">
+  <!-- Legend -->
+  <div class="table-legend">
 
-      <button type="button" class="table-tab" [class.active]="activeTab === 'applications'"
-        (click)="switchTab('applications')">
-        Applications
-      </button>
-
-      <button type="button" class="table-tab" [class.active]="activeTab === 'webServices'"
-        (click)="switchTab('webServices')">
-        Web Services
-      </button>
-
+    <div class="legend-item">
+      <span class="legend-indicator overall"></span>
+      <span>Completeness</span>
     </div>
 
-
-    <!-- Legend -->
-    <div class="table-legend">
-
-      <div class="legend-item">
-        <span class="legend-indicator overall"></span>
-        <span>Overall Completeness</span>
-      </div>
-
-      <div class="legend-item">
-        <span class="legend-indicator mandatory"></span>
-        <span>Mandatory Fields</span>
-      </div>
-
-    </div>
+  </div>
 
 
-    <div class="table-header">
-      <h3>
-        Completeness by {{ activeTab === 'applications' ? 'Application' : 'Web Service' }}
-      </h3>
-      <p>
-        Horizontal progress distribution colored by status category threshold.
-      </p>
-    </div>
+  <div class="table-header">
+
+    <h3>
+      Completeness by
+      {{ activeTab === 'applications' ? 'Application' : 'Web Service' }}
+    </h3>
+
+    <p>
+      Horizontal progress distribution colored by status category threshold.
+    </p>
+
+  </div>
 
 
-    <!-- Loader -->
-    @if (isCompletenessLoading) {
+  <!-- Loader -->
+  @if (isCompletenessLoading) {
 
     <div class="table-loader">
       <app-loader></app-loader>
     </div>
 
-    } @else {
+  } @else {
 
     <div class="completeness-list">
 
-      @for (item of getActiveCompletenessData(); track item.name) {
+      @for (item of activeCompletenessData; track item.applicationId) {
 
-      <div class="completeness-row">
+        <div class="completeness-row">
 
-        <!-- Name -->
-        <div class="completeness-name">
-          {{ item.name }}
-        </div>
+          <!-- Name -->
+          <div class="completeness-name">
+            {{ item.applicationName }}
+          </div>
 
-        <!-- Status -->
-        <div class="completeness-status" [class.complete]="item.status === 'COMPLETE'"
-          [class.partial]="item.status === 'PARTIAL'" [class.needs-attention]="item.status === 'NEEDS_ATTENTION'">
 
-          {{ item.status }}
+          <!-- Status -->
+          <div
+            class="completeness-status"
+            [class.complete]="item.status === 'COMPLETE'"
+            [class.partial]="item.status === 'PARTIAL'"
+            [class.needs-attention]="item.status === 'NEEDS_ATTENTION'">
 
-        </div>
-
-        <!-- Progress Bars -->
-        <div class="progress-container">
-
-          <!-- Overall Completeness -->
-          <div class="progress-wrapper">
-
-            <div class="progress-bar">
-              <div class="progress-fill overall" [style.width.%]="item.overallCompletenessRate">
-              </div>
-            </div>
-
-            <span class="progress-value">
-              {{ item.overallCompletenessRate | number:'1.0-2' }}%
-            </span>
+            {{ item.status }}
 
           </div>
 
-          <!-- Mandatory Fields -->
-          <div class="progress-wrapper">
 
-            <div class="progress-bar">
-              <div class="progress-fill mandatory" [style.width.%]="item.mandatoryCompletenessRate">
+          <!-- Progress -->
+          <div class="progress-container">
+
+            <div class="progress-wrapper">
+
+              <div class="progress-bar">
+
+                <div
+                  class="progress-fill overall"
+                  [style.width.%]="item.completenessRate">
+                </div>
+
               </div>
-            </div>
 
-            <span class="progress-value">
-              {{ item.mandatoryCompletenessRate | number:'1.0-2' }}%
-            </span>
+              <span class="progress-value">
+                {{ item.completenessRate | number:'1.0-2' }}%
+              </span>
+
+            </div>
 
           </div>
 
         </div>
-
-      </div>
 
       } @empty {
 
-      <div class="no-data">
-        No completeness data available.
-      </div>
+        <div class="no-data">
+          No completeness data available.
+        </div>
 
       }
 
     </div>
 
-    }
+  }
 
-  </section>
+
+  <!-- Pagination -->
+  @if (!isCompletenessLoading && list.totalElements > 0) {
+
+    <app-pagination
+      [totalElements]="list.totalElements"
+      [pageSize]="list.pageSize"
+      [currentPage]="list.currentPage"
+      (pageChange)="onHandlePage($event)">
+    </app-pagination>
+
+  }
+
+</section>
 
 </div>

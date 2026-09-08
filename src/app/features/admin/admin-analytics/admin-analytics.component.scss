@@ -33,13 +33,14 @@
   }
 }
 
-.summary-cards-container {
+.summary-cards-container{
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
   width: 100%;
   margin: 1rem 0;
 }
+
 
 .summary-card {
   flex: 1 1 240px;
@@ -93,7 +94,7 @@
   color: #111827;
 }
 
-.table-container {
+.table-container, .toggle-bar-container {
   width: 100%;
   padding: 20px;
   box-sizing: border-box;
