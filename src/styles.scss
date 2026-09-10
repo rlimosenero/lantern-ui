@@ -32,6 +32,14 @@ html {
   white-space: nowrap;
 }
 
+.table-description {
+  vertical-align: middle;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 500px;
+}
+
 .status-online {
   --mdc-chip-elevated-container-color: #e8f5e9; // Light Green
   --mdc-chip-label-text-color: #2e7d32; // Dark Green

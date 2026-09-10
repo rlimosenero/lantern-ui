@@ -130,6 +130,19 @@ mat-divider.mat-divider.mat-divider-horizontal {
   }
 }
 
+.url-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.url-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  word-break: break-all;
+}
+
 .content-body {
   padding: 0.5rem 2rem;
 

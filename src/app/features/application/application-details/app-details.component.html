@@ -6,7 +6,9 @@
       <div class="title-block">
         <div class="title-row">
           <span>
-            <h1>{{ applicationDetails?.appName ?? 'Untitled Application' }}</h1>
+            <h1 [class.placeholder-text]="!applicationDetails?.appName">
+              {{ applicationDetails?.appName ?? 'Untitled Application' }}
+            </h1>
 
             <div class="chip-container">
               <span class="custom-chip header-chip">Application</span>
@@ -24,7 +26,9 @@
 
         </div>
 
-        <p class="description" [class.no-data]="!applicationDetails?.appDesc">
+        <p class="description" 
+           [class.no-data]="!applicationDetails?.appDesc"
+           [title]="applicationDetails?.appDesc ?? 'No description provided for this application.'">
           {{ applicationDetails?.appDesc ?? 'No description provided for this application.' }}
         </p>
 
@@ -39,7 +43,7 @@
             {{ applicationDetails?.lifecycleStatus ?? 'UNKNOWN' }}
           </span>
 
-          <span class="version-text">
+          <span class="version-text" [class.placeholder-text]="!applicationDetails?.version">
             Version: {{ applicationDetails?.version ?? 'N/A' }}
           </span>
         </div>
@@ -56,34 +60,36 @@
         <div class="grid-2">
           <div class="data-field">
             <label>Application ID</label>
-            <p class="mono-text">{{ applicationDetails?.appUuid ?? '00000000-0000-0000-0000-000000000000' }}</p>
+            <p class="mono-text" [class.placeholder-text]="!applicationDetails?.appUuid">
+              {{ applicationDetails?.appUuid ?? '00000000-0000-0000-0000-000000000000' }}
+            </p>
           </div>
 
           <div class="data-field">
             <label>Owner Name</label>
             <p [class.placeholder-text]="!applicationDetails?.ownerName">
-              {{ applicationDetails?.ownerName ?? 'Unassigned' }}
+              {{ applicationDetails?.ownerName ? applicationDetails?.ownerName : 'Unassigned' }}
             </p>
           </div>
 
           <div class="data-field">
             <label>Owner Department</label>
             <p [class.placeholder-text]="!applicationDetails?.ownerDept">
-              {{ applicationDetails?.ownerDept ?? '—' }}
+              {{ applicationDetails?.ownerDept ? applicationDetails?.ownerDept : '—' }}
             </p>
           </div>
 
           <div class="data-field">
             <label>BAU Support Name</label>
             <p [class.placeholder-text]="!applicationDetails?.bauSupportName">
-              {{ applicationDetails?.bauSupportName ?? 'Pending Assignment' }}
+              {{ applicationDetails?.bauSupportName ? applicationDetails?.bauSupportName : 'Pending Assignment' }}
             </p>
           </div>
 
           <div class="data-field">
             <label>BAU Support Department</label>
             <p [class.placeholder-text]="!applicationDetails?.bauSupportDept">
-              {{ applicationDetails?.bauSupportDept ?? '—' }}
+              {{ applicationDetails?.bauSupportDept ? applicationDetails?.bauSupportDept : '—' }}
             </p>
           </div>
         </div>
@@ -182,89 +188,6 @@
         </div>
       </section>
 
-      <!-- <section class="analytics-section">
-        <div class="section-header">
-          <h3>Analytics Metrics</h3>
-          <app-button [name]="'Refresh'" (click)="openEditPage()" />
-        </div>
-
-        <span class="info-bar">
-          <span class="font-medium">Data gathered: </span><span>2/4/2024, 6:30:00 PM</span>
-        </span>
-
-        <div class="card-container">
-          <span class="card-analytics">
-            <h3>CPU Usage</h3>
-            <span class="card-content">
-              <h1>45.2</h1>
-              <p>%</p>
-            </span>
-            <span>
-              <mat-progress-bar class="cpu-usage" mode="determinate" value="40"></mat-progress-bar>
-            </span>
-          </span>
-
-          <span class="card-analytics">
-            <h3>Memory Usage</h3>
-            <span class="card-content">
-              <h1>1024</h1>
-              <p>MB/ 2047 MB</p>
-            </span>
-            <span>
-              <mat-progress-bar class="cpu-usage" mode="determinate" value="50"></mat-progress-bar>
-            </span>
-            <p class="footer">50.0% utilized</p>
-          </span>
-
-          <span class="card-analytics">
-            <h3>Avg Response Time</h3>
-            <span class="card-content">
-              <h1>235</h1>
-              <p>ms</p>
-            </span>
-            <span>
-              <span class="custom-chip active">Fast</span>
-            </span>
-          </span>
-
-          <span class="card-analytics">
-            <h3>Error Rate</h3>
-            <span class="card-content">
-              <h1>0.12</h1>
-              <p>%</p>
-            </span>
-            <span>
-              <span class="custom-chip active">Fast</span>
-            </span>
-          </span>
-
-          <span class="card-analytics">
-            <h3>Crashes (Last 24h)</h3>
-            <span class="card-content">
-              <h1>2</h1>
-              <p>incident(s)</p>
-            </span>
-            <span>
-              <span class="custom-chip deprecated">Attention needed</span>
-            </span>
-          </span>
-
-          <span class="card-analytics">
-            <h3>Storage</h3>
-            <span class="card-content">
-              <h1>15.8</h1>
-              <p>GB/ 50 GB</p>
-            </span>
-            <span>
-              <mat-progress-bar class="cpu-usage" mode="determinate" value="31"></mat-progress-bar>
-            </span>
-            <p class="footer">31.6% utilized</p>
-          </span>
-
-        </div>
-
-      </section> -->
-
       <section>
         <div class="section-header">
           <h3>Web Services</h3>
@@ -280,11 +203,16 @@
           <table mat-table [dataSource]="wsData.results" class="mat-elevation-z0 border-table">
             <ng-container matColumnDef="name">
               <th mat-header-cell *matHeaderCellDef>Name</th>
-              <td mat-cell *matCellDef="let s" class="app-name">{{s.apiName}}</td>
+              <td mat-cell *matCellDef="let s" class="app-name">{{s.apiName || '-'}}</td>
             </ng-container>
             <ng-container matColumnDef="description">
               <th mat-header-cell *matHeaderCellDef>Description</th>
-              <td mat-cell *matCellDef="let s">{{s.apiDesc}}</td>
+              <td mat-cell *matCellDef="let s" 
+                  class="table-description" 
+                  [class.placeholder-text]="!s.apiDesc"
+                  [title]="s.apiDesc || 'No description available'">
+                {{s.apiDesc || 'No description available'}}
+              </td>
             </ng-container>
             <ng-container matColumnDef="version">
               <th mat-header-cell *matHeaderCellDef>Version</th>
@@ -300,7 +228,7 @@
                   'repair-in-progress': s.lifecycleStatus == 'Repair in progress',
                   'retired': s.lifecycleStatus == 'RETIRED'
               }">
-                  {{s.lifecycleStatus}}
+                  {{s.lifecycleStatus || 'UNKNOWN'}}
                 </span>
               </td>
             </ng-container>
@@ -354,7 +282,7 @@
 
             <ng-container matColumnDef="date">
               <th mat-header-cell *matHeaderCellDef>Modified Date&Time</th>
-              <td mat-cell *matCellDef="let v">{{v.modifiedDateTime | date:'MMM dd, yyyy, HH:mm:ss'}}</td>
+              <td mat-cell *matCellDef="let v">{{v.modifiedDateTime ? (v.modifiedDateTime | date:'MMM dd, yyyy, HH:mm:ss') : '-'}}</td>
             </ng-container>
 
             <ng-container matColumnDef="stage">

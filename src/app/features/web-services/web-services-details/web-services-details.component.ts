@@ -27,6 +27,7 @@ import { VersionModalService } from '../../../shared/components/version-modal/ve
 import { StatusCodesModalService } from '../../../shared/components/status-codes-modal/status-codes-modal.service';
 import { ConsumerAppFormsModalService } from '../../../shared/components/consumer-app-forms-modal/consumer-app-forms-modal.service';
 import { UpstreamAppFormsModalService } from '../../../shared/components/upstream-app-forms-modal/upstream-app-forms-modal.service';
+import { CommaToListPipe } from '../../../shared/pipes/comma-to-list/comma-to-list.pipe';
 
 @Component({
   selector: 'app-web-services-details',
@@ -41,7 +42,8 @@ import { UpstreamAppFormsModalService } from '../../../shared/components/upstrea
     MatTableModule,
     PaginationComponent,
     LoaderComponent,
-    ButtonComponent
+    ButtonComponent,
+    CommaToListPipe
   ],
   templateUrl: './web-services-details.component.html',
   styleUrl: './web-services-details.component.scss',

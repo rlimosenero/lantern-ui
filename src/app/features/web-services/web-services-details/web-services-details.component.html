@@ -189,13 +189,16 @@
 
             <section>
                 <h3>Environment URLs</h3>
-
                 <div class="link-field">
                     <label>Production URL</label>
                     @if (WSDetails?.environmentUrls?.[0]?.prodURL) {
-                    <a [href]="WSDetails.environmentUrls[0].prodURL" target="_blank">
-                        {{ WSDetails.environmentUrls[0].prodURL }} <mat-icon>open_in_new</mat-icon>
-                    </a>
+                    <div class="url-list">
+                        @for (url of (WSDetails.environmentUrls[0].prodURL | commaToList); track url) {
+                        <a [href]="url" target="_blank" class="url-item">
+                            {{ url }} <mat-icon>open_in_new</mat-icon>
+                        </a>
+                        }
+                    </div>
                     } @else {
                     <span class="no-data">Not configured</span>
                     }
@@ -204,9 +207,13 @@
                 <div class="link-field">
                     <label>DR URL</label>
                     @if (WSDetails?.environmentUrls?.[0]?.drURL) {
-                    <a [href]="WSDetails.environmentUrls[0].drURL" target="_blank">
-                        {{ WSDetails.environmentUrls[0].drURL }} <mat-icon>open_in_new</mat-icon>
-                    </a>
+                    <div class="url-list">
+                        @for (url of (WSDetails.environmentUrls[0].drURL | commaToList); track url) {
+                        <a [href]="url" target="_blank" class="url-item">
+                            {{ url }} <mat-icon>open_in_new</mat-icon>
+                        </a>
+                        }
+                    </div>
                     } @else {
                     <span class="no-data">Not configured</span>
                     }
@@ -215,9 +222,13 @@
                 <div class="link-field">
                     <label>UAT URL</label>
                     @if (WSDetails?.environmentUrls?.[0]?.uatURL) {
-                    <a [href]="WSDetails.environmentUrls[0].uatURL" target="_blank">
-                        {{ WSDetails.environmentUrls[0].uatURL }} <mat-icon>open_in_new</mat-icon>
-                    </a>
+                    <div class="url-list">
+                        @for (url of (WSDetails.environmentUrls[0].uatURL | commaToList); track url) {
+                        <a [href]="url" target="_blank" class="url-item">
+                            {{ url }} <mat-icon>open_in_new</mat-icon>
+                        </a>
+                        }
+                    </div>
                     } @else {
                     <span class="no-data">Not configured</span>
                     }
@@ -226,9 +237,13 @@
                 <div class="link-field">
                     <label>SIT URL</label>
                     @if (WSDetails?.environmentUrls?.[0]?.sitURL) {
-                    <a [href]="WSDetails.environmentUrls[0].sitURL" target="_blank">
-                        {{ WSDetails.environmentUrls[0].sitURL }} <mat-icon>open_in_new</mat-icon>
-                    </a>
+                    <div class="url-list">
+                        @for (url of (WSDetails.environmentUrls[0].sitURL | commaToList); track url) {
+                        <a [href]="url" target="_blank" class="url-item">
+                            {{ url }} <mat-icon>open_in_new</mat-icon>
+                        </a>
+                        }
+                    </div>
                     } @else {
                     <span class="no-data">Not configured</span>
                     }
@@ -293,7 +308,8 @@
 
                         <ng-container matColumnDef="desc">
                             <th mat-header-cell *matHeaderCellDef>Description</th>
-                            <td mat-cell *matCellDef="let v" class="text-muted">
+                            <td mat-cell *matCellDef="let v" class="text-muted table-description"
+                                [title]="v.description ? v.description : 'No description provided for this application.'">
                                 {{ v.description ?? 'No description provided.' }}
                             </td>
                         </ng-container>
@@ -363,7 +379,8 @@
 
                         <ng-container matColumnDef="desc">
                             <th mat-header-cell *matHeaderCellDef>Description</th>
-                            <td mat-cell *matCellDef="let v" class="text-muted">
+                            <td mat-cell *matCellDef="let v" class="text-muted table-description"
+                                [title]="v.description ? v.description : 'No description provided for this application.'">
                                 {{ v.description ?? 'No header description provided.' }}
                             </td>
                         </ng-container>
@@ -433,7 +450,9 @@
 
                         <ng-container matColumnDef="desc">
                             <th mat-header-cell *matHeaderCellDef>Description</th>
-                            <td mat-cell *matCellDef="let v" class="text-muted">{{ v.description ?? '—' }}</td>
+                            <td mat-cell *matCellDef="let v" class="text-muted table-description"
+                                [title]="v.description ? v.description : 'No description provided for this application.'">
+                                {{ v.description ?? '—' }}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="isRequired">
@@ -601,7 +620,8 @@
 
                         <ng-container matColumnDef="desc">
                             <th mat-header-cell *matHeaderCellDef>Description</th>
-                            <td mat-cell *matCellDef="let v" class="text-muted">
+                            <td mat-cell *matCellDef="let v" class="text-muted table-description"
+                                [title]="v.description ? v.description : 'No description provided for this application.'">
                                 {{ v.description ?? 'No header description provided.' }}
                             </td>
                         </ng-container>
@@ -672,7 +692,10 @@
 
                         <ng-container matColumnDef="desc">
                             <th mat-header-cell *matHeaderCellDef>Description</th>
-                            <td mat-cell *matCellDef="let v" class="text-muted">{{ v.description ?? '—' }}</td>
+                            <td mat-cell *matCellDef="let v" class="text-muted table-description"
+                                [title]="v.description ? v.description : 'No description provided for this application.'">
+                                {{ v.description ??
+                                '—' }}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="isRequired">
@@ -772,7 +795,8 @@
 
                         <ng-container matColumnDef="message">
                             <th mat-header-cell *matHeaderCellDef>Message / Description</th>
-                            <td mat-cell *matCellDef="let v">
+                            <td mat-cell *matCellDef="let v" class="table-description"
+                                [title]="v.message ? v.message : 'No description provided for this application.'">
                                 {{ v.message ?? '—' }}
                             </td>
                         </ng-container>
