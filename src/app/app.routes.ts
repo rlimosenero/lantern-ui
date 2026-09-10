@@ -19,7 +19,7 @@ export const routes: Routes = [
     component: MainShellComponent,
     canActivate: [authGuard],
     children: [
-      { path: 'analytics', component: AdminAnalyticsComponent, data: { breadcrumb: 'Analytics' } },
+      // { path: 'analytics', component: AdminAnalyticsComponent, data: { breadcrumb: 'Analytics' } },
       { path: 'masterlist-io', component: MasterlistExcelComponent },
       {
         path: 'application',
