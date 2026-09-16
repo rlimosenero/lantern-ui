@@ -1,3 +1,8 @@
+:host {
+  font-family: var(--font-sans) !important;
+}
+
+
 // Layout Container
 .lantern-wrapper {
   height: 100dvh;
@@ -59,7 +64,7 @@ mat-toolbar {
 
 
 .active-link {
-  background-color: rgba(186, 26, 26, 0.1);
+  background-color: rgba(186, 26, 26, 0.1) !important;
   color: #ba1a1a !important;
 
   mat-icon {
@@ -78,8 +83,44 @@ button.mat-mdc-list-item:hover {
   background-color: rgba(186, 26, 26, 0.1);
 }
 
+.sidebar-options {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: flex-start;
+  align-items: center;
+  height: 48px;
+  padding: 0 16px;
+  font-family: inherit;
+  gap: 1rem;
+  font-size: 1rem;
+  line-height: 24px;
+  border: none;
+  background-color: transparent;
+  text-decoration: unset;
+  color: black;
+
+}
+
+.sidebar-options:hover {
+  background-color: rgba(186, 26, 26, 0.1);
+}
+
+.icon-active {
+  display: none;
+}
+
+.sidebar-options.active-link .icon-default {
+  display: none;
+}
+
+.sidebar-options.active-link .icon-active {
+  display: block;
+}
+
 ::ng-deep .mat-drawer-inner-container {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  padding-bottom: 1rem;
 }

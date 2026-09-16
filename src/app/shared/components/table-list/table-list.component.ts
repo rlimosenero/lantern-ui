@@ -28,7 +28,7 @@ export class TableListComponent implements OnChanges, OnInit {
   @Input() type: 'APP' | 'WEBSERVICE' = 'APP';
 
   tableList: TableItem[] = [];
-  displayedColumns: string[] = ['name', 'desc', 'stableVersion', 'betaVersion', 'status', 'options'];
+  displayedColumns: string[] = [ 'options', 'name', 'desc', 'stableVersion', 'betaVersion', 'status'];
 
   constructor(
     private router: Router

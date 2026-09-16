@@ -13,7 +13,6 @@ import { LoaderComponent } from '../loader/loader.component';
   selector: 'app-version-modal',
   imports: [
     SplitPipe,
-    MatIcon,
     PaginationComponent,
     DatePipe,
     MatTableModule,

@@ -28,6 +28,7 @@ import { StatusCodesModalService } from '../../../shared/components/status-codes
 import { ConsumerAppFormsModalService } from '../../../shared/components/consumer-app-forms-modal/consumer-app-forms-modal.service';
 import { UpstreamAppFormsModalService } from '../../../shared/components/upstream-app-forms-modal/upstream-app-forms-modal.service';
 import { CommaToListPipe } from '../../../shared/pipes/comma-to-list/comma-to-list.pipe';
+import { ReplaceUnderscorePipe } from '../../../shared/pipes/replace-underscore/replace-underscore.pipe';
 
 @Component({
   selector: 'app-web-services-details',
@@ -43,7 +44,8 @@ import { CommaToListPipe } from '../../../shared/pipes/comma-to-list/comma-to-li
     PaginationComponent,
     LoaderComponent,
     ButtonComponent,
-    CommaToListPipe
+    CommaToListPipe,
+    ReplaceUnderscorePipe
   ],
   templateUrl: './web-services-details.component.html',
   styleUrl: './web-services-details.component.scss',
@@ -62,7 +64,7 @@ export class WebServicesDetailsComponent implements OnInit {
   reqBodyFields: string[] = ['name', 'typeAndFormat', 'desc', 'isRequired', 'sampleValue', 'rules', 'logic', 'defaultValue'];
   resBodyFields: string[] = ['name', 'typeAndFormat', 'desc', 'isRequired', 'sampleValue', 'rules', 'logic', 'defaultValue', 'sourceOrDomainApplication', 'sourceOrDomainFieldName'];
   statusCodesFields: string[] = ['HTTPCode', 'businessCode', 'message', 'type', 'suggestedAction'];
-  displayedVersionColumns: string[] = ['version', 'date', 'stage', 'env', 'build', 'documents', 'options'];
+  displayedVersionColumns: string[] = ['options', 'version', 'date', 'stage', 'env', 'build', 'documents'];
 
   versionData: any = [];
   public baseUrl = environment.baseUrl;
@@ -452,7 +454,7 @@ export class WebServicesDetailsComponent implements OnInit {
 
   setConsumerTableColumns() {
     if (this.auth.isAdmin()) {
-      return ['appName', 'appOwner', 'dateOnboarded', 'status', 'trigger', 'appType', 'techOwner', 'tokenExpiryDate', 'networkMode', 'options'];
+      return ['options', 'appName', 'appOwner', 'dateOnboarded', 'status', 'trigger', 'appType', 'techOwner', 'tokenExpiryDate', 'networkMode'];
     } else {
       return ['appName', 'appOwner', 'dateOnboarded', 'status', 'trigger', 'appType', 'techOwner', 'tokenExpiryDate', 'networkMode'];
     }
@@ -460,7 +462,7 @@ export class WebServicesDetailsComponent implements OnInit {
 
   setUpstreamTableColumns() {
     if (this.auth.isAdmin()) {
-      return ['appName', 'appOwner', 'tokenExpiryDate', 'techOwner', 'options']
+      return ['options', 'appName', 'appOwner', 'tokenExpiryDate', 'techOwner']
     } else {
       return ['appName', 'appOwner', 'tokenExpiryDate', 'techOwner']
     }

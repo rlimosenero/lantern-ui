@@ -66,6 +66,16 @@
                 <h2>Configuration & Security</h2>
 
                 <div class="grid two">
+
+                    @if( isMainframe ){
+                    <div class="form-group">
+                        <label>Transaction ID</label>
+                        <input type="text" name="tranId" [(ngModel)]="payload.tranId" [maxlength]=4 #tranId="ngModel"
+                            placeholder="Enter Tran ID" />
+                    </div>
+                    }
+
+
                     <div class="form-group">
                         <label>API Layer</label>
 
@@ -204,14 +214,26 @@
 
                     <div class="form-group">
                         <label>Pass Through</label>
-                        <select class="custom-dropdown" name="passThrough"
-                            [(ngModel)]="payload.passThrough">
+                        <select class="custom-dropdown" name="passThrough" [(ngModel)]="payload.passThrough">
                             <option [ngValue]="null" disabled selected>Select Option</option>
                             <option [ngValue]="true">Yes</option>
                             <option [ngValue]="false">No</option>
                         </select>
                     </div>
 
+                    @if( isMainframe ){
+                    <div class="form-group">
+                        <label>Source Library</label>
+                        <input type="text" name="sourceLibrary" [(ngModel)]="payload.sourceLibrary"
+                            #sourceLibrary="ngModel" placeholder="Enter Source Library" />
+                    </div>
+
+                    <div class="form-group">
+                        <label>CICS Region</label>
+                        <input type="text" name="cicsRegion" [(ngModel)]="payload.cicsRegion" #cicsRegion="ngModel"
+                            placeholder="Enter CICS Region" />
+                    </div>
+                    }
                 </div>
             </section>
 

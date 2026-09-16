@@ -27,6 +27,7 @@ export class WebServicesFormComponent implements OnInit {
   initialSnapshot = '';
   dropdownOptions: any = {};
   validations: any = {};
+  isMainframe = false;
 
   payload: any = this.createInitialPayload();
 
@@ -70,55 +71,59 @@ export class WebServicesFormComponent implements OnInit {
       apiId: '',
       apiName: '',
 
-      appName: '',
+      appName: null,
       appUuid: null,
 
-      category: '',
-      description: '',
+      category: null,
+      description: null,
 
-      layer: '',
-      webServiceType: '',
-      httpMethod: '',
+      layer: null,
+      webServiceType: null,
+      httpMethod: null,
 
       accessedViaGateway: null,
 
-      authenticationMethod: '',
-      authorizationName: '',
-      lifecycleStatus: '',
+      authenticationMethod: null,
+      authorizationName: null,
+      lifecycleStatus: null,
 
-      swaggerUrl: '',
-      docsUrl: '',
+      swaggerUrl: null,
+      docsUrl: null,
 
-      urlProd: '',
-      urlDr: '',
-      urlUat: '',
-      urlSit: '',
+      urlProd: null,
+      urlDr: null,
+      urlUat: null,
+      urlSit: null,
 
-      requestBodySample: '',
-      requestDataFormat: '',
-      requestDataSensitivityType: '',
-      requestDataInTransitEnc: '',
-      requestAveSize: '',
-      requestMaxSize: '',
+      requestBodySample: null,
+      requestDataFormat: null,
+      requestDataSensitivityType: null,
+      requestDataInTransitEnc: null,
+      requestAveSize: null,
+      requestMaxSize: null,
 
       requestDataLogged: null,
       requestDataCached: null,
       requestDuplicateAllowed: null,
       requestThrottlingSupported: null,
 
-      responseBodySample: '',
-      responseDataFormat: '',
-      responseDataSensitivityType: '',
-      responseDataInTransitEnc: '',
-      responseAveSize: '',
-      responseMaxSize: '',
+      responseBodySample: null,
+      responseDataFormat: null,
+      responseDataSensitivityType: null,
+      responseDataInTransitEnc: null,
+      responseAveSize: null,
+      responseMaxSize: null,
 
       responseDataLogged: null,
       responseDataCached: null,
 
-      rateLimitInfo: '',
-      exposure: '',
-      passThrough: null
+      rateLimitInfo: null,
+      exposure: null,
+      passThrough: null,
+
+      tranId: null,
+      sourceLibrary: null,
+      cicsRegion: null
     };
 
   }
@@ -216,6 +221,7 @@ export class WebServicesFormComponent implements OnInit {
   }
 
   getApplicationDetails(id: string): void {
+    this.isMainframe = false;
 
     if (!id) return;
 
@@ -227,6 +233,8 @@ export class WebServicesFormComponent implements OnInit {
         next: (res: any) => {
 
           const data = res.data;
+
+          this.isMainframe = data.techStackPlatform?.toLowerCase().includes('mainframe');
 
           this.payload.appUuid =
             data.appUuid;
@@ -306,7 +314,10 @@ export class WebServicesFormComponent implements OnInit {
             responseDataCached: data.responseDataCached,
             responseBodySample: data.responseBodySample,
             rateLimitInfo: data.rateLimitInfo,
-            passThrough: data.passThrough
+            passThrough: data.passThrough,
+            tranId: data.tranId,
+            sourceLibrary: data.sourceLibrary,
+            cicsRegion: data.cicsRegion
 
           };
 
@@ -565,7 +576,7 @@ export class WebServicesFormComponent implements OnInit {
       .subscribe({
         next: (res: any) => {
           this.validations = res.data;
-          console.log(JSON.stringify(res.data))
+          // console.log(JSON.stringify(res.data))
         },
         error: (err) => {
           console.error('Validation Error:', err);

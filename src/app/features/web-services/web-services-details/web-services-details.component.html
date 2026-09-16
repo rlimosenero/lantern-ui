@@ -141,10 +141,40 @@
 
                     <div class="data-field">
                         <label>API Layer</label>
-                        <p>{{ (WSDetails?.layer | titlecase) ?? '—' }}</p>
+                        <p>{{ (WSDetails?.layer | replaceUnderscore | titlecase) ?? '—' }}</p>
                     </div>
                 </div>
             </section>
+
+            @if(WSDetails?.tranId || WSDetails?.cicsRegion || WSDetails?.sourceLibrary){
+            <section>
+
+                <h3>Mainframe Service Configuration</h3>
+                <div class="grid-2">
+                    @if (WSDetails?.tranId) {
+                    <div class="data-field">
+                        <label>Transaction ID</label>
+                        <p class="highlight">{{ WSDetails?.tranId ? WSDetails?.tranId : '—' }}</p>
+                    </div>
+                    }
+
+                    @if (WSDetails?.cicsRegion) {
+                    <div class="data-field">
+                        <label>CICS Region</label>
+                        <span class="badge">{{ WSDetails?.cicsRegion ?? '—' }}</span>
+                    </div>
+                    }
+
+                    @if (WSDetails?.sourceLibrary) {
+                    <div class="data-field">
+                        <label>Source Library</label>
+                        <p>{{ WSDetails?.sourceLibrary ?? '—' }}</p>
+                    </div>
+                    }
+                </div>
+            </section>
+            }
+
 
             <section>
                 <h3>Description</h3>
@@ -155,7 +185,7 @@
                     </p>
                     } @else {
                     <div class="empty-description">
-                        <mat-icon>notes</mat-icon>
+                        <img class="icon-tbl" src="assets/icons/notes.png" />
                         <p>No functional description has been provided for this web service.</p>
                     </div>
                     }
@@ -195,7 +225,7 @@
                     <div class="url-list">
                         @for (url of (WSDetails.environmentUrls[0].prodURL | commaToList); track url) {
                         <a [href]="url" target="_blank" class="url-item">
-                            {{ url }} <mat-icon>open_in_new</mat-icon>
+                            {{ url }} <img class="icon-tbl" src="assets/icons/document.png" />
                         </a>
                         }
                     </div>
@@ -210,7 +240,7 @@
                     <div class="url-list">
                         @for (url of (WSDetails.environmentUrls[0].drURL | commaToList); track url) {
                         <a [href]="url" target="_blank" class="url-item">
-                            {{ url }} <mat-icon>open_in_new</mat-icon>
+                            {{ url }} <img class="icon-tbl" src="assets/icons/document.png" />
                         </a>
                         }
                     </div>
@@ -225,7 +255,7 @@
                     <div class="url-list">
                         @for (url of (WSDetails.environmentUrls[0].uatURL | commaToList); track url) {
                         <a [href]="url" target="_blank" class="url-item">
-                            {{ url }} <mat-icon>open_in_new</mat-icon>
+                            {{ url }} <img class="icon-tbl" src="assets/icons/document.png" />
                         </a>
                         }
                     </div>
@@ -240,7 +270,7 @@
                     <div class="url-list">
                         @for (url of (WSDetails.environmentUrls[0].sitURL | commaToList); track url) {
                         <a [href]="url" target="_blank" class="url-item">
-                            {{ url }} <mat-icon>open_in_new</mat-icon>
+                            {{ url }} <img class="icon-tbl" src="assets/icons/document.png" />
                         </a>
                         }
                     </div>
@@ -319,7 +349,7 @@
                     </table>
                     } @else {
                     <div class="empty-container">
-                        <mat-icon>warning</mat-icon>
+                        <img class="icon-tbl" src="assets/icons/warning.png" />
                         <p>No URL path parameters defined for this service.</p>
                     </div>
                     }
@@ -390,7 +420,7 @@
                     </table>
                     } @else {
                     <div class="empty-container">
-                        <mat-icon>warning</mat-icon>
+                        <img class="icon-tbl" src="assets/icons/warning.png" />
                         <p>No specific request headers required for this service.</p>
                     </div>
                     }
@@ -498,7 +528,7 @@
                     </table>
                     } @else {
                     <div class="empty-container">
-                        <mat-icon>warning</mat-icon>
+                        <img class="icon-tbl" src="assets/icons/warning.png" />
                         <p>No request body fields defined for this service.</p>
                     </div>
                     }
@@ -631,7 +661,7 @@
                     </table>
                     } @else {
                     <div class="empty-container">
-                        <mat-icon>warning</mat-icon>
+                        <img class="icon-tbl" src="assets/icons/warning.png" />
                         <p>No custom response headers documented for this service.</p>
                     </div>
                     }
@@ -757,7 +787,7 @@
                     </table>
                     } @else {
                     <div class="empty-container">
-                        <mat-icon>warning</mat-icon>
+                        <img class="icon-tbl" src="assets/icons/warning.png" />
                         <p>No response body fields documented for this service.</p>
                     </div>
                     }
@@ -830,7 +860,7 @@
                     </table>
                     } @else {
                     <div class="empty-container">
-                        <mat-icon>warning</mat-icon>
+                        <img class="icon-tbl" src="assets/icons/warning.png" />
                         <p>No specific status codes or error mappings defined for this service.</p>
                     </div>
                     }
@@ -982,7 +1012,7 @@
                             <th mat-header-cell *matHeaderCellDef>Options</th>
                             <td mat-cell *matCellDef="let v; let i = index" class="text-muted">
                                 <button (click)="openConsumerAppModal(i)">
-                                    <mat-icon class="action-icon">edit</mat-icon>
+                                    <img class="icon-tbl" src="assets/icons/edit.png" />
                                 </button>
                             </td>
                         </ng-container>
@@ -993,7 +1023,7 @@
                     </table>
                     } @else {
                     <div class="empty-container">
-                        <mat-icon>warning</mat-icon>
+                        <img class="icon-tbl" src="assets/icons/warning.png" />
                         <p>No registered consumer applications found for this service.</p>
                     </div>
                     }
@@ -1047,7 +1077,7 @@
                             <th mat-header-cell *matHeaderCellDef>Options</th>
                             <td mat-cell *matCellDef="let v; let i = index" class="text-muted">
                                 <button (click)="openUpstreamAppModal(i)">
-                                    <mat-icon class="action-icon">edit</mat-icon>
+                                    <img class="icon-tbl" src="assets/icons/edit.png" />
                                 </button>
                             </td>
                         </ng-container>
@@ -1058,7 +1088,7 @@
                     </table>
                     } @else {
                     <div class="empty-container">
-                        <mat-icon>warning</mat-icon>
+                        <img class="icon-tbl" src="assets/icons/warning.png" />
                         <p>No upstream/source application dependencies documented.</p>
                     </div>
                     }
@@ -1144,7 +1174,7 @@
                             <td mat-cell *matCellDef="let v">
                                 <button mat-icon-button class="btn-custom-blue" (click)="openUrl(v.docsUrl)"
                                     [disabled]="!v.docs_url">
-                                    <mat-icon>open_in_new</mat-icon>
+                                    <img class="icon-tbl" src="assets/icons/document.png" />
                                 </button>
                             </td>
                         </ng-container>
@@ -1152,12 +1182,12 @@
                         <ng-container matColumnDef="options">
                             <th mat-header-cell *matHeaderCellDef style="width: 120px;">Options</th>
                             <td mat-cell *matCellDef="let v; let i = index">
-                                <button (click)="openDialog(v.apiVersionUuid)"><mat-icon
-                                        class="action-icon">visibility</mat-icon>
+                                <button (click)="openDialog(v.apiVersionUuid)">
+                                    <img class="icon-tbl" src="assets/icons/view.png" />
                                 </button>
                                 @if (auth.isAdmin()) {
                                 <button (click)="editVersion(i)">
-                                    <mat-icon class="action-icon">edit</mat-icon>
+                                    <img class="icon-tbl" src="assets/icons/edit.png" />
                                 </button>
                                 }
 
@@ -1175,7 +1205,7 @@
                 } @else {
                 <div class="table-container">
                     <div class="empty-container">
-                        <mat-icon>warning</mat-icon>
+                        <img class="icon-tbl" src="assets/icons/warning.png" />
                         <p>No Version History Found</p>
                     </div>
                 </div>
@@ -1193,7 +1223,7 @@
                     @if (WSDetails?.swaggerURL) {
                     <a [href]="WSDetails.swaggerURL" target="_blank">
                         {{ WSDetails.swaggerURL }}
-                        <mat-icon>open_in_new</mat-icon>
+                        <img class="icon-tbl" src="assets/icons/document.png" />
                     </a>
                     } @else {
                     <span class="text-muted">No Swagger URL provided.</span>
@@ -1205,7 +1235,7 @@
                     @if (WSDetails?.documentsURL) {
                     <a [href]="WSDetails.documentsURL" target="_blank">
                         {{ WSDetails.documentsURL }}
-                        <mat-icon>open_in_new</mat-icon>
+                        <img class="icon-tbl" src="assets/icons/document.png" />
                     </a>
                     } @else {
                     <span class="text-muted">No documentation URL provided.</span>

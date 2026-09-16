@@ -3,7 +3,7 @@
   <mat-sidenav #drawer mode="side" opened="true" class="sidebar">
     <section>
       <div class="sidebar-header">
-        <mat-icon color="primary" class="header-icon">flare</mat-icon>
+        <img class="icon-tbl" src="assets/icons/lantern.png" />
         <!-- <b class="header-text">LANTERN</b> -->
       </div>
 
@@ -16,25 +16,29 @@
         </a>
         } -->
 
-        <a mat-list-item routerLink="/search" routerLinkActive="active-link">
-          <mat-icon matListItemIcon>manage_search</mat-icon>
-          <div matListItemTitle>Search</div>
+        <a class="sidebar-options" routerLink="/search" routerLinkActive="active-link">
+          <img class="icon-tbl icon-default" src="assets/icons/search.png" alt="" />
+          <img class="icon-tbl icon-active" src="assets/icons/search-alt.png" alt="" />
+          <div>Search</div>
         </a>
 
-        <a mat-list-item routerLink="/application" routerLinkActive="active-link">
-          <mat-icon matListItemIcon>list</mat-icon>
-          <div matListItemTitle>Applications</div>
+        <a class="sidebar-options" routerLink="/application" routerLinkActive="active-link">
+          <img class="icon-tbl icon-default" src="assets/icons/app.png" alt="" />
+          <img class="icon-tbl icon-active" src="assets/icons/app-alt.png" alt="" />
+          <div>Applications</div>
         </a>
 
-        <a mat-list-item routerLink="/web-services" routerLinkActive="active-link">
-          <mat-icon matListItemIcon>lists</mat-icon>
-          <div matListItemTitle>Web Services</div>
+        <a class="sidebar-options" routerLink="/web-services" routerLinkActive="active-link">
+          <img class="icon-tbl icon-default" src="assets/icons/web-service.png" alt="" />
+          <img class="icon-tbl icon-active" src="assets/icons/web-service-alt.png" alt="" />
+          <div>Web Services</div>
         </a>
-        
+
         @if (auth.isAdmin()) {
-        <a mat-list-item routerLink="/masterlist-io" routerLinkActive="active-link">
-          <mat-icon matListItemIcon>upload_file</mat-icon>
-          <div matListItemTitle>Master List I/O</div>
+        <a class="sidebar-options" routerLink="/masterlist-io" routerLinkActive="active-link">
+          <img class="icon-tbl icon-default" src="assets/icons/upload.png" />
+          <img class="icon-tbl icon-active" src="assets/icons/upload-alt.png" />
+          <div>Master List I/O</div>
         </a>
         }
 
@@ -42,9 +46,9 @@
     </section>
 
     <section>
-      <button mat-list-item (click)="logout()">
-        <mat-icon matListItemIcon>logout</mat-icon>
-        <div matListItemTitle>Logout</div>
+      <button (click)="logout()" class="sidebar-options">
+        <img class="icon-tbl" src="assets/icons/logout.png" />
+        <div>Logout</div>
       </button>
     </section>
 
@@ -55,7 +59,7 @@
     <mat-toolbar>
       <mat-toolbar-row>
         <button mat-icon-button (click)="drawer.toggle()" aria-label="Toggle menu">
-          <mat-icon>menu</mat-icon>
+          <img class="icon-tbl" src="assets/icons/sidebar.png" />
         </button>
         <span class="ms-2">API Catalog Monitoring</span>
         <span class="example-spacer"></span>
@@ -64,7 +68,7 @@
 
     <div class="main-content">
       <div class="main-content-container">
-        <app-breadcrumbs/>
+        <app-breadcrumbs />
         <router-outlet></router-outlet>
       </div>
     </div>

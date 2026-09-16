@@ -46,8 +46,8 @@ export class AppDetailsComponent implements OnInit {
   public auth = inject(AuthService);
   private route = inject(ActivatedRoute);
 
-  displayedServiceColumns: string[] = ['name', 'description', 'version', 'status', 'options'];
-  displayedVersionColumns: string[] = ['version', 'date', 'stage', 'env', 'build', 'documents', 'options'];
+  displayedServiceColumns: string[] = ['options', 'name', 'description', 'version', 'status'];
+  displayedVersionColumns: string[] = ['options', 'version', 'date', 'stage', 'env', 'build', 'documents'];
 
   applicationDetails: any = [];
   wsData: any = [];
@@ -230,7 +230,7 @@ export class AppDetailsComponent implements OnInit {
     });
   }
 
-  editVersion(i: number){
+  editVersion(i: number) {
     // console.log(this.versionData.results[i]);
     this.versionModalService.getApplicationVersionDetails(this.versionData.results[i].appVersionUuid).pipe(first()).subscribe({
       next: (res: any) => {
