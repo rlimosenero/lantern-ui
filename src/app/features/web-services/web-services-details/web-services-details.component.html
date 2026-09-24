@@ -1,5 +1,9 @@
 <div class="page-layout">
 
+    @if(missingFields){
+    <app-display-missing-fields [missingFields]="missingFields"></app-display-missing-fields>
+    }
+
     @if (WSDetails) {
     <mat-card class="detail-container">
         <div class="header-section">

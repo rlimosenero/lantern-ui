@@ -54,115 +54,125 @@
   </section>
 
   <!-- Completeness Table -->
-<section class="table-container">
+  <section class="table-container">
 
-  <!-- Legend -->
-  <div class="table-legend">
+    <!-- Legend -->
+    <div class="table-legend">
 
-    <div class="legend-item">
-      <span class="legend-indicator overall"></span>
-      <span>Completeness</span>
+      <div class="legend-item">
+        <span class="legend-indicator overall"></span>
+        <span>Overall Completeness</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-indicator mandatory"></span>
+        <span>Mandatory Fields Completeness</span>
+      </div>
+
     </div>
 
-  </div>
+
+    <div class="table-header">
+
+      <h3>
+        Completeness by
+        {{ activeTab === 'applications' ? 'Application' : 'Web Service' }}
+      </h3>
+
+      <p>
+        Horizontal progress distribution colored by status category threshold.
+      </p>
+
+    </div>
 
 
-  <div class="table-header">
-
-    <h3>
-      Completeness by
-      {{ activeTab === 'applications' ? 'Application' : 'Web Service' }}
-    </h3>
-
-    <p>
-      Horizontal progress distribution colored by status category threshold.
-    </p>
-
-  </div>
-
-
-  <!-- Loader -->
-  @if (isCompletenessLoading) {
+    <!-- Loader -->
+    @if (isCompletenessLoading) {
 
     <div class="table-loader">
       <app-loader></app-loader>
     </div>
 
-  } @else {
+    } @else {
 
     <div class="completeness-list">
 
-      @for (item of activeCompletenessData; track item.applicationId) {
+      @for (item of activeCompletenessData; track item.uuid) {
 
-        <div class="completeness-row">
+      <div class="completeness-row" (click)="goToDetails(item)">
 
-          <!-- Name -->
-          <div class="completeness-name">
-            {{ item.applicationName }}
-          </div>
-
-
-          <!-- Status -->
-          <div
-            class="completeness-status"
-            [class.complete]="item.status === 'COMPLETE'"
-            [class.partial]="item.status === 'PARTIAL'"
-            [class.needs-attention]="item.status === 'NEEDS_ATTENTION'">
-
-            {{ item.status }}
-
-          </div>
+        <!-- Name -->
+        <div class="completeness-name">
+          {{ item.name }}
+        </div>
 
 
-          <!-- Progress -->
-          <div class="progress-container">
+        <!-- Status -->
+        <div class="completeness-status" [class.complete]="item.status === 'COMPLETE'"
+          [class.partial]="item.status === 'PARTIAL'" [class.needs-attention]="item.status === 'NEEDS_ATTENTION'">
 
-            <div class="progress-wrapper">
+          {{ item.status }}
 
-              <div class="progress-bar">
+        </div>
 
-                <div
-                  class="progress-fill overall"
-                  [style.width.%]="item.completenessRate">
-                </div>
 
+        <!-- Progress -->
+        <div class="progress-container">
+
+          <div class="progress-wrapper">
+
+            <div class="progress-bar">
+
+              <div class="progress-fill overall" [style.width.%]="item.completenessRate">
               </div>
-
-              <span class="progress-value">
-                {{ item.completenessRate | number:'1.0-2' }}%
-              </span>
 
             </div>
 
+            <span class="progress-value">
+              {{ item.completenessRate | number:'1.0-2' }}%
+            </span>
+
+          </div>
+          <div class="progress-wrapper">
+
+            <div class="progress-bar">
+
+              <div class="progress-fill mandatory" [style.width.%]="item.mandatoryCompletenessRate">
+              </div>
+
+            </div>
+
+            <span class="progress-value">
+              {{ item.mandatoryCompletenessRate | number:'1.0-2' }}%
+            </span>
+
           </div>
 
         </div>
 
+      </div>
+
       } @empty {
 
-        <div class="no-data">
-          No completeness data available.
-        </div>
+      <div class="no-data">
+        No completeness data available.
+      </div>
 
       }
 
     </div>
 
-  }
+    }
 
 
-  <!-- Pagination -->
-  @if (!isCompletenessLoading && list.totalElements > 0) {
+    <!-- Pagination -->
+    @if (!isCompletenessLoading && list.totalElements > 0) {
 
-    <app-pagination
-      [totalElements]="list.totalElements"
-      [pageSize]="list.pageSize"
-      [currentPage]="list.currentPage"
+    <app-pagination [totalElements]="list.totalElements" [pageSize]="list.pageSize" [currentPage]="list.currentPage"
       (pageChange)="onHandlePage($event)">
     </app-pagination>
 
-  }
+    }
 
-</section>
+  </section>
 
 </div>

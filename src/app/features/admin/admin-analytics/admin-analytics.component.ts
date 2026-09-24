@@ -1,17 +1,20 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { CommonModule, KeyValuePipe } from '@angular/common';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { firstValueFrom } from 'rxjs';
 
 import { LoaderComponent } from '../../../shared/components/loader/loader.component';
 import { AdminAnalyticsService } from './admin-analytics.service';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
 
 interface CompletenessData {
-  applicationId: string;
-  applicationName: string;
+  uuid: string;
+  name: string;
   completenessRate: number;
+  mandatoryCompletenessRate: number;
   status: string;
   completedFields: number;
   requiredFields: number;
@@ -48,7 +51,8 @@ export class AdminAnalyticsComponent implements OnInit {
   activeCompletenessData: CompletenessData[] = [];
 
   constructor(
-    private adminAnalyticsService: AdminAnalyticsService
+    private adminAnalyticsService: AdminAnalyticsService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -76,73 +80,105 @@ export class AdminAnalyticsComponent implements OnInit {
     }
   }
 
-  loadApplicationCompletenessData(): void {
-    this.loadApplicationSummary();
-    this.loadApplicationList(0);
-
-  }
-
-  loadApplicationList(page: number) {
+  async loadApplicationCompletenessData(): Promise<void> {
     this.isCompletenessLoading = true;
 
-    this.adminAnalyticsService.getApplicationCompleteness(page, 10).subscribe({
-      next: (res: any) => {
-        console.log('applicationlist');
-        console.log(res);
+    try {
+      await Promise.all([
+        this.loadApplicationSummary(),
+        this.loadApplicationList(0)
+      ]);
+    } finally {
+      this.isCompletenessLoading = false;
+    }
+  }
 
-        this.list = res.data;
+  async loadApplicationList(page: number): Promise<void> {
+    try {
+      const res: any = await firstValueFrom(
+        this.adminAnalyticsService.getApplicationCompleteness(page, 10)
+      );
 
-        this.activeCompletenessData = res.data.results;
+      this.list = res.data;
+      this.activeCompletenessData = res.data.results;
+    } catch (err) {
+      console.error('Error fetching application completeness:', err);
+    }
+  }
 
-        this.isCompletenessLoading = false;
-      },
-      error: (err) => {
-        console.error('Error fetching application completeness:', err);
+  async loadApplicationSummary(): Promise<void> {
+    try {
+      const res: any = await firstValueFrom(
+        this.adminAnalyticsService.getApplicationCompletenessSummary()
+      );
 
-        this.isCompletenessLoading = false;
-      }
+      this.summaryData = res.data;
+    } catch (err) {
+      console.error('Error fetching completeness summary:', err);
+    }
+  }
+
+  async loadWebServicesCompletenessData(): Promise<void> {
+    this.isCompletenessLoading = true;
+
+    try {
+      await Promise.all([
+        this.loadWebServiceSummary(),
+        this.loadWebServiceList(0)
+      ]);
+
+    } finally {
+      this.isCompletenessLoading = false;
+    }
+  }
+
+  async loadWebServiceList(page: number): Promise<void> {
+    try {
+      const res: any = await firstValueFrom(
+        this.adminAnalyticsService.getWebServicesCompleteness(page, 10)
+      );
+
+      this.list = res.data;
+      this.activeCompletenessData = res.data.results;
+    } catch (err) {
+      console.error('Error fetching application completeness:', err);
+    }
+  }
+
+  async loadWebServiceSummary(): Promise<void> {
+    try {
+      const res: any = await firstValueFrom(
+        this.adminAnalyticsService.getWebServicesCompletenessSummary()
+      );
+
+      this.summaryData = res.data;
+    } catch (err) {
+      console.error('Error fetching completeness summary:', err);
+    }
+  }
+
+  goToDetails(item: CompletenessData): void {
+    const basePath = this.activeTab === 'applications'
+      ? '/application/details'
+      : '/web-services/details';
+
+    this.router.navigate([basePath, item.uuid], {
+      state: { missingFields: item.missingFields }
     });
   }
 
-  loadApplicationSummary() {
+  async onHandlePage(newPage: number): Promise<void> {
+
     this.isCompletenessLoading = true;
 
-    this.adminAnalyticsService.getCompletenessSummary().subscribe({
-      next: (res: any) => {
-        console.log('summary');
-        console.log(res);
-
-        this.summaryData = res.data;
-      },
-      error: (err) => {
-        console.error('Error fetching completeness summary:', err);
+    try {
+      if (this.activeTab === 'applications') {
+        await this.loadApplicationList(newPage);
+      } else {
+        await this.loadWebServiceList(newPage);
       }
-    });
-  }
-
-  loadWebServicesCompletenessData(): void {
-    this.loadWebServiceSummary();
-    this.loadWebServiceList(0);
-    //API call for WS
-    this.activeCompletenessData = this.webServices;
-  }
-
-  loadWebServiceSummary() {
-    console.log('test');
-  }
-
-  loadWebServiceList(page: number) {
-    console.log(page);
-  }
-
-
-  onHandlePage(newPage: number) {
-    console.log(newPage)
-    if (this.activeTab == 'applications') {
-      this.loadApplicationList(newPage);
-
-    } else {
-      this.loadWebServiceList(newPage);
+    } finally {
+      this.isCompletenessLoading = false;
     }
   }
 

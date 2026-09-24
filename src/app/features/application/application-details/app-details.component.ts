@@ -21,6 +21,7 @@ import { AuthService } from '../../../core/auth/auth.service';
 import { VersionFormsModalComponent } from '../../../shared/components/version-forms-modal/version-forms-modal.component';
 import { VersionFormsModalService } from '../../../shared/components/version-forms-modal/version-forms-modal.service';
 import { VersionModalService } from '../../../shared/components/version-modal/version-modal.service';
+import { DisplayMissingFieldsComponent } from '../../../shared/components/display-missing-fields/display-missing-fields.component';
 
 @Component({
   selector: 'app-app-details',
@@ -37,7 +38,8 @@ import { VersionModalService } from '../../../shared/components/version-modal/ve
     PaginationComponent,
     SplitPipe,
     LoaderComponent,
-    ButtonComponent
+    ButtonComponent,
+    DisplayMissingFieldsComponent
   ],
   templateUrl: './app-details.component.html',
   styleUrls: ['./app-details.component.scss']
@@ -57,6 +59,8 @@ export class AppDetailsComponent implements OnInit {
   isVersionListLoading = true;
   isWebServiceListLoading = true;
 
+  missingFields: any = [];
+
   constructor(
     private applicationApiService: ApplicationApiService,
     private router: Router,
@@ -69,13 +73,25 @@ export class AppDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.breadcrumbService.clearAllOverrides();
 
+    this.missingFields = this.loadMissingFields();
+
     this.fetchAppDetails();
     this.getWebServicesList();
     this.fetchAppVersions();
+
   }
 
   mockList() {
     return new Array(5).fill({});
+  }
+
+  loadMissingFields() {
+    if (history.state?.missingFields) {
+
+      return history.state?.missingFields
+
+    }
+    return null;
   }
 
   fetchAppDetails() {
@@ -92,7 +108,7 @@ export class AppDetailsComponent implements OnInit {
 
         this.breadcrumbService.setOverride(this.router.url, data.data.appName);
 
-        setTimeout(() => this.scrollToKeyword(), 300);
+        // setTimeout(() => this.scrollToKeyword(), 300);
       },
       error: (err: any) => {
         console.log('Error: ' + err);
@@ -100,35 +116,34 @@ export class AppDetailsComponent implements OnInit {
     })
   }
 
-  scrollToKeyword() {
-    const keyword = this.route.snapshot.queryParamMap.get('searchKeyword');
-    if (!keyword || keyword.trim() === '') return;
+  // scrollToKeyword() {
+  //   const keyword = this.route.snapshot.queryParamMap.get('searchKeyword');
+  //   if (!keyword || keyword.trim() === '') return;
 
-    const elements = document.querySelectorAll('h1, h2, h3, h4, span, td, b, p, div, a');
+  //   const elements = document.querySelectorAll('h1, h2, h3, h4, span, td, b, p, div, a');
 
-    const target = Array.from(elements).find(el =>
-      el.childNodes.length > 0 &&
-      Array.from(el.childNodes).some(node => node.nodeType === Node.TEXT_NODE) &&
-      el.textContent?.toLowerCase().includes(keyword.toLowerCase())
-    ) as HTMLElement;
+  //   const target = Array.from(elements).find(el =>
+  //     el.childNodes.length > 0 &&
+  //     Array.from(el.childNodes).some(node => node.nodeType === Node.TEXT_NODE) &&
+  //     el.textContent?.toLowerCase().includes(keyword.toLowerCase())
+  //   ) as HTMLElement;
 
-    if (target) {
-      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  //   if (target) {
+  //     target.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
 
-      const escapedKeyword = keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      const regex = new RegExp(`(${escapedKeyword})`, 'gi');
+  //     const escapedKeyword = keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  //     const regex = new RegExp(`(${escapedKeyword})`, 'gi');
 
-      const originalHTML = target.innerHTML;
+  //     const originalHTML = target.innerHTML;
 
-      // Wrap the matching text in a span with red color
-      target.innerHTML = originalHTML.replace(regex, `<span class="search-highlight" style="color: #ba1a1a;">$1</span>`);
+  //     target.innerHTML = originalHTML.replace(regex, `<span class="search-highlight" style="color: #ba1a1a;">$1</span>`);
 
-      setTimeout(() => {
-        target.innerHTML = originalHTML;
-      }, 3000);
-    }
-  }
+  //     setTimeout(() => {
+  //       target.innerHTML = originalHTML;
+  //     }, 3000);
+  //   }
+  // }
 
   // get id from url
   getIdFromUrl(): any {
@@ -216,6 +231,7 @@ export class AppDetailsComponent implements OnInit {
   }
 
   openVersionModal(versionDetails?: any) {
+    
     this.versionFormsModalService.open({
       appInfo: {
         appName: this.applicationDetails?.appName,
@@ -228,17 +244,20 @@ export class AppDetailsComponent implements OnInit {
         this.fetchAppVersions();
       }
     });
+
   }
 
   editVersion(i: number) {
-    // console.log(this.versionData.results[i]);
-    this.versionModalService.getApplicationVersionDetails(this.versionData.results[i].appVersionUuid).pipe(first()).subscribe({
-      next: (res: any) => {
-        // console.log(res.data);
-        this.openVersionModal(res.data);
-      },
-      error: (err) => console.error(err)
-    })
+
+    this.versionModalService.getApplicationVersionDetails(this.versionData.results[i].appVersionUuid)
+      .pipe(first())
+      .subscribe({
+        next: (res: any) => {
+
+          this.openVersionModal(res.data);
+        },
+        error: (err) => console.error(err)
+      })
     // 
   }
 

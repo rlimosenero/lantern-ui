@@ -154,8 +154,6 @@
   display: flex;
   align-items: center;
   gap: 18px;
-
-  margin-top: 18px;
 }
 
 .legend-item {
@@ -222,7 +220,7 @@
   display: grid;
 
   grid-template-columns:
-    minmax(180px, 1.4fr) 90px minmax(300px, 1fr);
+    minmax(0px, 1.4fr) 90px minmax(0px, 1fr);
 
   align-items: center;
   gap: 16px;
@@ -230,6 +228,11 @@
   border: 1px solid lightgray;
   padding: 0.5rem 1rem;
   border-radius: 0.625rem;
+}
+
+.completeness-row:hover {
+  cursor:pointer;
+  border: 1px solid lightblue;
 }
 
 .completeness-name {
@@ -355,17 +358,6 @@
 /* =========================
    Responsive
    ========================= */
-
-@media (max-width: 1000px) {
-
-  .completeness-row {
-    grid-template-columns:
-      minmax(160px, 1fr) 90px minmax(160px, 1fr) minmax(160px, 1fr);
-
-    gap: 10px;
-  }
-
-}
 
 @media (max-width: 768px) {
 

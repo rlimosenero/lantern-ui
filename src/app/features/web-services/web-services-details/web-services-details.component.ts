@@ -29,6 +29,7 @@ import { ConsumerAppFormsModalService } from '../../../shared/components/consume
 import { UpstreamAppFormsModalService } from '../../../shared/components/upstream-app-forms-modal/upstream-app-forms-modal.service';
 import { CommaToListPipe } from '../../../shared/pipes/comma-to-list/comma-to-list.pipe';
 import { ReplaceUnderscorePipe } from '../../../shared/pipes/replace-underscore/replace-underscore.pipe';
+import { DisplayMissingFieldsComponent } from '../../../shared/components/display-missing-fields/display-missing-fields.component';
 
 @Component({
   selector: 'app-web-services-details',
@@ -45,7 +46,8 @@ import { ReplaceUnderscorePipe } from '../../../shared/pipes/replace-underscore/
     LoaderComponent,
     ButtonComponent,
     CommaToListPipe,
-    ReplaceUnderscorePipe
+    ReplaceUnderscorePipe,
+    DisplayMissingFieldsComponent
   ],
   templateUrl: './web-services-details.component.html',
   styleUrl: './web-services-details.component.scss',
@@ -59,6 +61,8 @@ export class WebServicesDetailsComponent implements OnInit {
   WSDetails: any = undefined;
 
   isLoading = true;
+
+  missingFields: any = [];
 
   genericColumn: string[] = ['paramName', 'typeAndFormat', 'isRequired', 'value', 'desc'];
   reqBodyFields: string[] = ['name', 'typeAndFormat', 'desc', 'isRequired', 'sampleValue', 'rules', 'logic', 'defaultValue'];
@@ -159,10 +163,24 @@ export class WebServicesDetailsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    
     this.breadcrumbService.clearAllOverrides();
+
+    this.missingFields = this.loadMissingFields();
 
     this.fetchWebServiceDetails();
     this.fetchVersions();
+
+  }
+
+    loadMissingFields() {
+    if (history.state?.missingFields) {
+
+      console.log('Missing fields from analytics:', history.state?.missingFields);
+      return history.state?.missingFields
+
+    }
+    return null;
   }
 
   fetchWebServiceDetails() {
