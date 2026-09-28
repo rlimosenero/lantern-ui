@@ -163,7 +163,7 @@ export class WebServicesDetailsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    
+
     this.breadcrumbService.clearAllOverrides();
 
     this.missingFields = this.loadMissingFields();
@@ -173,7 +173,7 @@ export class WebServicesDetailsComponent implements OnInit {
 
   }
 
-    loadMissingFields() {
+  loadMissingFields() {
     if (history.state?.missingFields) {
 
       console.log('Missing fields from analytics:', history.state?.missingFields);
