@@ -367,12 +367,14 @@ td {
   }
 
   a {
-    color: #1a73e8;
-    text-decoration: none;
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    font-size: 0.95rem;
+
+    max-width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 
     &:hover {
       text-decoration: underline;
@@ -529,6 +531,59 @@ span.custom-chip {
   .msg-warn {
     font-size: 14px;
   }
+}
+
+.local-files-section {
+  margin-bottom: 1.5rem;
+
+  h3 {
+    margin-bottom: 0.75rem;
+  }
+}
+
+.local-file-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.local-file-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  padding: 4px 10px;
+  border: 1px solid #dcdcdc;
+  border-radius: 6px;
+
+  background: #fff;
+  color: #374151;
+  cursor: pointer;
+
+  font-family: inherit;
+  font-size: 13px;
+
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #f5f8ff;
+    border-color: #155dfc;
+    color: #155dfc;
+  }
+}
+
+.file-icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.file-name {
+  max-width: 260px;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 @container (min-width: 1280px) {

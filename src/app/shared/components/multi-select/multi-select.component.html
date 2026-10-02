@@ -5,7 +5,7 @@
     <ng-container *ngIf="selected.length; else placeholder">
       <span class="tag" *ngFor="let item of selected">
         {{ item.value }}
-        <mat-icon (click)="remove(item); $event.stopPropagation()">close</mat-icon>
+        <img class="icon-tbl" (click)="remove(item); $event.stopPropagation()" src="assets/icons/close.png" />
       </span>
     </ng-container>
 

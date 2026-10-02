@@ -8,7 +8,6 @@ import { AdminService } from '../services/admin.service';
   selector: 'app-masterlist-excel',
   imports: [
     MatCard,
-    MatIcon,
     ButtonComponent
   ],
   templateUrl: './masterlist-excel.component.html',

@@ -1,8 +1,8 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { APP_CONFIG } from '../../../core/models/app.config.model';
-import { webServicesData, webServicesListTable } from '../../../core/models/static';
-import { SearchResponse } from '../../../core/models/interface';
+import { LocalFileContentResponse, LocalFileResponse, SearchResponse } from '../../../core/models/interface';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -49,6 +49,26 @@ export class WebServicesApiService {
   getValidationProperties() {
     const url = `${this.config.baseUrl}/validation/record/application-api-record/form/applicationApi`;
     return this.http.get(url);
+  }
+
+  getLocalFileLocation(fileLoc: string) {
+    const params = new HttpParams().set('sourceFolderUrl', fileLoc);
+
+    return this.http.get(
+      `${this.config.baseUrl}/local-files`,
+      { params }
+    );
+  }
+
+  getLocalFileContent(appApiUuid: string,file: LocalFileResponse){
+    const params = new HttpParams()
+      .set('path', file.relativePath)
+      .set('appApiUuid', appApiUuid);
+
+    return this.http.get<LocalFileContentResponse>(
+      `${this.config.baseUrl}/local-files/content`,
+      { params }
+    );
   }
 
 }

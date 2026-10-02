@@ -1,13 +1,14 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
-import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import {  FormBuilder,  ReactiveFormsModule,  Validators} from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../../../core/auth/auth.service';
 import { MatIconModule } from '@angular/material/icon';
-import { ButtonComponent } from '../../../shared/components/button/button.component';
+import { AuthService } from '../../../core/auth/auth.service';
+import { InactivityService } from '../../../core/auth/inactivity.service';
+import {  ButtonComponent} from '../../../shared/components/button/button.component';
 
 @Component({
   selector: 'app-login',
+  standalone: true,
   imports: [
     ReactiveFormsModule,
     MatIconModule,
@@ -16,21 +17,73 @@ import { ButtonComponent } from '../../../shared/components/button/button.compon
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
+
 export class LoginComponent {
-  private auth = inject(AuthService);
-  private fb = inject(FormBuilder);
 
-  loginForm = this.fb.group({
-    username: ['', Validators.required],
-    password: ['', Validators.required]
-  });
+  private readonly authService =    inject(AuthService);
+  private readonly formBuilder =    inject(FormBuilder);
+  private readonly router =    inject(Router);
+  private readonly inactivityService =    inject(InactivityService);
 
-  onSubmit() {
-    if (this.loginForm.valid) {
-      this.auth.authenticate(this.loginForm.value).subscribe({
-        next: () => console.log('Successfully logged in'),
-        error: (err) => console.log('Login failed. Please check your credentials.')
-      });
+  readonly loginForm =
+    this.formBuilder.nonNullable.group({
+      username: [
+        '',
+        Validators.required
+      ],
+      password: [
+        '',
+        Validators.required
+      ]
+    });
+
+  loginInProgress = false;
+  loginError: string | null = null;
+
+  onSubmit(): void {
+    if (this.loginForm.invalid) {
+      this.loginForm.markAllAsTouched();
+      return;
     }
+
+    const credentials =
+      this.loginForm.getRawValue();
+
+    this.loginInProgress = true;
+    this.loginError = null;
+
+    this.authService
+      .authenticate(credentials)
+      .subscribe({
+        next: response => {
+          this.loginInProgress = false;
+
+          if (response.flag !== 'S') {
+            this.loginError =
+              response.message
+              ?? 'Login failed.';
+
+            return;
+          }
+
+          this.inactivityService.start();
+
+          void this.router.navigate([
+            '/search'
+          ]);
+        },
+        error: error => {
+          this.loginInProgress = false;
+
+          console.error(
+            'Login failed',
+            error
+          );
+
+          this.loginError =
+            error?.error?.message
+            ?? 'Invalid username or password.';
+        }
+      });
   }
 }

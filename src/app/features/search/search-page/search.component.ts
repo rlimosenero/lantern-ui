@@ -96,8 +96,8 @@ export class SearchComponent implements OnInit {
   isSearched = false;
 
   searchQuery: string = '';
-  displayedColumns: string[] = ['type', 'name', 'match', 'view'];
-  displayedColumnsGeneric: string[] = ['type', 'name', 'view'];
+  displayedColumns: string[] = ['view', 'type', 'layer', 'name', 'match'];
+  displayedColumnsGeneric: string[] = ['view', 'type', 'name'];
 
   isFilterExpanded = false;
   activeFilters: { [key: string]: string[] } = {};

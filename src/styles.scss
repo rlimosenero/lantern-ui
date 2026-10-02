@@ -21,6 +21,23 @@ html {
   box-sizing: border-box;
 }
 
+button {
+  cursor: pointer;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+}
+
+.icon-tbl {
+  transition: transform 0.2s ease;
+}
+
+.icon-tbl.rotated {
+  transform: rotate(180deg);
+}
+
 *,
 *::before,
 *::after {
@@ -48,6 +65,18 @@ html {
 .status-offline {
   --mdc-chip-elevated-container-color: #ffebee; // Light Red
   --mdc-chip-label-text-color: #d32f2f; // Dark Red
+}
+
+.icon-tbl {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+
+.icon-chip {
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
 }
 
 .active {

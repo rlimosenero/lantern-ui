@@ -28,6 +28,9 @@ import { StatusCodesModalService } from '../../../shared/components/status-codes
 import { ConsumerAppFormsModalService } from '../../../shared/components/consumer-app-forms-modal/consumer-app-forms-modal.service';
 import { UpstreamAppFormsModalService } from '../../../shared/components/upstream-app-forms-modal/upstream-app-forms-modal.service';
 import { CommaToListPipe } from '../../../shared/pipes/comma-to-list/comma-to-list.pipe';
+import { ReplaceUnderscorePipe } from '../../../shared/pipes/replace-underscore/replace-underscore.pipe';
+import { DisplayMissingFieldsComponent } from '../../../shared/components/display-missing-fields/display-missing-fields.component';
+import { LocalFileContentResponse, LocalFileResponse } from '../../../core/models/interface';
 
 @Component({
   selector: 'app-web-services-details',
@@ -43,7 +46,9 @@ import { CommaToListPipe } from '../../../shared/pipes/comma-to-list/comma-to-li
     PaginationComponent,
     LoaderComponent,
     ButtonComponent,
-    CommaToListPipe
+    CommaToListPipe,
+    ReplaceUnderscorePipe,
+    DisplayMissingFieldsComponent
   ],
   templateUrl: './web-services-details.component.html',
   styleUrl: './web-services-details.component.scss',
@@ -58,13 +63,19 @@ export class WebServicesDetailsComponent implements OnInit {
 
   isLoading = true;
 
+  missingFields: any = [];
+
   genericColumn: string[] = ['paramName', 'typeAndFormat', 'isRequired', 'value', 'desc'];
   reqBodyFields: string[] = ['name', 'typeAndFormat', 'desc', 'isRequired', 'sampleValue', 'rules', 'logic', 'defaultValue'];
   resBodyFields: string[] = ['name', 'typeAndFormat', 'desc', 'isRequired', 'sampleValue', 'rules', 'logic', 'defaultValue', 'sourceOrDomainApplication', 'sourceOrDomainFieldName'];
   statusCodesFields: string[] = ['HTTPCode', 'businessCode', 'message', 'type', 'suggestedAction'];
-  displayedVersionColumns: string[] = ['version', 'date', 'stage', 'env', 'build', 'documents', 'options'];
+  displayedVersionColumns: string[] = ['options', 'version', 'date', 'stage', 'env', 'build', 'documents'];
 
   versionData: any = [];
+
+  // displaying of localfiles
+  localFiles: LocalFileResponse[] = [];
+
   public baseUrl = environment.baseUrl;
 
   configMap: any = {
@@ -157,10 +168,26 @@ export class WebServicesDetailsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+
     this.breadcrumbService.clearAllOverrides();
+
+    this.missingFields = this.loadMissingFields();
 
     this.fetchWebServiceDetails();
     this.fetchVersions();
+
+    // this.getFileLocation();
+
+  }
+
+  loadMissingFields() {
+    if (history.state?.missingFields) {
+
+      console.log('Missing fields from analytics:', history.state?.missingFields);
+      return history.state?.missingFields
+
+    }
+    return null;
   }
 
   fetchWebServiceDetails() {
@@ -170,6 +197,9 @@ export class WebServicesDetailsComponent implements OnInit {
     this.webServiceApiService.getWebServicesDetails(WSId).subscribe({
       next: (res: any) => {
         this.WSDetails = res.data;
+
+        this.getFileLocation();
+
         const serviceName = res.data.serviceConfig?.[0]?.name || 'Service Details';
 
         if (keyword) {
@@ -386,7 +416,6 @@ export class WebServicesDetailsComponent implements OnInit {
   editVersion(i: number) {
     this.versionModalService.getApiVersionDetails(this.versionData.results[i].apiVersionUuid).pipe(first()).subscribe({
       next: (res: any) => {
-        // console.log(res.data);
         this.openVersionModal(res.data);
       },
       error: (err) => console.error(err)
@@ -452,7 +481,7 @@ export class WebServicesDetailsComponent implements OnInit {
 
   setConsumerTableColumns() {
     if (this.auth.isAdmin()) {
-      return ['appName', 'appOwner', 'dateOnboarded', 'status', 'trigger', 'appType', 'techOwner', 'tokenExpiryDate', 'networkMode', 'options'];
+      return ['options', 'appName', 'appOwner', 'dateOnboarded', 'status', 'trigger', 'appType', 'techOwner', 'tokenExpiryDate', 'networkMode'];
     } else {
       return ['appName', 'appOwner', 'dateOnboarded', 'status', 'trigger', 'appType', 'techOwner', 'tokenExpiryDate', 'networkMode'];
     }
@@ -460,7 +489,7 @@ export class WebServicesDetailsComponent implements OnInit {
 
   setUpstreamTableColumns() {
     if (this.auth.isAdmin()) {
-      return ['appName', 'appOwner', 'tokenExpiryDate', 'techOwner', 'options']
+      return ['options', 'appName', 'appOwner', 'tokenExpiryDate', 'techOwner']
     } else {
       return ['appName', 'appOwner', 'tokenExpiryDate', 'techOwner']
     }
@@ -470,6 +499,65 @@ export class WebServicesDetailsComponent implements OnInit {
     if (!type) return 'N/A';
 
     return this.sensitivityTypeMap[type] ?? 'N/A';
+  }
+
+  getFileLocation() {
+    this.webServiceApiService.getLocalFileLocation(this.WSDetails.documentsURL).subscribe({
+      next: (response: any) => {
+        this.localFiles = response.files;
+      },
+      error: error => {
+        console.error(
+          'Unable to retrieve local files',
+          error
+        );
+
+        this.localFiles = [];
+      }
+    });
+  }
+
+  openFilePreview(file: LocalFileResponse): void {
+    this.webServiceApiService
+      .getLocalFileContent(this.WSDetails.uuid, file)
+      .subscribe({
+        next: response => {
+
+          const newWindow = window.open('', '_blank');
+
+          if (!newWindow) {
+            return;
+          }
+
+          newWindow.document.write(`
+          <html>
+            <head>
+              <title>${response.fileName}</title>
+              <style>
+                body {
+                  font-family: Consolas, monospace;
+                  padding: 20px;
+                  white-space: pre-wrap;
+                  word-break: break-word;
+                }
+              </style>
+            </head>
+            <body>
+              ${this.escapeHtml(response.content)}
+            </body>
+          </html>
+        `);
+
+          newWindow.document.close();
+        }
+      });
+  }
+
+  private escapeHtml(value: string): string {
+    return value
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
   }
 
 }

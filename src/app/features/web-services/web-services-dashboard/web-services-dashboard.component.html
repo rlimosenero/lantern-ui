@@ -2,18 +2,23 @@
   <div class="search-container">
     <div class="search-row">
       <div class="search-box">
-        <mat-icon>search</mat-icon>
+        <img class="icon-tbl" src="assets/icons/searchbar.png" />
         <input [(ngModel)]="searchQuery" type="text" (keydown.enter)="applyFilters()"
           placeholder="Search web services...">
 
         @if (searchQuery) {
-          <mat-icon class="clear-btn" (click)="searchQuery = '';">close</mat-icon>
+        <img class="icon-tbl" (click)="searchQuery = '';" src="assets/icons/close.png" />
         }
       </div>
 
       <button mat-icon-button (click)="toggleFilters()" [class.active-filter]="isFilterExpanded"
         class="filter-toggle-btn">
-        <mat-icon>filter_list</mat-icon>
+        @if(!isFilterExpanded){
+        <img class="icon-tbl" src="assets/icons/filter.png" />
+        }
+        @if(isFilterExpanded){
+        <img class="icon-tbl" src="assets/icons/filter-alt.png" />
+        }
       </button>
 
       <app-button [name]="'Search'" (click)="applyFilters()" />
@@ -25,7 +30,7 @@
       @for (tag of allSelectedTags; track tag.value) {
       <span class="tag" [ngClass]="tag.value.toLowerCase().replace('_', '-')">
         {{ tag.value }}
-        <mat-icon (click)="toggleFilter(tag.key, tag.value)">close</mat-icon>
+        <img class="icon-chip" (click)="toggleFilter(tag.key, tag.value)" src="assets/icons/close.png" />
       </span>
       }
       <button class="clear-all" (click)="clearAll()">Clear all</button>
@@ -38,13 +43,13 @@
         <div class="custom-dropdown">
           <div class="dropdown-trigger" (click)="toggleDropdown(filter)">
             <span>{{ filter.label }}</span>
-            <mat-icon [class.rotated]="filter.isOpen">expand_more</mat-icon>
+            <img class="icon-tbl" [class.rotated]="filter.isOpen" src="assets/icons/chevron-down.png" />
           </div>
 
           @if (filter.isOpen) {
           <div class="options-container">
             <div class="filter-search-wrapper" (click)="$event.stopPropagation()">
-              <mat-icon>search</mat-icon>
+              <img class="icon-tbl" src="assets/icons/searchbar.png" />
               <input type="text" [(ngModel)]="filter.searchTerm" placeholder="Search {{ filter.label }}..."
                 class="filter-inner-search">
             </div>
@@ -53,7 +58,7 @@
               <div class="option-item" [class.selected]="isSelected(filter.key, option)"
                 (click)="toggleFilter(filter.key, option)">
                 <div class="checkbox">
-                  @if (isSelected(filter.key, option)) { <mat-icon>done</mat-icon> }
+                  @if (isSelected(filter.key, option)) { <img class="icon-tbl" src="assets/icons/check.png" /> }
                 </div>
                 {{ option | replaceUnderscore | titlecase }}
               </div>
@@ -84,7 +89,7 @@
     @if (isError) {
     <div class="table-container">
       <div class="empty-container">
-        <mat-icon>warning</mat-icon>
+        <img class="icon-tbl" src="assets/icons/warning.png" />
         <p>Please try again later or check your internet connection.</p>
       </div>
     </div>
@@ -108,7 +113,7 @@
 
     <div class="table-container">
       <div class="empty-container">
-        <mat-icon>warning</mat-icon>
+        <img class="icon-tbl" src="assets/icons/warning.png" />
         <h3>No Web Services Found</h3>
       </div>
     </div>

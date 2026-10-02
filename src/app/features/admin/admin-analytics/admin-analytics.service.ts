@@ -14,14 +14,26 @@ export class AdminAnalyticsService {
   private readonly baseUrl =
     `${this.config.baseUrl}/api/v1/analytics/completeness`;
 
-  getCompletenessSummary() {
-    const url = `${this.baseUrl}/summary`;
+  getApplicationCompletenessSummary() {
+    const url = `${this.baseUrl}/applications/summary`;
 
     return this.http.get(url);
   }
 
   getApplicationCompleteness(page: number = 0, size: number = 10) {
     const url = `${this.baseUrl}/applications?page=${page}&size=${size}`;
+
+    return this.http.get(url);
+  }
+
+  getWebServicesCompletenessSummary() {
+    const url = `${this.baseUrl}/web-services/summary`;
+
+    return this.http.get(url);
+  }
+
+  getWebServicesCompleteness(page: number = 0, size: number = 10) {
+    const url = `${this.baseUrl}/web-services?page=${page}&size=${size}`;
 
     return this.http.get(url);
   }

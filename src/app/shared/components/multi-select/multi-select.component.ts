@@ -8,8 +8,7 @@ import { MatIcon } from '@angular/material/icon';
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule,
-    MatIcon
+    FormsModule
   ],
   templateUrl: './multi-select.component.html',
   styleUrl: './multi-select.component.scss',
