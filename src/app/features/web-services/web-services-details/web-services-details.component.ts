@@ -30,7 +30,7 @@ import { UpstreamAppFormsModalService } from '../../../shared/components/upstrea
 import { CommaToListPipe } from '../../../shared/pipes/comma-to-list/comma-to-list.pipe';
 import { ReplaceUnderscorePipe } from '../../../shared/pipes/replace-underscore/replace-underscore.pipe';
 import { DisplayMissingFieldsComponent } from '../../../shared/components/display-missing-fields/display-missing-fields.component';
-import { LocalFileContentResponse, LocalFileResponse, LocalFolderResponse } from '../../../core/models/interface';
+import { LocalFileContentResponse, LocalFileResponse } from '../../../core/models/interface';
 
 @Component({
   selector: 'app-web-services-details',
@@ -75,11 +75,6 @@ export class WebServicesDetailsComponent implements OnInit {
 
   // displaying of localfiles
   localFiles: LocalFileResponse[] = [];
-
-  selectedFile: LocalFileContentResponse | null = null;
-  fileModalVisible = false;
-  fileContentLoading = false;
-  fileContentError: string | null = null;
 
   public baseUrl = environment.baseUrl;
 
@@ -523,38 +518,46 @@ export class WebServicesDetailsComponent implements OnInit {
   }
 
   openFilePreview(file: LocalFileResponse): void {
-    this.fileModalVisible = true;
-    this.fileContentLoading = true;
-    this.fileContentError = null;
-    this.selectedFile = null;
-
-    this.webServiceApiService.getLocalFileContent(this.WSDetails?.uuid,file)
+    this.webServiceApiService
+      .getLocalFileContent(this.WSDetails.uuid, file)
       .subscribe({
         next: response => {
-          this.selectedFile = response;
-          this.fileContentLoading = false;
-        },
-        error: error => {
-          console.error(
-            `Unable to read ${file.fileName}`,
-            error
-          );
 
-          this.fileContentLoading = false;
+          const newWindow = window.open('', '_blank');
 
-          this.fileContentError =
-            error?.error?.message
-            ?? 'Unable to read the selected file.';
+          if (!newWindow) {
+            return;
+          }
+
+          newWindow.document.write(`
+          <html>
+            <head>
+              <title>${response.fileName}</title>
+              <style>
+                body {
+                  font-family: Consolas, monospace;
+                  padding: 20px;
+                  white-space: pre-wrap;
+                  word-break: break-word;
+                }
+              </style>
+            </head>
+            <body>
+              ${this.escapeHtml(response.content)}
+            </body>
+          </html>
+        `);
+
+          newWindow.document.close();
         }
       });
   }
 
-  closeFilePreview(): void {
-    this.fileModalVisible = false;
-    this.fileContentLoading = false;
-    this.fileContentError = null;
-    this.selectedFile = null;
+  private escapeHtml(value: string): string {
+    return value
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
   }
-
 
 }

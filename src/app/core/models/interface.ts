@@ -135,3 +135,9 @@ export interface ServiceResponse<T> {
   message: string | null;
   tranRefNo: string | null;
 }
+
+export interface FilePreviewData {
+  fileName: string;
+  relativePath: string;
+  content: string;
+}

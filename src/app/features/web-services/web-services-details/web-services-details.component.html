@@ -63,67 +63,6 @@
 
         <div class="content-body">
 
-            <ul class="local-file-list">
-                @for (
-                file of localFiles;
-                track file.relativePath
-                ) {
-                <li>
-                    <button type="button" class="file-link" [title]="file.relativePath" (click)="openFilePreview(file)">
-                        {{ file.fileName }}
-                    </button>
-                </li>
-                }
-            </ul>
-
-            @if (fileModalVisible) {
-            <div class="modal-backdrop" (click)="closeFilePreview()">
-
-                <section class="file-modal" role="dialog" aria-modal="true" aria-labelledby="file-preview-title"
-                    (click)="$event.stopPropagation()">
-
-                    <header class="file-modal-header">
-                        <div>
-                            <h2 id="file-preview-title">
-                                {{ selectedFile?.fileName || 'File preview' }}
-                            </h2>
-
-                            @if (selectedFile) {
-                            <p class="file-path">
-                                {{ selectedFile.relativePath }}
-                            </p>
-                            }
-                        </div>
-
-                        <button type="button" class="close-button" aria-label="Close file preview"
-                            (click)="closeFilePreview()">
-                            ×
-                        </button>
-                    </header>
-
-                    <div class="file-modal-body">
-                        @if (fileContentLoading) {
-                        <p>Loading file content...</p>
-                        }
-
-                        @if (fileContentError) {
-                        <p class="error-message">
-                            {{ fileContentError }}
-                        </p>
-                        }
-
-                        @if (
-                        !fileContentLoading
-                        && !fileContentError
-                        && selectedFile
-                        ) {
-                        <pre class="file-content">{{ selectedFile.content }}</pre>
-                        }
-                    </div>
-                </section>
-            </div>
-            }
-
             <section>
                 <h3>Service Configuration</h3>
                 <div class="grid-2">
@@ -1306,6 +1245,28 @@
                     <span class="text-muted">No documentation URL provided.</span>
                     }
                 </div>
+
+
+                <!-- local files viewing -->
+                <section class="local-files-section">
+
+                    <div class="local-file-list">
+                        @for (file of localFiles; track file.relativePath) {
+
+                        <button type="button" class="local-file-item" [title]="file.relativePath"
+                            (click)="openFilePreview(file)">
+
+                            <span>
+                                {{ file.fileName }}
+                            </span>
+
+                        </button>
+
+                        }
+                    </div>
+                </section>
+                <!-- end of local files viewing -->
+                 
             </section>
 
             <section>
