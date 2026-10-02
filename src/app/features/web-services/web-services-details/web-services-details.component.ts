@@ -75,6 +75,8 @@ export class WebServicesDetailsComponent implements OnInit {
 
   // displaying of localfiles
   localFiles: LocalFileResponse[] = [];
+  localReqCopyBook: LocalFileResponse[] = [];
+  localResCopyBook: LocalFileResponse[] = [];
 
   public baseUrl = environment.baseUrl;
 
@@ -199,6 +201,12 @@ export class WebServicesDetailsComponent implements OnInit {
         this.WSDetails = res.data;
 
         this.getFileLocation();
+
+        if (this.WSDetails?.responseCopyBook || this.WSDetails?.requestCopyBook) {
+          this.getRequestCopyBook();
+          this.getResponseCopyBook();
+        }
+
 
         const serviceName = res.data.serviceConfig?.[0]?.name || 'Service Details';
 
@@ -499,6 +507,38 @@ export class WebServicesDetailsComponent implements OnInit {
     if (!type) return 'N/A';
 
     return this.sensitivityTypeMap[type] ?? 'N/A';
+  }
+
+  getRequestCopyBook() {
+    this.webServiceApiService.getLocalFileLocation(this.WSDetails.requestCopyBook).subscribe({
+      next: (response: any) => {
+        this.localReqCopyBook = response.files;
+      },
+      error: error => {
+        console.error(
+          'Unable to retrieve local files',
+          error
+        );
+
+        this.localReqCopyBook = [];
+      }
+    });
+  }
+
+  getResponseCopyBook() {
+    this.webServiceApiService.getLocalFileLocation(this.WSDetails.responseCopyBook).subscribe({
+      next: (response: any) => {
+        this.localResCopyBook = response.files;
+      },
+      error: error => {
+        console.error(
+          'Unable to retrieve local files',
+          error
+        );
+
+        this.localResCopyBook = [];
+      }
+    });
   }
 
   getFileLocation() {

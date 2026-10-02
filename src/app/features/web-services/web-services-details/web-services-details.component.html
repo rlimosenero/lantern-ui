@@ -150,7 +150,7 @@
                 </div>
             </section>
 
-            @if(WSDetails?.tranId || WSDetails?.cicsRegion || WSDetails?.sourceLibrary){
+            @if(WSDetails?.tranId || WSDetails?.cicsRegion || WSDetails?.sourceLibrary || WSDetails?.requestCopyBook || WSDetails?.responseCopyBook){
             <section>
 
                 <h3>Mainframe Service Configuration</h3>
@@ -175,6 +175,54 @@
                         <p>{{ WSDetails?.sourceLibrary ?? '—' }}</p>
                     </div>
                     }
+
+                    @if (WSDetails?.requestCopyBook) {
+                    <div class="data-field">
+                        <label>Request Copybook</label>
+                        <div class="local-files-section">
+
+                            <div class="local-file-list">
+                                @for (file of localReqCopyBook; track file.relativePath) {
+
+                                <button type="button" class="local-file-item" [title]="file.relativePath"
+                                    (click)="openFilePreview(file)">
+
+                                    <span>
+                                        {{ file.fileName }}
+                                    </span>
+
+                                </button>
+
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    }
+
+                    @if (WSDetails?.responseCopyBook) {
+                    <div class="data-field">
+                        <label>Response Copybook</label>
+                        <div class="local-files-section">
+
+                            <div class="local-file-list">
+                                @for (file of localResCopyBook; track file.relativePath) {
+
+                                <button type="button" class="local-file-item" [title]="file.relativePath"
+                                    (click)="openFilePreview(file)">
+
+                                    <span>
+                                        {{ file.fileName }}
+                                    </span>
+
+                                </button>
+
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    }
+
+
                 </div>
             </section>
             }
@@ -1266,7 +1314,7 @@
                     </div>
                 </section>
                 <!-- end of local files viewing -->
-                 
+
             </section>
 
             <section>
