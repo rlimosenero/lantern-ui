@@ -63,6 +63,29 @@
 
         <div class="content-body">
 
+                <!-- local files viewing -->
+                 @if(localFiles){
+                <section class="local-files-section">
+                    <h3>Api Contract(s)</h3>
+                    <div class="local-file-list">
+                        @for (file of localFiles; track file.relativePath) {
+
+                        <button type="button" class="local-file-item" [title]="file.relativePath"
+                            (click)="openFilePreview(file)">
+
+                            <span>
+                                {{ file.fileName }}
+                            </span>
+
+                        </button>
+
+                        }
+                    </div>
+                </section>
+                 }
+
+                <!-- end of local files viewing -->
+
             <section>
                 <h3>Service Configuration</h3>
                 <div class="grid-2">
@@ -1296,7 +1319,7 @@
 
 
                 <!-- local files viewing -->
-                <section class="local-files-section">
+                <!-- <section class="local-files-section">
 
                     <div class="local-file-list">
                         @for (file of localFiles; track file.relativePath) {
@@ -1312,7 +1335,7 @@
 
                         }
                     </div>
-                </section>
+                </section> -->
                 <!-- end of local files viewing -->
 
             </section>
