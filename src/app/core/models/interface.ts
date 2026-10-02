@@ -104,3 +104,34 @@ export interface ApiFilterRequest {
   search: string;
   filters: Array<{ key: string; value: string }>;
 }
+
+export interface LocalFileResponse {
+  fileName: string;
+  relativePath: string;
+}
+
+export interface LocalFolderResponse {
+  available: boolean;
+  folderRelativePath: string | null;
+  files: LocalFileResponse[];
+}
+
+export interface LocalFileContentResponse {
+  fileName: string;
+  relativePath: string;
+  contentType: string;
+  content: string;
+}
+
+export interface AuthResponse {
+  accessToken: string;
+  tokenType: string;
+  expiresIn: number;
+}
+
+export interface ServiceResponse<T> {
+  data: T | null;
+  flag: 'S' | 'F';
+  message: string | null;
+  tranRefNo: string | null;
+}

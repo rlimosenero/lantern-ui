@@ -50,6 +50,19 @@ Transfers funds from a source account to one or more beneficiary accounts.
 | Data Classification (Response) | Financial Data |
 
 ---
+# 4.1 REQUEST HEADERS
+
+| Header | Required | Description | Sample Value |
+|----------|----------|----------|----------|
+| Authorization | Yes | OAuth2 Bearer Token | Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9... |
+| X-Correlation-Id | Yes | Unique request tracking identifier | b7d07d1e-98a3-4f50-9dc3-f213df1542c2 |
+| X-Request-Id | Yes | Unique request identifier | REQ-20260924-0001 |
+| X-Channel-Id | Yes | Calling channel identifier | MOBILE_BANKING |
+| X-Client-Id | Yes | Registered client application id | mobile-banking-app |
+| Content-Type | Yes | Request content type | application/json |
+
+---
+``
 
 # 5. OPERATIONAL CHARACTERISTICS
 
@@ -148,6 +161,18 @@ Payload:
 ```
 
 ---
+
+# 7.1 RESPONSE HEADERS
+
+| Header | Description | Sample Value |
+|----------|----------|----------|
+| X-Correlation-Id | Mirrors request correlation id for traceability | b7d07d1e-98a3-4f50-9dc3-f213df1542c2 |
+| X-Request-Id | Original request identifier | REQ-20260924-0001 |
+| X-Response-Timestamp | Response generation timestamp | 2026-09-24T15:23:45+08:00 |
+| Content-Type | Response content type | application/json |
+
+---
+
 
 # 8. RESPONSE FIELDS
 

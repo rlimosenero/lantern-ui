@@ -30,6 +30,7 @@ import { UpstreamAppFormsModalService } from '../../../shared/components/upstrea
 import { CommaToListPipe } from '../../../shared/pipes/comma-to-list/comma-to-list.pipe';
 import { ReplaceUnderscorePipe } from '../../../shared/pipes/replace-underscore/replace-underscore.pipe';
 import { DisplayMissingFieldsComponent } from '../../../shared/components/display-missing-fields/display-missing-fields.component';
+import { LocalFileContentResponse, LocalFileResponse, LocalFolderResponse } from '../../../core/models/interface';
 
 @Component({
   selector: 'app-web-services-details',
@@ -71,6 +72,15 @@ export class WebServicesDetailsComponent implements OnInit {
   displayedVersionColumns: string[] = ['options', 'version', 'date', 'stage', 'env', 'build', 'documents'];
 
   versionData: any = [];
+
+  // displaying of localfiles
+  localFiles: LocalFileResponse[] = [];
+
+  selectedFile: LocalFileContentResponse | null = null;
+  fileModalVisible = false;
+  fileContentLoading = false;
+  fileContentError: string | null = null;
+
   public baseUrl = environment.baseUrl;
 
   configMap: any = {
@@ -171,6 +181,8 @@ export class WebServicesDetailsComponent implements OnInit {
     this.fetchWebServiceDetails();
     this.fetchVersions();
 
+    // this.getFileLocation();
+
   }
 
   loadMissingFields() {
@@ -190,6 +202,9 @@ export class WebServicesDetailsComponent implements OnInit {
     this.webServiceApiService.getWebServicesDetails(WSId).subscribe({
       next: (res: any) => {
         this.WSDetails = res.data;
+
+        this.getFileLocation();
+
         const serviceName = res.data.serviceConfig?.[0]?.name || 'Service Details';
 
         if (keyword) {
@@ -406,7 +421,6 @@ export class WebServicesDetailsComponent implements OnInit {
   editVersion(i: number) {
     this.versionModalService.getApiVersionDetails(this.versionData.results[i].apiVersionUuid).pipe(first()).subscribe({
       next: (res: any) => {
-        // console.log(res.data);
         this.openVersionModal(res.data);
       },
       error: (err) => console.error(err)
@@ -491,5 +505,56 @@ export class WebServicesDetailsComponent implements OnInit {
 
     return this.sensitivityTypeMap[type] ?? 'N/A';
   }
+
+  getFileLocation() {
+    this.webServiceApiService.getLocalFileLocation(this.WSDetails.documentsURL).subscribe({
+      next: (response: any) => {
+        this.localFiles = response.files;
+      },
+      error: error => {
+        console.error(
+          'Unable to retrieve local files',
+          error
+        );
+
+        this.localFiles = [];
+      }
+    });
+  }
+
+  openFilePreview(file: LocalFileResponse): void {
+    this.fileModalVisible = true;
+    this.fileContentLoading = true;
+    this.fileContentError = null;
+    this.selectedFile = null;
+
+    this.webServiceApiService.getLocalFileContent(this.WSDetails?.uuid,file)
+      .subscribe({
+        next: response => {
+          this.selectedFile = response;
+          this.fileContentLoading = false;
+        },
+        error: error => {
+          console.error(
+            `Unable to read ${file.fileName}`,
+            error
+          );
+
+          this.fileContentLoading = false;
+
+          this.fileContentError =
+            error?.error?.message
+            ?? 'Unable to read the selected file.';
+        }
+      });
+  }
+
+  closeFilePreview(): void {
+    this.fileModalVisible = false;
+    this.fileContentLoading = false;
+    this.fileContentError = null;
+    this.selectedFile = null;
+  }
+
 
 }
