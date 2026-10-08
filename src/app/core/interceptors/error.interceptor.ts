@@ -1,49 +1,123 @@
-import { HttpInterceptorFn, HttpResponse } from '@angular/common/http';
+import {
+  HttpErrorResponse,
+  HttpInterceptorFn,
+  HttpResponse
+} from '@angular/common/http';
 import { inject } from '@angular/core';
-import { tap, catchError, throwError } from 'rxjs';
-import { ToastService } from '../../shared/components/toast/toast.service';
+import {
+  catchError,
+  tap,
+  throwError
+} from 'rxjs';
 
-export const errorInterceptor: HttpInterceptorFn = (req, next) => {
+import {
+  ToastService
+} from '../../shared/components/toast/toast.service';
+
+export const errorInterceptor:
+HttpInterceptorFn = (request, next) => {
   const toast = inject(ToastService);
-  const url = req.url.toLowerCase();
+  const url = request.url.toLowerCase();
 
-  return next(req).pipe(
-    tap((event) => {
-      if (event instanceof HttpResponse) {
-        const body: any = event.body;
+  const isLoginRequest =    url.includes('/auth/login');
+  const isRefreshRequest =    url.includes('/auth/refresh');
+  const isLogoutRequest = url.includes('/auth/logout');
+  const isActivityRequest = url.includes('/auth/activity');
 
-        if (body && body.flag === 'F') {
-          if (!url.includes('/filters')) {
-            toast.show(body.message || 'Action failed', 'error');
-          }
-        }
+  const suppressEndpointToast =
+    url.includes('/filters')
+    || url.includes('/filter')
+    || url.includes('/version')
+    || url.includes('/local-files');
 
-        else if (body && body.flag === 'S') {
-          // Only show success toast if it's an import or login endpoint
-          const isWhitelisted = url.includes('/import') || url.includes('/login');
+  return next(request).pipe(
+    tap(event => {
+      if (!(event instanceof HttpResponse)) {
+        return;
+      }
 
-          if (isWhitelisted) {
-            toast.show(body.message || 'Success', 'success');
-          }
-        }
+      const body = event.body as {
+        flag?: string;
+        message?: string;
+      } | null;
+
+      if (
+        body?.flag === 'F'
+        && !suppressEndpointToast
+        && !isRefreshRequest
+        && !isActivityRequest
+        && !isLogoutRequest
+      ) {
+        toast.show(
+          body.message || 'Action failed',
+          'error'
+        );
+
+        return;
+      }
+
+      const showSuccessToast =
+        body?.flag === 'S'
+        && (
+          url.includes('/import')
+          || isLoginRequest
+        );
+
+      if (showSuccessToast) {
+        toast.show(
+          body.message || 'Success',
+          'success'
+        );
       }
     }),
-    catchError((error) => {
+
+    catchError((error: HttpErrorResponse) => {
+      /*
+       * Never show a toast for refresh or logout requests.
+       *
+       * The auth interceptor is responsible for deciding
+       * whether a failed refresh should end the session.
+       */
       const suppressToast =
-        error.status === 401 ||
-        url.includes('/filters') ||
-        url.includes('/filter') ||
-        url.includes('/version');
+        isRefreshRequest
+        || isActivityRequest
+        || isLogoutRequest
+        || suppressEndpointToast;
 
       if (!suppressToast) {
         toast.show(
-          error.error?.message || 'Connection to server lost',
+          getErrorMessage(
+            error,
+            isLoginRequest
+          ),
           'error'
         );
       }
 
       return throwError(() => error);
     })
-
   );
 };
+
+function getErrorMessage(
+  error: HttpErrorResponse,
+  isLoginRequest: boolean
+): string {
+  if (isLoginRequest && error.status === 401) {
+    return error.error?.message
+      || 'Invalid username or password.';
+  }
+
+  if (error.status === 0) {
+    return 'Connection to server lost.';
+  }
+
+  if (error.status === 403) {
+    return error.error?.message
+      || 'You do not have permission to perform this action.';
+  }
+
+  return error.error?.message
+    || error.message
+    || 'An unexpected error occurred.';
+}

@@ -1,10 +1,25 @@
-import { Component, inject } from '@angular/core';
-import {  FormBuilder,  ReactiveFormsModule,  Validators} from '@angular/forms';
+import {
+  Component,
+  inject
+} from '@angular/core';
+import {
+  FormBuilder,
+  ReactiveFormsModule,
+  Validators
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
-import { AuthService } from '../../../core/auth/auth.service';
-import { InactivityService } from '../../../core/auth/inactivity.service';
-import {  ButtonComponent} from '../../../shared/components/button/button.component';
+import { finalize } from 'rxjs';
+
+import {
+  AuthService
+} from '../../../core/auth/auth.service';
+import {
+  InactivityService
+} from '../../../core/auth/inactivity.service';
+import {
+  ButtonComponent
+} from '../../../shared/components/button/button.component';
 
 @Component({
   selector: 'app-login',
@@ -17,13 +32,19 @@ import {  ButtonComponent} from '../../../shared/components/button/button.compon
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
-
 export class LoginComponent {
 
-  private readonly authService =    inject(AuthService);
-  private readonly formBuilder =    inject(FormBuilder);
-  private readonly router =    inject(Router);
-  private readonly inactivityService =    inject(InactivityService);
+  private readonly authService =
+    inject(AuthService);
+
+  private readonly formBuilder =
+    inject(FormBuilder);
+
+  private readonly router =
+    inject(Router);
+
+  private readonly inactivityService =
+    inject(InactivityService);
 
   readonly loginForm =
     this.formBuilder.nonNullable.group({
@@ -41,7 +62,10 @@ export class LoginComponent {
   loginError: string | null = null;
 
   onSubmit(): void {
-    if (this.loginForm.invalid) {
+    if (
+      this.loginForm.invalid
+      || this.loginInProgress
+    ) {
       this.loginForm.markAllAsTouched();
       return;
     }
@@ -54,10 +78,13 @@ export class LoginComponent {
 
     this.authService
       .authenticate(credentials)
+      .pipe(
+        finalize(() => {
+          this.loginInProgress = false;
+        })
+      )
       .subscribe({
         next: response => {
-          this.loginInProgress = false;
-
           if (response.flag !== 'S') {
             this.loginError =
               response.message
@@ -72,9 +99,8 @@ export class LoginComponent {
             '/search'
           ]);
         },
-        error: error => {
-          this.loginInProgress = false;
 
+        error: error => {
           console.error(
             'Login failed',
             error

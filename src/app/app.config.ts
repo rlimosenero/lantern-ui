@@ -23,7 +23,10 @@ export const appConfig: ApplicationConfig = {
     ),
     // provideHttpClient(),
     provideHttpClient(
-      withInterceptors([authInterceptor, errorInterceptor]) // Registers the interceptor globally
+      withInterceptors([
+        errorInterceptor,
+        authInterceptor
+      ])
     ),
     provideAnimationsAsync(),
     {
