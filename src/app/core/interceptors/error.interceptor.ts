@@ -27,8 +27,8 @@ HttpInterceptorFn = (request, next) => {
   const suppressEndpointToast =
     url.includes('/filters')
     || url.includes('/filter')
-    || url.includes('/version')
-    || url.includes('/local-files');
+    || url.includes('/local-files')
+    || url.includes('/version');
 
   return next(request).pipe(
     tap(event => {

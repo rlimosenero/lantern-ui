@@ -73,6 +73,8 @@ export class WebServicesDetailsComponent implements OnInit {
 
   versionData: any = [];
 
+  isMainframe: any = [];
+
   // displaying of localfiles
   localFiles: LocalFileResponse[] = [];
   localReqCopyBook: LocalFileResponse[] = [];
@@ -178,8 +180,6 @@ export class WebServicesDetailsComponent implements OnInit {
     this.fetchWebServiceDetails();
     this.fetchVersions();
 
-    // this.getFileLocation();
-
   }
 
   loadMissingFields() {
@@ -207,7 +207,7 @@ export class WebServicesDetailsComponent implements OnInit {
           this.getResponseCopyBook();
         }
 
-
+        // format breadcrumbs
         const serviceName = res.data.serviceConfig?.[0]?.name || 'Service Details';
 
         if (keyword) {
@@ -218,6 +218,8 @@ export class WebServicesDetailsComponent implements OnInit {
 
         this.requestBodySampleString = this.formatSample(this.WSDetails?.requestBodySample);
         this.responseBodySampleString = this.formatSample(this.WSDetails?.responseBodySample);
+
+        this.identifyWebService();
 
         setTimeout(() => this.scrollToKeyword(), 300);
       },
@@ -507,6 +509,15 @@ export class WebServicesDetailsComponent implements OnInit {
     if (!type) return 'N/A';
 
     return this.sensitivityTypeMap[type] ?? 'N/A';
+  }
+
+  identifyWebService() {
+    if (this.WSDetails?.tranId) {
+      this.isMainframe = true;
+    }
+
+    console.log('isMainframe:', this.isMainframe);
+
   }
 
   getRequestCopyBook() {
