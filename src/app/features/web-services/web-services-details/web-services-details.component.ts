@@ -31,6 +31,7 @@ import { CommaToListPipe } from '../../../shared/pipes/comma-to-list/comma-to-li
 import { ReplaceUnderscorePipe } from '../../../shared/pipes/replace-underscore/replace-underscore.pipe';
 import { DisplayMissingFieldsComponent } from '../../../shared/components/display-missing-fields/display-missing-fields.component';
 import { LocalFileContentResponse, LocalFileResponse } from '../../../core/models/interface';
+import { SplitPipe } from '../../../shared/pipes/split/split.pipe';
 
 @Component({
   selector: 'app-web-services-details',
@@ -48,7 +49,8 @@ import { LocalFileContentResponse, LocalFileResponse } from '../../../core/model
     ButtonComponent,
     CommaToListPipe,
     ReplaceUnderscorePipe,
-    DisplayMissingFieldsComponent
+    DisplayMissingFieldsComponent,
+    SplitPipe,
   ],
   templateUrl: './web-services-details.component.html',
   styleUrl: './web-services-details.component.scss',
