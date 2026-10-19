@@ -541,12 +541,35 @@
 
                 <div class="divider"></div>
 
-                <div class="data-field"><label>Request Body Sample</label></div>
-                <div class="code-container">
-                    <code>
-                        <pre>{{requestBodySampleString}}</pre>
-                    </code>
+                <div class="data-field">
+                    <label>Request Body Samples</label>
                 </div>
+
+                <ng-container *ngIf="requestBodySamples?.length; else noRequestBodySamples">
+                    <div class="sample-container">
+                        <div class="sample-tabs" role="tablist" aria-label="Request body samples">
+                            <button *ngFor="let sample of requestBodySamples; let i = index" type="button" role="tab"
+                                class="sample-tab" [class.active]="selectedRequestTab === i"
+                                [attr.aria-selected]="selectedRequestTab === i" (click)="selectedRequestTab = i">
+                                {{ sample.title }}
+                            </button>
+                        </div>
+
+                        <div class="code-container">
+                            <div class="sample-description" *ngIf="requestBodySamples[selectedRequestTab]?.description">
+                                {{ requestBodySamples[selectedRequestTab]?.description }}
+                            </div>
+
+                            <pre><code>{{ requestBodySamples[selectedRequestTab]?.formattedPayload }}</code></pre>
+                        </div>
+                    </div>
+                </ng-container>
+
+                <ng-template #noRequestBodySamples>
+                    <div class="sample-empty">
+                        <span>No request body samples available.</span>
+                    </div>
+                </ng-template>
 
                 <div class="divider"></div>
 
@@ -782,12 +805,36 @@
 
                 <div class="divider"> </div>
 
-                <div class="data-field"><label>Response Body Sample</label></div>
-                <div class="code-container">
-                    <code>
-                        <pre>{{responseBodySampleString}}</pre>
-                    </code>
+                <div class="data-field">
+                    <label>Response Body Samples</label>
                 </div>
+
+                <ng-container *ngIf="responseBodySamples?.length; else noResponseBodySamples">
+                    <div class="sample-container">
+                        <div class="sample-tabs" role="tablist" aria-label="Response body samples">
+                            <button *ngFor="let sample of responseBodySamples; let i = index" type="button" role="tab"
+                                class="sample-tab" [class.active]="selectedResponseTab === i"
+                                [attr.aria-selected]="selectedResponseTab === i" (click)="selectedResponseTab = i">
+                                {{ sample.title }}
+                            </button>
+                        </div>
+
+                        <div class="code-container">
+                            <div class="sample-description"
+                                *ngIf="responseBodySamples[selectedResponseTab]?.description">
+                                {{ responseBodySamples[selectedResponseTab]?.description }}
+                            </div>
+
+                            <pre><code>{{ responseBodySamples[selectedResponseTab]?.formattedPayload }}</code></pre>
+                        </div>
+                    </div>
+                </ng-container>
+
+                <ng-template #noResponseBodySamples>
+                    <div class="sample-empty">
+                        <span>No response body samples available.</span>
+                    </div>
+                </ng-template>
 
                 <div class="divider"> </div>
 

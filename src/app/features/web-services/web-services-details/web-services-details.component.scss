@@ -1,17 +1,11 @@
+@use '../../_features-shared' as shared;
+
 :host {
   display: block;
   background-color: #f8f9fa;
   min-height: 100vh;
   font-family: var(--font-sans);
 }
-
-// Global Variables
-$border-color: #e9ecef;
-$text-muted: #6c757d;
-$active-green: #dcfce7;
-$active-text: #016630;
-$warning-yellow: #fff3cd;
-$warning-text: #856404;
 
 mat-divider.mat-divider.mat-divider-horizontal {
   width: 93%;
@@ -53,13 +47,10 @@ mat-divider.mat-divider.mat-divider-horizontal {
     color: #15803d;
   }
 
-  // Greenish
   .beta {
     background-color: #fff7ed !important;
     color: #c2410c;
   }
-
-  // Orangeish
 }
 
 .page-layout {
@@ -75,11 +66,10 @@ mat-divider.mat-divider.mat-divider-horizontal {
   }
 }
 
+@include shared.page-layout-breakpoints;
+
 .detail-container {
-  border-radius: 12px !important;
-  border: 1px solid $border-color;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
-  background: white;
+  @include shared.detail-container;
 
   .header-section {
     padding: 2rem;
@@ -100,7 +90,6 @@ mat-divider.mat-divider.mat-divider-horizontal {
           margin: 0;
           font-size: 1.875rem;
           font-weight: 500;
-          // line-height: 1.2rem;
         }
 
         span {
@@ -113,12 +102,11 @@ mat-divider.mat-divider.mat-divider-horizontal {
 
       .description {
         font-size: 1.1rem;
-        color: $text-muted;
+        color: shared.$text-muted;
         margin: 8px 0 16px 0;
       }
     }
   }
-
 
   .chip-container {
     display: flex;
@@ -167,12 +155,8 @@ mat-divider.mat-divider.mat-divider-horizontal {
 }
 
 .table-container {
-  overflow-x: auto;
-  max-width: 100%;
-  border: 1px solid #E0E0E0;
-  border-radius: .625rem;
+  @include shared.table-container;
   margin: 0.5rem 0 2rem 0;
-  position: relative;
 }
 
 th,
@@ -187,7 +171,6 @@ td {
   display: flex;
   flex-wrap: wrap;
   gap: 23px;
-
 
   h3 {
     margin: 0 0 0.5rem;
@@ -204,7 +187,6 @@ td {
 
   .card-analytics {
     padding: 1rem;
-    width: 100%;
     border: 1px solid #0000001a;
     border-radius: 0.625rem;
     height: 130px;
@@ -251,7 +233,6 @@ td {
       height: 8px;
     }
   }
-
 }
 
 .mat-column-options {
@@ -262,30 +243,17 @@ td {
   }
 }
 
-// Grid Layouts
 .grid-2 {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 2rem;
 }
 
-
 .empty-container {
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.5rem;
-
-  h3,
-  mat-icon {
-    font-weight: 500;
-    color: #808080;
-  }
+  @include shared.empty-container;
 }
 
 .data-field {
-
   .header-container {
     display: flex;
     flex-direction: row;
@@ -294,13 +262,7 @@ td {
   }
 
   label {
-    display: block;
-    font-size: 0.85rem;
-    color: $text-muted;
-    margin-bottom: 4px;
-    font-weight: 500;
-    line-height: 1.5rem;
-
+    @include shared.data-field-label;
   }
 
   p {
@@ -311,9 +273,8 @@ td {
   .description-text {
     line-height: 1.6;
     color: #374151;
-    white-space: pre-wrap; // Maintains line breaks from the database
+    white-space: pre-wrap;
   }
-
 
   .empty-description {
     display: flex;
@@ -339,9 +300,8 @@ td {
     }
   }
 
-
   button {
-    color: #155dfc;
+    color: shared.$primary-blue;
     font-weight: 500;
     font-size: 1rem;
     line-height: 1.5rem;
@@ -353,75 +313,18 @@ td {
   }
 }
 
-// Links & Resources Styles
 .link-field {
-  margin-bottom: 1.25rem;
-
-  label {
-    display: block;
-    font-size: 0.85rem;
-    color: $text-muted;
-    margin-bottom: 4px;
-    font-weight: 500;
-    line-height: 1.5rem;
-  }
-
-  a {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-
-    max-width: 100%;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-
-    &:hover {
-      text-decoration: underline;
-    }
-
-    mat-icon {
-      font-size: 16px;
-      width: 16px;
-      height: 16px;
-    }
-  }
+  @include shared.link-field;
 }
 
-// Tech Stack Styles
 .stack-group {
-  margin-bottom: 1rem;
-
-  label {
-    font-size: 0.85rem;
-    color: $text-muted;
-    font-weight: 500;
-    line-height: 1.5rem;
-  }
-
-  div {
-    display: flex;
-    gap: 0.5rem;
-  }
-
-  span.custom-chip {
-    background-color: #f2edee;
-  }
-
+  @include shared.stack-group;
 }
 
 span.custom-chip {
-  padding: 2px 8px;
-  border-radius: 8px;
-  font-size: 0.75rem;
-  font-weight: 500;
-  display: inline-block;
-  line-height: calc(1rem);
-  margin: 0.1rem 0;
-  border: 1px solid #0000001a;
+  @include shared.custom-chip;
   height: 22px;
   white-space: nowrap;
-  margin-right: 0.5rem;
 }
 
 .info-bar {
@@ -442,58 +345,20 @@ span.custom-chip {
   font-weight: 500;
 }
 
-// Table Styles
 .section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  @include shared.section-header;
 }
 
 .border-table {
-  width: 100%;
-  // border: 1px solid #eee;
-  // border-radius: 8px;
-  overflow: hidden;
-
-  .mat-mdc-header-row {
-    height: 40px;
-  }
-
-  .mat-mdc-row {
-    height: 39px;
-  }
-
-  .app-name {
-    font-weight: 500;
-  }
-
-  span.custom-chip {
-    border: 1px solid #0000001a;
-  }
+  @include shared.border-table;
 }
 
 .btn-custom-blue {
-  color: #155dfc !important;
+  color: shared.$primary-blue !important;
 }
 
 .badge {
-  padding: 2px 8px;
-  border-radius: 8px;
-  font-size: 0.75rem;
-  font-weight: 500;
-  display: inline-block;
-  line-height: calc(1rem);
-  border: 1px solid #a1a1a180;
-
-  &.active {
-    background-color: $active-green;
-    color: $active-text;
-  }
-
-  &.active-sm {
-    background: $active-green;
-    color: $active-text;
-  }
+  @include shared.status-badge;
 }
 
 .status-row {
@@ -502,7 +367,7 @@ span.custom-chip {
   gap: 12px;
 
   .version-text {
-    color: $text-muted;
+    color: shared.$text-muted;
     font-size: 0.9rem;
   }
 }
@@ -524,14 +389,108 @@ span.custom-chip {
   }
 }
 
-.sec-warn {
+.sample-empty {
+  display: flex;
+  align-items: center;
+  min-height: 72px;
+  margin-top: 10px;
   padding: 1rem;
-  border-radius: 0.25rem;
-  border-color: $border-color;
 
-  .msg-warn {
-    font-size: 14px;
+  color: #6b7280;
+  background-color: #f9fafb;
+
+  border: 1px dashed #d1d5db;
+  border-radius: 8px;
+
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+.sample-container {
+  margin-top: 10px;
+
+  >.code-container {
+    margin-top: 0;
+    border-top-left-radius: 0;
   }
+}
+
+.sample-tabs {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  padding-left: 0;
+  margin: 0;
+}
+
+.sample-tab {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 34px;
+  padding: 7px 16px;
+
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.25rem;
+
+  color: #4b5563;
+  background-color: #e5e7eb;
+
+  border: 1px solid #c7cbd1;
+  border-bottom: none;
+  border-radius: 7px 7px 0 0;
+
+  cursor: pointer;
+  transition:
+    color 0.15s ease,
+    background-color 0.15s ease,
+    border-color 0.15s ease;
+
+  &:hover:not(.active) {
+    color: #111827;
+    background-color: #d1d5db;
+  }
+
+  &.active {
+    position: relative;
+    z-index: 1;
+
+    color: #ffffff;
+    background-color: #1e1e1e;
+    border-color: #333333;
+
+    /*
+     * Extends the active tab over the code container border,
+     * making both elements appear connected.
+     */
+    margin-bottom: -1px;
+    padding-bottom: 8px;
+  }
+
+  &:focus-visible {
+    position: relative;
+    z-index: 2;
+    outline: 2px solid shared.$primary-blue;
+    outline-offset: 2px;
+  }
+}
+
+.sample-description {
+  margin-bottom: 0.75rem;
+  color: #f3f4f6;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5rem;
+}
+
+.sec-warn {
+  @include shared.sec-warn;
 }
 
 .local-files-section {
@@ -552,24 +511,20 @@ span.custom-chip {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-
   padding: 4px 10px;
   border: 1px solid #dcdcdc;
   border-radius: 6px;
-
   background: #fff;
   color: #374151;
   cursor: pointer;
-
   font-family: inherit;
   font-size: 13px;
-
   transition: all 0.2s ease;
 
   &:hover {
     background: #f5f8ff;
-    border-color: #155dfc;
-    color: #155dfc;
+    border-color: shared.$primary-blue;
+    color: shared.$primary-blue;
   }
 }
 
@@ -581,33 +536,7 @@ span.custom-chip {
 
 .file-name {
   max-width: 260px;
-
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-@container (min-width: 1280px) {
-  .page-layout {
-    width: 1024px;
-  }
-}
-
-@container (max-width: 1279px) {
-  .page-layout {
-    width: 1024px;
-  }
-}
-
-@container (max-width: 1023px) {
-  .page-layout {
-    width: 720px;
-  }
-}
-
-@container (max-width: 767px) {
-  .page-layout {
-    max-width: 592px;
-    width: 100%;
-  }
 }

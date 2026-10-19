@@ -3,6 +3,8 @@ import { SearchResponse } from '../../../core/models/interface';
 import { HttpClient } from '@angular/common/http';
 import { APP_CONFIG } from '../../../core/models/app.config.model';
 
+export const APP_SEARCH_CACHE_KEY = 'app_search_state';
+
 @Injectable({
   providedIn: 'root',
 })

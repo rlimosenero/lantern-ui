@@ -178,37 +178,15 @@
                 </div>
             </section>
 
+            @for (section of techStackSections; track section.key) {
             <section>
-                <h2>Techstack - Platform</h2>
-                <app-multi-select [data]="dropdownOptions['TECH_STACK_PLATFORM'] || []"
-                    [initialValue]="isEditMode ? payload.techStackPlatform : ''"
-                    (selectionChange)="onTechStackChange($event, 'techStackPlatform')">
+                <h2>{{ section.label }}</h2>
+                <app-multi-select [data]="dropdownOptions[section.optionGroup] || []"
+                    [initialValue]="isEditMode ? payload[section.key] : ''"
+                    (selectionChange)="onTechStackChange($event, section.key)">
                 </app-multi-select>
             </section>
-
-            <section>
-                <h2>Techstack - Application</h2>
-                <app-multi-select [data]="dropdownOptions['TECH_STACK_APP'] || []"
-                    [initialValue]="isEditMode ? payload.techStackApp : ''"
-                    (selectionChange)="onTechStackChange($event, 'techStackApp')">
-                </app-multi-select>
-            </section>
-
-            <section>
-                <h2>Techstack - Storage</h2>
-                <app-multi-select [data]="dropdownOptions['TECH_STACK_STORAGE'] || []"
-                    [initialValue]="isEditMode ? payload.techStackStorage : ''"
-                    (selectionChange)="onTechStackChange($event, 'techStackStorage')">
-                </app-multi-select>
-            </section>
-
-            <section>
-                <h2>Techstack - Security</h2>
-                <app-multi-select [data]="dropdownOptions['TECH_STACK_SECURITY'] || []"
-                    [initialValue]="isEditMode ? payload.techStackSecurity : ''"
-                    (selectionChange)="onTechStackChange($event, 'techStackSecurity')">
-                </app-multi-select>
-            </section>
+            }
 
             <!-- Actions -->
             <div class="actions">

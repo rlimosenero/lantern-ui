@@ -8,13 +8,20 @@ import { ButtonComponent } from '../../../shared/components/button/button.compon
 import { MultiSelectComponent } from '../../../shared/components/multi-select/multi-select.component';
 import { ModalService } from '../../../shared/components/confirmation-modal/modal.service';
 import { BreadcrumbService } from '../../../shared/components/breadcrumbs/breadcrumbs.service';
-import { ApplicationApiService } from '../services/application-api.service';
+import { ApplicationApiService, APP_SEARCH_CACHE_KEY } from '../services/application-api.service';
 
 type TechStackKey =
   | 'techStackApp'
   | 'techStackPlatform'
   | 'techStackStorage'
-  | 'techStackSecurity';
+  | 'techStackSecurity'
+  | 'techStackMessage';
+
+interface TechStackSection {
+  label: string;
+  key: TechStackKey;
+  optionGroup: string;
+}
 
 @Component({
   selector: 'app-application-form',
@@ -36,6 +43,14 @@ export class ApplicationFormComponent implements OnInit {
   initialSnapshot = '';
   dropdownOptions: any = {};
   validations: any = {};
+
+  readonly techStackSections: TechStackSection[] = [
+    { label: 'Techstack - Platform',     key: 'techStackPlatform', optionGroup: 'TECH_STACK_PLATFORM' },
+    { label: 'Techstack - Application',  key: 'techStackApp',      optionGroup: 'TECH_STACK_APP' },
+    { label: 'Techstack - Storage',      key: 'techStackStorage',  optionGroup: 'TECH_STACK_STORAGE' },
+    { label: 'Techstack - Security',     key: 'techStackSecurity', optionGroup: 'TECH_STACK_SECURITY' },
+    { label: 'Techstack - Messaging',    key: 'techStackMessage',  optionGroup: 'TECH_STACK_MESSAGE' },
+  ];
 
   payload: any = this.createInitialPayload();
 
@@ -168,8 +183,7 @@ export class ApplicationFormComponent implements OnInit {
   }
 
   clearSearchState(): void {
-    localStorage.removeItem('app_search_state');
-
+    localStorage.removeItem(APP_SEARCH_CACHE_KEY);
   }
 
   fetchDropdownOptions(): void {

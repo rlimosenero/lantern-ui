@@ -82,6 +82,11 @@ export class WebServicesDetailsComponent implements OnInit {
   localReqCopyBook: LocalFileResponse[] = [];
   localResCopyBook: LocalFileResponse[] = [];
 
+  requestBodySamples: any = [];
+  responseBodySamples: any = [];
+  selectedRequestTab = 0;
+  selectedResponseTab = 0;
+
   public baseUrl = environment.baseUrl;
 
   configMap: any = {
@@ -218,8 +223,9 @@ export class WebServicesDetailsComponent implements OnInit {
 
         this.breadcrumbService.setOverride(this.router.url, serviceName);
 
-        this.requestBodySampleString = this.formatSample(this.WSDetails?.requestBodySample);
-        this.responseBodySampleString = this.formatSample(this.WSDetails?.responseBodySample);
+        // this.requestBodySampleString = this.formatSample(this.WSDetails?.requestBodySample);
+        // this.responseBodySampleString = this.formatSample(this.WSDetails?.responseBodySample);
+        this.populatePayloadSamples();
 
         this.identifyWebService();
 
@@ -611,6 +617,20 @@ export class WebServicesDetailsComponent implements OnInit {
       .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;');
+  }
+
+  private populatePayloadSamples(): void {
+    this.requestBodySamples =
+      this.WSDetails?.requestSamplePayloads?.map((payload: any) => ({
+        ...payload,
+        formattedPayload: this.formatSample(payload.generatedPayload)
+      })) ?? [];
+
+    this.responseBodySamples =
+      this.WSDetails?.responseSamplePayloads?.map((payload: any) => ({
+        ...payload,
+        formattedPayload: this.formatSample(payload.generatedPayload)
+      })) ?? [];
   }
 
 }
