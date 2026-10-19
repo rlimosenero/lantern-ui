@@ -266,7 +266,7 @@
                     @if (WSDetails?.integration) {
                     <div class="data-field">
                         <label>Source Library</label>
-                        <p>{{ WSDetails?.integration ?? '—' }}</p>
+                        <p>{{ (WSDetails?.integration | replaceUnderscore | titlecase) ?? '—' }}</p>
                     </div>
                     }
 
