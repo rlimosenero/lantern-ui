@@ -1,0 +1,395 @@
+
+// ── Design tokens ─────────────────────────────────────────────────────────────
+$border-color:    #e9ecef;
+$text-muted:      #6c757d;
+$active-green:    #dcfce7;
+$active-text:     #016630;
+$warning-yellow:  #fff3cd;
+$warning-text:    #856404;
+$primary-red:     #ba1a1a;
+$primary-blue:    #155dfc;
+
+// ── Responsive breakpoints for .page-layout ───────────────────────────────────
+// Used by detail pages and form pages in every feature.
+@mixin page-layout-breakpoints {
+  @container (min-width: 1280px) {
+    .page-layout { width: 1024px; }
+  }
+  @container (max-width: 1279px) {
+    .page-layout { width: 1024px; }
+  }
+  @container (max-width: 1023px) {
+    .page-layout { width: 720px; }
+  }
+  @container (max-width: 767px) {
+    .page-layout { max-width: 592px; width: 100%; }
+  }
+}
+
+// ── Responsive breakpoints for .page-container ────────────────────────────────
+// Used by list/dashboard pages (application, web-services, search).
+@mixin page-container-breakpoints {
+  @container (min-width: 1536px) {
+    .page-container { width: 1488px; }
+  }
+  @container (max-width: 1535px) {
+    .page-container { width: 1232px; }
+  }
+  @container (max-width: 1279px) {
+    .page-container { width: 1024px; }
+  }
+  @container (max-width: 1023px) {
+    .page-container { width: 720px; }
+  }
+  @container (max-width: 767px) {
+    .page-container { max-width: 592px; width: 100%; }
+  }
+}
+
+// ── Table container ────────────────────────────────────────────────────────────
+@mixin table-container {
+  overflow-x: auto;
+  max-width: 100%;
+  border: 1px solid #E0E0E0;
+  border-radius: 0.625rem;
+  position: relative;
+}
+
+// ── Empty state container ──────────────────────────────────────────────────────
+@mixin empty-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.5rem;
+
+  h3, mat-icon {
+    font-weight: 500;
+    color: #808080;
+  }
+}
+
+// ── Mat-card for list pages ────────────────────────────────────────────────────
+@mixin list-card {
+  border-radius: 0.625rem;
+  border: none;
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  padding: 24px;
+}
+
+// ── Detail / form card ─────────────────────────────────────────────────────────
+@mixin detail-container {
+  border-radius: 12px !important;
+  border: 1px solid $border-color;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+  background: white;
+}
+
+// ── Section heading with bottom border (used in form pages) ───────────────────
+@mixin section-heading {
+  font-size: 1.25rem;
+  line-height: 1.4rem;
+  font-weight: 600;
+  margin: 0 0 1.5rem 0;
+  padding-bottom: 1rem;
+  color: black;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+// ── Form field group ──────────────────────────────────────────────────────────
+@mixin form-group {
+  display: flex;
+  flex-direction: column;
+
+  label {
+    font-size: 13px;
+    margin-bottom: 6px;
+    color: #374151;
+  }
+
+  input, select, textarea {
+    padding: 8px 10px;
+    border: 1px solid #d1d5db;
+    font-size: 1rem;
+    border-radius: 0.25rem;
+    font-family: var(--font-sans);
+
+    &:focus {
+      outline: none;
+      border-color: #2563eb;
+    }
+
+    &::placeholder {
+      color: #99a1af !important;
+    }
+  }
+}
+
+// ── Native select styled as dropdown ─────────────────────────────────────────
+@mixin custom-select {
+  appearance: none;
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+
+  &:focus {
+    outline: none;
+    border-color: #0052cc;
+    box-shadow: 0 0 0 2px rgba(0, 82, 204, 0.1);
+  }
+
+  &:disabled {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+  }
+}
+
+// ── Form validation error ─────────────────────────────────────────────────────
+@mixin form-error {
+  font-size: 12px;
+  color: #ef4444;
+  margin-top: 4px;
+}
+
+// ── Form save/cancel action bar ───────────────────────────────────────────────
+@mixin form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 20px;
+  border-top: 1px solid #e5e7eb;
+}
+
+// ── Filter search bar (used in filter dropdowns on list pages) ────────────────
+@mixin search-bar {
+  background: #f3f3f5;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  width: 100%;
+
+  input {
+    border: none;
+    background: transparent;
+    outline: none;
+    margin-left: 10px;
+    width: 100%;
+    color: #666;
+  }
+}
+
+// ── Active filter button state ────────────────────────────────────────────────
+@mixin active-filter {
+  color: $primary-red;
+  background-color: rgba(186, 26, 26, 0.1);
+}
+
+// ── Selected filter tag chip ──────────────────────────────────────────────────
+@mixin filter-tag {
+  border: 1px solid #0000001a;
+  padding: 2px 8px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1rem;
+  margin: 0.5rem 0;
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+// ── Custom filter dropdown (shared across application, web-services, search) ──
+@mixin filter-dropdown {
+  .dropdown-trigger {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0.8rem;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: calc(0.625rem - 2px);
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: border-color 0.2s;
+
+    &:hover { border-color: $primary-red; }
+  }
+
+  .options-container {
+    margin-top: 4px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 8px;
+    position: absolute;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  }
+
+  .option-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+
+    &:hover { background: #f5f5f5; }
+
+    &.selected {
+      color: $primary-red;
+      background: rgba(186, 26, 26, 0.1);
+    }
+  }
+
+  .filter-search-wrapper {
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #f1f5f9;
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 2;
+
+    .filter-inner-search {
+      border: none;
+      outline: none;
+      font-size: 13px;
+      width: 100%;
+      padding: 4px 0;
+
+      &::placeholder { color: #cbd5e1; }
+    }
+  }
+
+  .no-options {
+    padding: 12px;
+    font-size: 12px;
+    color: #94a3b8;
+    text-align: center;
+  }
+}
+
+// ── Detail page: data field label+value pair ──────────────────────────────────
+@mixin data-field-label {
+  display: block;
+  font-size: 0.85rem;
+  color: $text-muted;
+  margin-bottom: 4px;
+  font-weight: 500;
+  line-height: 1.5rem;
+}
+
+// ── Detail page: link field ───────────────────────────────────────────────────
+@mixin link-field {
+  margin-bottom: 1.25rem;
+
+  label {
+    @include data-field-label;
+  }
+
+  a {
+    color: #1a73e8;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.95rem;
+
+    &:hover { text-decoration: underline; }
+  }
+}
+
+// ── Detail page: tech stack chip group ───────────────────────────────────────
+@mixin stack-group {
+  margin-bottom: 1rem;
+
+  label {
+    font-size: 0.85rem;
+    color: $text-muted;
+    font-weight: 500;
+    line-height: 1.5rem;
+  }
+
+  div {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  span.custom-chip {
+    background-color: #f2edee;
+  }
+}
+
+// ── Status/environment chip ───────────────────────────────────────────────────
+@mixin custom-chip {
+  padding: 2px 8px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  display: inline-block;
+  line-height: 1rem;
+  border: 1px solid #0000001a;
+}
+
+// ── Status badge (larger than chip, used in detail headers) ───────────────────
+@mixin status-badge {
+  padding: 2px 8px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  display: inline-block;
+  line-height: 1rem;
+  border: 1px solid #a1a1a180;
+
+  &.active    { background-color: $active-green; color: $active-text; }
+  &.active-sm { background: $active-green;       color: $active-text; }
+}
+
+// ── Bordered data table ───────────────────────────────────────────────────────
+@mixin border-table {
+  width: 100%;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  overflow: hidden;
+
+  .mat-mdc-header-row { height: 40px; }
+  .mat-mdc-row        { height: 39px; }
+  .app-name           { font-weight: 500; }
+
+  span.custom-chip { border: 1px solid #0000001a; }
+}
+
+// ── Section header with action button ────────────────────────────────────────
+@mixin section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+// ── Retirement / non-operational warning banner ───────────────────────────────
+@mixin sec-warn {
+  padding: 1rem;
+  border-radius: 0.25rem;
+  border-color: $border-color;
+
+  .msg-warn { font-size: 14px; }
+}

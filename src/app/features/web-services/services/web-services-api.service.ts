@@ -4,6 +4,8 @@ import { APP_CONFIG } from '../../../core/models/app.config.model';
 import { LocalFileContentResponse, LocalFileResponse, SearchResponse } from '../../../core/models/interface';
 import { Observable } from 'rxjs';
 
+export const WEB_SERVICES_CACHE_KEY = 'web_services_search_state';
+
 @Injectable({
   providedIn: 'root',
 })

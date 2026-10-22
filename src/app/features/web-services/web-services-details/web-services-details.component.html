@@ -63,28 +63,28 @@
 
         <div class="content-body">
 
-                <!-- local files viewing -->
-                 @if(localFiles){
-                <section class="local-files-section">
-                    <h3>Api Contract(s)</h3>
-                    <div class="local-file-list">
-                        @for (file of localFiles; track file.relativePath) {
+            <!-- local files viewing -->
+            @if(localFiles.length > 0){
+            <section class="local-files-section">
+                <h3>Api Contract(s)</h3>
+                <div class="local-file-list">
+                    @for (file of localFiles; track file.relativePath) {
 
-                        <button type="button" class="local-file-item" [title]="file.relativePath"
-                            (click)="openFilePreview(file)">
+                    <button type="button" class="local-file-item" [title]="file.relativePath"
+                        (click)="openFilePreview(file)">
 
-                            <span>
-                                {{ file.fileName }}
-                            </span>
+                        <span>
+                            {{ file.fileName }}
+                        </span>
 
-                        </button>
+                    </button>
 
-                        }
-                    </div>
-                </section>
-                 }
+                    }
+                </div>
+            </section>
+            }
 
-                <!-- end of local files viewing -->
+            <!-- end of local files viewing -->
 
             <section>
                 <h3>Service Configuration</h3>
@@ -123,7 +123,7 @@
                     </div>
 
                     <div class="data-field">
-                        <label>Web Service Type</label>
+                        <label>{{ isMainframe ? 'Protocol' : 'Web Service Type' }}</label>
                         <p>{{ (WSDetails?.serviceConfig?.[0]?.type | titlecase) ?? '—' }}</p>
                     </div>
 
@@ -173,7 +173,8 @@
                 </div>
             </section>
 
-            @if(WSDetails?.tranId || WSDetails?.cicsRegion || WSDetails?.sourceLibrary || WSDetails?.requestCopyBook || WSDetails?.responseCopyBook){
+            @if(WSDetails?.tranId || WSDetails?.cicsRegion || WSDetails?.sourceLibrary || WSDetails?.requestCopyBook ||
+            WSDetails?.responseCopyBook){
             <section>
 
                 <h3>Mainframe Service Configuration</h3>
@@ -188,14 +189,17 @@
                     @if (WSDetails?.cicsRegion) {
                     <div class="data-field">
                         <label>CICS Region</label>
-                        <span class="badge">{{ WSDetails?.cicsRegion ?? '—' }}</span>
-                    </div>
-                    }
+                        <div>
+                            @let cicsRegion = (WSDetails?.cicsRegion | split);
 
-                    @if (WSDetails?.sourceLibrary) {
-                    <div class="data-field">
-                        <label>Source Library</label>
-                        <p>{{ WSDetails?.sourceLibrary ?? '—' }}</p>
+                            @for (item of cicsRegion; track item) {
+                            <span class="custom-chip">{{ item }}</span>
+                            } @empty {
+                            <span class="no-data">No CICS Region information available</span>
+                            }
+
+                        </div>
+
                     </div>
                     }
 
@@ -242,6 +246,27 @@
                                 }
                             </div>
                         </div>
+                    </div>
+                    }
+
+                    @if (WSDetails?.sourceLibrary) {
+                    <div class="data-field">
+                        <label>Source Library</label>
+                        <p>{{ WSDetails?.sourceLibrary ?? '—' }}</p>
+                    </div>
+                    }
+
+                    @if (WSDetails?.pipeline) {
+                    <div class="data-field">
+                        <label>Pipeline</label>
+                        <span class="badge">{{ WSDetails?.pipeline ?? '—' }}</span>
+                    </div>
+                    }
+
+                    @if (WSDetails?.integration) {
+                    <div class="data-field">
+                        <label>Source Library</label>
+                        <p>{{ (WSDetails?.integration | replaceUnderscore | titlecase) ?? '—' }}</p>
                     </div>
                     }
 
@@ -516,12 +541,35 @@
 
                 <div class="divider"></div>
 
-                <div class="data-field"><label>Request Body Sample</label></div>
-                <div class="code-container">
-                    <code>
-                        <pre>{{requestBodySampleString}}</pre>
-                    </code>
+                <div class="data-field">
+                    <label>Request Body Samples</label>
                 </div>
+
+                <ng-container *ngIf="requestBodySamples?.length; else noRequestBodySamples">
+                    <div class="sample-container">
+                        <div class="sample-tabs" role="tablist" aria-label="Request body samples">
+                            <button *ngFor="let sample of requestBodySamples; let i = index" type="button" role="tab"
+                                class="sample-tab" [class.active]="selectedRequestTab === i"
+                                [attr.aria-selected]="selectedRequestTab === i" (click)="selectedRequestTab = i">
+                                {{ sample.title }}
+                            </button>
+                        </div>
+
+                        <div class="code-container">
+                            <div class="sample-description" *ngIf="requestBodySamples[selectedRequestTab]?.description">
+                                {{ requestBodySamples[selectedRequestTab]?.description }}
+                            </div>
+
+                            <pre><code>{{ requestBodySamples[selectedRequestTab]?.formattedPayload }}</code></pre>
+                        </div>
+                    </div>
+                </ng-container>
+
+                <ng-template #noRequestBodySamples>
+                    <div class="sample-empty">
+                        <span>No request body samples available.</span>
+                    </div>
+                </ng-template>
 
                 <div class="divider"></div>
 
@@ -757,12 +805,36 @@
 
                 <div class="divider"> </div>
 
-                <div class="data-field"><label>Response Body Sample</label></div>
-                <div class="code-container">
-                    <code>
-                        <pre>{{responseBodySampleString}}</pre>
-                    </code>
+                <div class="data-field">
+                    <label>Response Body Samples</label>
                 </div>
+
+                <ng-container *ngIf="responseBodySamples?.length; else noResponseBodySamples">
+                    <div class="sample-container">
+                        <div class="sample-tabs" role="tablist" aria-label="Response body samples">
+                            <button *ngFor="let sample of responseBodySamples; let i = index" type="button" role="tab"
+                                class="sample-tab" [class.active]="selectedResponseTab === i"
+                                [attr.aria-selected]="selectedResponseTab === i" (click)="selectedResponseTab = i">
+                                {{ sample.title }}
+                            </button>
+                        </div>
+
+                        <div class="code-container">
+                            <div class="sample-description"
+                                *ngIf="responseBodySamples[selectedResponseTab]?.description">
+                                {{ responseBodySamples[selectedResponseTab]?.description }}
+                            </div>
+
+                            <pre><code>{{ responseBodySamples[selectedResponseTab]?.formattedPayload }}</code></pre>
+                        </div>
+                    </div>
+                </ng-container>
+
+                <ng-template #noResponseBodySamples>
+                    <div class="sample-empty">
+                        <span>No response body samples available.</span>
+                    </div>
+                </ng-template>
 
                 <div class="divider"> </div>
 

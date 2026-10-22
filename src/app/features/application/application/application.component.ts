@@ -7,7 +7,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
-import { ApplicationApiService } from '../services/application-api.service';
+import { ApplicationApiService, APP_SEARCH_CACHE_KEY } from '../services/application-api.service';
 import { TableListComponent } from '../../../shared/components/table-list/table-list.component';
 import { AuthService } from '../../../core/auth/auth.service';
 import { ButtonComponent } from '../../../shared/components/button/button.component';
@@ -18,8 +18,6 @@ import { ReplaceUnderscorePipe } from '../../../shared/pipes/replace-underscore/
 import { LoaderComponent } from '../../../shared/components/loader/loader.component';
 import { finalize } from 'rxjs';
 import { BreadcrumbService } from '../../../shared/components/breadcrumbs/breadcrumbs.service';
-
-const APP_SEARCH_CACHE_KEY = 'app_search_state';
 
 @Component({
   selector: 'app-application',

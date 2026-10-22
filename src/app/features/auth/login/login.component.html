@@ -2,23 +2,42 @@
   <div class="login-box">
     <div class="login-sec app-icon">
       <img class="login-icon" src="assets/icons/lantern.png" />
-      <span>
-        <h1>API Catalog</h1>
-      </span>
+
+      <h1>API Catalog</h1>
     </div>
 
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-sec">
+    <form class="login-sec login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()"
+      [attr.aria-busy]="loginInProgress">
       <h3>Sign In</h3>
 
       <div class="input-container">
-        <input type="text" formControlName="username" placeholder="Username" autocomplete="username" />
-        <input type="password" formControlName="password" placeholder="Password" autocomplete="current-password" />
+        <input type="text" formControlName="username" placeholder="Username" autocomplete="username"
+          [readonly]="loginInProgress" />
+
+        <input type="password" formControlName="password" placeholder="Password" autocomplete="current-password"
+          [readonly]="loginInProgress" />
       </div>
 
-      <span class="btn-sec">
-        <app-button [name]="'Login'" type="submit" [disabled]="loginForm.invalid" />
-      </span>
-    </form>
+      @if (loginError) {
+      <p class="login-error" role="alert">
+        {{ loginError }}
+      </p>
+      }
 
+      <span class="btn-sec">
+        <app-button [name]="loginInProgress ? 'Signing in...' : 'Login'" type="submit"
+          [disabled]="loginForm.invalid || loginInProgress" />
+      </span>
+
+      @if (loginInProgress) {
+      <div class="login-loader" role="status" aria-live="polite" aria-label="Signing in">
+        <span class="loader-spinner" aria-hidden="true"></span>
+
+        <span class="loader-text">
+          Signing in...
+        </span>
+      </div>
+      }
+    </form>
   </div>
 </div>

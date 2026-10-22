@@ -23,6 +23,12 @@ import { VersionFormsModalService } from '../../../shared/components/version-for
 import { VersionModalService } from '../../../shared/components/version-modal/version-modal.service';
 import { DisplayMissingFieldsComponent } from '../../../shared/components/display-missing-fields/display-missing-fields.component';
 
+interface TechStackDisplay {
+  label: string;
+  field: string;
+  emptyText: string;
+}
+
 @Component({
   selector: 'app-app-details',
   standalone: true,
@@ -50,6 +56,20 @@ export class AppDetailsComponent implements OnInit {
 
   displayedServiceColumns: string[] = ['options', 'name', 'description', 'version', 'status'];
   displayedVersionColumns: string[] = ['options', 'version', 'date', 'stage', 'env', 'build', 'documents'];
+
+  readonly linkFields: { label: string; field: string; emptyText: string }[] = [
+    { label: 'Git Repository',            field: 'repoUrl',    emptyText: 'No repository link provided' },
+    { label: 'Swagger/API Documentation', field: 'swaggerUrl', emptyText: 'Documentation not available' },
+    { label: 'SharePoint Documents',      field: 'docsUrl',    emptyText: 'No documents attached' },
+  ];
+
+  readonly techStackDisplay: TechStackDisplay[] = [
+    { label: 'Platform',                field: 'techStackPlatform', emptyText: 'No platform information available' },
+    { label: 'Application Technologies',field: 'techStackApp',      emptyText: 'No technology data available' },
+    { label: 'Storage & Data',          field: 'techStackStorage',  emptyText: 'No storage information available' },
+    { label: 'Security',                field: 'techStackSecurity', emptyText: 'No security protocols listed' },
+    { label: 'Messaging',               field: 'techStackMessage',  emptyText: 'No messaging protocols listed' },
+  ];
 
   applicationDetails: any = [];
   wsData: any = [];

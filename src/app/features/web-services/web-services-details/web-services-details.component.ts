@@ -31,6 +31,7 @@ import { CommaToListPipe } from '../../../shared/pipes/comma-to-list/comma-to-li
 import { ReplaceUnderscorePipe } from '../../../shared/pipes/replace-underscore/replace-underscore.pipe';
 import { DisplayMissingFieldsComponent } from '../../../shared/components/display-missing-fields/display-missing-fields.component';
 import { LocalFileContentResponse, LocalFileResponse } from '../../../core/models/interface';
+import { SplitPipe } from '../../../shared/pipes/split/split.pipe';
 
 @Component({
   selector: 'app-web-services-details',
@@ -48,7 +49,8 @@ import { LocalFileContentResponse, LocalFileResponse } from '../../../core/model
     ButtonComponent,
     CommaToListPipe,
     ReplaceUnderscorePipe,
-    DisplayMissingFieldsComponent
+    DisplayMissingFieldsComponent,
+    SplitPipe,
   ],
   templateUrl: './web-services-details.component.html',
   styleUrl: './web-services-details.component.scss',
@@ -73,10 +75,17 @@ export class WebServicesDetailsComponent implements OnInit {
 
   versionData: any = [];
 
+  isMainframe: any = [];
+
   // displaying of localfiles
   localFiles: LocalFileResponse[] = [];
   localReqCopyBook: LocalFileResponse[] = [];
   localResCopyBook: LocalFileResponse[] = [];
+
+  requestBodySamples: any = [];
+  responseBodySamples: any = [];
+  selectedRequestTab = 0;
+  selectedResponseTab = 0;
 
   public baseUrl = environment.baseUrl;
 
@@ -178,8 +187,6 @@ export class WebServicesDetailsComponent implements OnInit {
     this.fetchWebServiceDetails();
     this.fetchVersions();
 
-    // this.getFileLocation();
-
   }
 
   loadMissingFields() {
@@ -207,7 +214,7 @@ export class WebServicesDetailsComponent implements OnInit {
           this.getResponseCopyBook();
         }
 
-
+        // format breadcrumbs
         const serviceName = res.data.serviceConfig?.[0]?.name || 'Service Details';
 
         if (keyword) {
@@ -216,8 +223,11 @@ export class WebServicesDetailsComponent implements OnInit {
 
         this.breadcrumbService.setOverride(this.router.url, serviceName);
 
-        this.requestBodySampleString = this.formatSample(this.WSDetails?.requestBodySample);
-        this.responseBodySampleString = this.formatSample(this.WSDetails?.responseBodySample);
+        // this.requestBodySampleString = this.formatSample(this.WSDetails?.requestBodySample);
+        // this.responseBodySampleString = this.formatSample(this.WSDetails?.responseBodySample);
+        this.populatePayloadSamples();
+
+        this.identifyWebService();
 
         setTimeout(() => this.scrollToKeyword(), 300);
       },
@@ -509,6 +519,15 @@ export class WebServicesDetailsComponent implements OnInit {
     return this.sensitivityTypeMap[type] ?? 'N/A';
   }
 
+  identifyWebService() {
+    if (this.WSDetails?.tranId) {
+      this.isMainframe = true;
+    }
+
+    console.log('isMainframe:', this.isMainframe);
+
+  }
+
   getRequestCopyBook() {
     this.webServiceApiService.getLocalFileLocation(this.WSDetails.requestCopyBook).subscribe({
       next: (response: any) => {
@@ -598,6 +617,20 @@ export class WebServicesDetailsComponent implements OnInit {
       .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;');
+  }
+
+  private populatePayloadSamples(): void {
+    this.requestBodySamples =
+      this.WSDetails?.requestSamplePayloads?.map((payload: any) => ({
+        ...payload,
+        formattedPayload: this.formatSample(payload.generatedPayload)
+      })) ?? [];
+
+    this.responseBodySamples =
+      this.WSDetails?.responseSamplePayloads?.map((payload: any) => ({
+        ...payload,
+        formattedPayload: this.formatSample(payload.generatedPayload)
+      })) ?? [];
   }
 
 }

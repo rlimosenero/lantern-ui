@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { MonitoringService } from '../../admin/services/monitoring.service';
-import { WebServicesApiService } from '../services/web-services-api.service';
+import { WebServicesApiService, WEB_SERVICES_CACHE_KEY } from '../services/web-services-api.service';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -18,8 +18,6 @@ import { finalize } from 'rxjs';
 import { LoaderComponent } from '../../../shared/components/loader/loader.component';
 import { ReplaceUnderscorePipe } from '../../../shared/pipes/replace-underscore/replace-underscore.pipe';
 import { BreadcrumbService } from '../../../shared/components/breadcrumbs/breadcrumbs.service';
-
-const WEB_SERVICES_CACHE_KEY = 'web_services_search_state';
 
 @Component({
   selector: 'app-web-services-dashboard',

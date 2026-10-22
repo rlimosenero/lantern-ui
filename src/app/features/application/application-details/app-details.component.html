@@ -101,109 +101,36 @@
       <section class="tech-stack-section">
         <h3>Technology Stack</h3>
 
+        @for (stack of techStackDisplay; track stack.field) {
         <div class="stack-group">
-          <label>Platform</label>
+          <label>{{ stack.label }}</label>
           <div>
-            @let techStackPlatform = (applicationDetails?.techStackPlatform | split);
-
-            @for (item of techStackPlatform; track item) {
+            @for (item of (applicationDetails?.[stack.field] | split); track item) {
             <span class="custom-chip">{{ item }}</span>
             } @empty {
-            <span class="no-data">No platform information available</span>
+            <span class="no-data">{{ stack.emptyText }}</span>
             }
           </div>
         </div>
-
-        <div class="stack-group">
-          <label>Application Technologies</label>
-          <div>
-            @let techStackApp = (applicationDetails?.techStackApp | split);
-
-            @for (item of techStackApp; track item) {
-            <span class="custom-chip">{{ item }}</span>
-            } @empty {
-            <span class="no-data">No technology data available</span>
-            }
-          </div>
-        </div>
-
-        <div class="stack-group">
-          <label>Storage & Data</label>
-          <div>
-            @let techStackStorage = (applicationDetails?.techStackStorage | split);
-
-            @for (item of techStackStorage; track item) {
-            <span class="custom-chip">{{ item }}</span>
-            } @empty {
-            <span class="no-data">No storage information available</span>
-            }
-          </div>
-        </div>
-
-        <div class="stack-group">
-          <label>Security</label>
-          <div>
-            @let techStackSecurity = (applicationDetails?.techStackSecurity | split);
-
-            @for (item of techStackSecurity; track item) {
-            <span class="custom-chip">{{ item }}</span>
-            } @empty {
-            <span class="no-data">No security protocols listed</span>
-            }
-          </div>
-        </div>
-
-        <div class="stack-group">
-          <label>Messaging</label>
-          <div>
-            @let techStackMessage = (applicationDetails?.techStackMessage | split);
-
-            @for (item of techStackMessage; track item) {
-            <span class="custom-chip">{{ item }}</span>
-            } @empty {
-            <span class="no-data">No security protocols listed</span>
-            }
-          </div>
-        </div>
-
+        }
 
       </section>
 
       <section>
         <h3>Links & Resources</h3>
 
+        @for (link of linkFields; track link.field) {
         <div class="link-field">
-          <label>Git Repository</label>
-          @if (applicationDetails?.repoUrl) {
-          <a [href]="applicationDetails.repoUrl" target="_blank">
-            {{ applicationDetails.repoUrl }} <img class="icon-tbl" src="assets/icons/document.png" />
+          <label>{{ link.label }}</label>
+          @if (applicationDetails?.[link.field]) {
+          <a [href]="applicationDetails[link.field]" target="_blank">
+            {{ applicationDetails[link.field] }} <img class="icon-tbl" src="assets/icons/document.png" />
           </a>
           } @else {
-          <span class="no-link">No repository link provided</span>
+          <span class="no-link">{{ link.emptyText }}</span>
           }
         </div>
-
-        <div class="link-field">
-          <label>Swagger/API Documentation</label>
-          @if (applicationDetails?.swaggerUrl) {
-          <a [href]="applicationDetails.swaggerUrl" target="_blank">
-            {{ applicationDetails.swaggerUrl }} <img class="icon-tbl" src="assets/icons/document.png" />
-          </a>
-          } @else {
-          <span class="no-link">Documentation not available</span>
-          }
-        </div>
-
-        <div class="link-field">
-          <label>SharePoint Documents</label>
-          @if (applicationDetails?.docsUrl) {
-          <a [href]="applicationDetails.docsUrl" target="_blank">
-            {{ applicationDetails.docsUrl }} <img class="icon-tbl" src="assets/icons/document.png" />
-          </a>
-          } @else {
-          <span class="no-link">No documents attached</span>
-          }
-        </div>
+        }
       </section>
 
       <section>

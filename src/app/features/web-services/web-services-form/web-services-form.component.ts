@@ -7,7 +7,7 @@ import { ButtonComponent } from '../../../shared/components/button/button.compon
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApplicationApiService } from '../../application/services/application-api.service';
 import { ModalService } from '../../../shared/components/confirmation-modal/modal.service';
-import { WebServicesApiService } from '../services/web-services-api.service';
+import { WebServicesApiService, WEB_SERVICES_CACHE_KEY } from '../services/web-services-api.service';
 
 @Component({
   selector: 'app-web-services-form',
@@ -157,8 +157,7 @@ export class WebServicesFormComponent implements OnInit {
   }
 
   clearSearchState(): void {
-    localStorage.removeItem('web_services_search_state');
-
+    localStorage.removeItem(WEB_SERVICES_CACHE_KEY);
   }
 
 

@@ -1,3 +1,5 @@
+@use '../../_features-shared' as shared;
+
 :host {
   display: block;
   background-color: #f8f9fa;
@@ -10,14 +12,6 @@ mat-divider.mat-divider.mat-divider-horizontal {
   align-self: center;
   border-top-color: #a1a1a180 !important;
 }
-
-// Global Variables
-$border-color: #e9ecef;
-$text-muted: #6c757d;
-$active-green: #dcfce7;
-$active-text: #016630;
-$warning-yellow: #fff3cd;
-$warning-text: #856404;
 
 .page-layout {
   width: 100%;
@@ -32,11 +26,10 @@ $warning-text: #856404;
   }
 }
 
+@include shared.page-layout-breakpoints;
+
 .detail-container {
-  border-radius: 12px !important;
-  border: 1px solid $border-color;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
-  background: white;
+  @include shared.detail-container;
 
   .header-section {
     padding: 2rem;
@@ -58,7 +51,6 @@ $warning-text: #856404;
           margin: 0;
           font-size: 1.875rem;
           font-weight: 500;
-          // line-height: 1.2rem;
         }
 
         span {
@@ -71,12 +63,11 @@ $warning-text: #856404;
 
       .description {
         font-size: 1.1rem;
-        color: $text-muted;
+        color: shared.$text-muted;
         margin: 8px 0 16px 0;
       }
     }
   }
-
 
   .chip-container {
     display: flex;
@@ -103,84 +94,17 @@ $warning-text: #856404;
 }
 
 span.custom-chip {
-  margin: 0;
-  border: 1px solid #0000001a;
+  @include shared.custom-chip;
   height: 22px;
   white-space: nowrap;
+  margin: 0;
 }
 
-th,
-td {
+th, td {
   vertical-align: middle;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-.card-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 23px;
-
-
-  h3 {
-    margin: 0 0 0.5rem;
-    color: #6a7282 !important;
-    font-size: 0.875rem !important;
-  }
-
-  h1 {
-    font-size: 1.5rem;
-    line-height: 1.33rem;
-    font-weight: 700;
-    margin: 0;
-  }
-
-  .card-analytics {
-    padding: 1rem;
-    width: 100%;
-    border: 1px solid #0000001a;
-    border-radius: 0.625rem;
-    height: 130px;
-    width: 304px;
-  }
-
-  .card-content {
-    display: flex;
-    flex-direction: row;
-    gap: 8px;
-    align-items: baseline;
-    margin: 1rem 0 0.5rem;
-  }
-
-  p {
-    margin: 0;
-    color: #6a7282;
-    font-size: 0.875rem;
-    line-height: 1.42rem;
-  }
-
-  p.footer {
-    font-size: 0.75rem;
-    margin: 0;
-  }
-
-  .cpu-usage {
-    height: 8px;
-    border-radius: 10px;
-
-    ::ng-deep .mdc-linear-progress__bar-inner {
-      border-color: #00c951 !important;
-      border-top-width: 8px;
-      transform: translateY(-2px);
-    }
-
-    ::ng-deep .mdc-linear-progress__buffer {
-      background: #ebe6e7;
-      height: 8px;
-    }
-  }
-
 }
 
 .mat-column-options {
@@ -191,7 +115,6 @@ td {
   }
 }
 
-// Grid Layouts
 .grid-2 {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -199,87 +122,13 @@ td {
 }
 
 .data-field {
-  label {
-    display: block;
-    font-size: 0.85rem;
-    color: $text-muted;
-    margin-bottom: 4px;
-    font-weight: 500;
-    line-height: 1.5rem;
-
-  }
-
-  p {
-    margin: 0;
-    font-size: 1rem;
-  }
+  label { @include shared.data-field-label; }
+  p { margin: 0; font-size: 1rem; }
 }
 
-// Links & Resources Styles
-.link-field {
-  margin-bottom: 1.25rem;
+.link-field { @include shared.link-field; }
 
-  label {
-    display: block;
-    font-size: 0.85rem;
-    color: $text-muted;
-    margin-bottom: 4px;
-    font-weight: 500;
-    line-height: 1.5rem;
-  }
-
-  a {
-    color: #1a73e8;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 0.95rem;
-
-    &:hover {
-      text-decoration: underline;
-    }
-
-    mat-icon {
-      font-size: 16px;
-      width: 16px;
-      height: 16px;
-    }
-  }
-}
-
-// Tech Stack Styles
-.stack-group {
-  margin-bottom: 1rem;
-
-  label {
-    font-size: 0.85rem;
-    color: $text-muted;
-    font-weight: 500;
-    line-height: 1.5rem;
-  }
-
-  div {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-  }
-
-  span.custom-chip {
-    background-color: #f2edee;
-  }
-
-}
-
-span.custom-chip {
-  padding: 2px 8px;
-  border-radius: 8px;
-  font-size: 0.75rem;
-  font-weight: 500;
-  display: inline-block;
-  line-height: calc(1rem);
-  margin: 0.5rem 0;
-}
+.stack-group { @include shared.stack-group; }
 
 .info-bar {
   display: flex;
@@ -295,91 +144,22 @@ span.custom-chip {
   margin-bottom: 1rem;
 }
 
-.font-medium {
-  font-weight: 500;
-}
+.table-container { @include shared.table-container; }
 
-.table-container {
-  overflow-x: auto;
-  max-width: 100%;
-  border: 1px solid #E0E0E0;
-  border-radius: .625rem;
-  position: relative;
-}
+.empty-container { @include shared.empty-container; }
 
-.empty-container {
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.5rem;
-
-  h3,
-  mat-icon {
-    font-weight: 500;
-    color: #808080;
-  }
-}
-
-table,
-.mat-mdc-table {
+table, .mat-mdc-table {
   width: 900px !important;
   display: table !important;
 }
 
-// Table Styles
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
+.section-header { @include shared.section-header; }
 
-.border-table {
-  width: 100%;
-  border: 1px solid #eee;
-  border-radius: 8px;
-  overflow: hidden;
+.border-table { @include shared.border-table; }
 
-  .mat-mdc-header-row {
-    height: 40px;
-  }
+.btn-custom-blue { color: shared.$primary-blue !important; }
 
-  .mat-mdc-row {
-    height: 39px;
-  }
-
-  .app-name {
-    font-weight: 500;
-  }
-
-  span.custom-chip {
-    border: 1px solid #0000001a;
-  }
-}
-
-.btn-custom-blue {
-  color: #155dfc !important;
-}
-
-.badge {
-  padding: 2px 8px;
-  border-radius: 8px;
-  font-size: 0.75rem;
-  font-weight: 500;
-  display: inline-block;
-  line-height: calc(1rem);
-  border: 1px solid #a1a1a180;
-
-  &.active {
-    background-color: $active-green;
-    color: $active-text;
-  }
-
-  &.active-sm {
-    background: $active-green;
-    color: $active-text;
-  }
-}
+.badge { @include shared.status-badge; }
 
 .status-row {
   display: flex;
@@ -387,42 +167,9 @@ table,
   gap: 12px;
 
   .version-text {
-    color: $text-muted;
+    color: shared.$text-muted;
     font-size: 0.9rem;
   }
 }
 
-.sec-warn {
-  padding: 1rem;
-  border-radius: 0.25rem;
-  border-color: $border-color;
-
-  .msg-warn {
-    font-size: 14px;
-  }
-}
-
-@container (min-width: 1280px) {
-  .page-layout {
-    width: 1024px;
-  }
-}
-
-@container (max-width: 1279px) {
-  .page-layout {
-    width: 1024px;
-  }
-}
-
-@container (max-width: 1023px) {
-  .page-layout {
-    width: 720px;
-  }
-}
-
-@container (max-width: 767px) {
-  .page-layout {
-    max-width: 592px;
-    width: 100%;
-  }
-}
+.sec-warn { @include shared.sec-warn; }
