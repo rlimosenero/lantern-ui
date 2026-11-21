@@ -39,7 +39,7 @@
                         'in-maintenance': WSDetails?.serviceConfig?.[0]?.status == 'In Maintenance',
                         'nonoperational': WSDetails?.serviceConfig?.[0]?.status == 'Non-operational',
                         'repair-in-progress': WSDetails?.serviceConfig?.[0]?.status == 'Repair in progress',
-                        'retired': WSDetails?.serviceConfig?.[0]?.status == 'RETIRED'
+                        'retired': WSDetails?.serviceConfig?.[0]?.status == 'Retired'
                         }" [class.unknown]="!WSDetails?.serviceConfig?.[0]?.status">
                         {{ WSDetails?.serviceConfig?.[0]?.status ?? 'UNKNOWN' }}
                     </span>
@@ -153,7 +153,7 @@
                             'in-maintenance': WSDetails?.serviceConfig?.[0]?.status == 'In Maintenance',
                             'nonoperational': WSDetails?.serviceConfig?.[0]?.status == 'Non-operational',
                             'repair-in-progress': WSDetails?.serviceConfig?.[0]?.status == 'Repair in progress',
-                            'retired': WSDetails?.serviceConfig?.[0]?.status == 'RETIRED'
+                            'retired': WSDetails?.serviceConfig?.[0]?.status == 'Retired'
                         }">
                             {{ WSDetails?.serviceConfig?.[0]?.status ?? 'Unknown' }}
                         </span>
@@ -1140,7 +1140,7 @@
                                     'in-maintenance': v.status == 'In Maintenance',
                                     'nonoperational': v.status == 'Non-operational',
                                     'repair-in-progress': v.status == 'Repair in progress',
-                                    'retired': v.status == 'RETIRED'
+                                    'retired': v.status == 'Retired'
                                 }">
                                     {{ v.status }}
                                 </span>
@@ -1266,8 +1266,8 @@
 
             </section>
 
-            @if (WSDetails?.serviceConfig?.[0]?.status !== 'RETIRED' && WSDetails?.serviceConfig?.[0]?.status !==
-            'RETIRED' ){
+            @if (WSDetails?.serviceConfig?.[0]?.status !== 'Retired' && WSDetails?.serviceConfig?.[0]?.status !==
+            'Retired' ){
             <section class="audit-section">
                 <div class="section-header">
                     <h3>Version History / Change Log</h3>
@@ -1437,7 +1437,7 @@
 
             <section>
 
-                @if (WSDetails?.serviceConfig?.[0]?.status == 'RETIRED'){
+                @if (WSDetails?.serviceConfig?.[0]?.status == 'Retired'){
                 <div class="sec-warn retired">
                     <span class="msg-warn">
                         🚫 This service is retired. It should not be used for new projects.

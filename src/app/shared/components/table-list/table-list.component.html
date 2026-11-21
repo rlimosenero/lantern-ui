@@ -47,7 +47,7 @@
             'in-maintenance': list.status == 'In Maintenance',
             'nonoperational': list.status == 'Non-operational',
             'repair-in-progress': list.status == 'Repair in progress',
-            'retired': list.status == 'RETIRED'
+            'retired': list.status == 'Retired'
           }">
         {{ list.status | lowercase | replaceUnderscore | titlecase }}
       </span>

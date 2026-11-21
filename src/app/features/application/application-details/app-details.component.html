@@ -41,7 +41,7 @@
             'in-maintenance': applicationDetails?.lifecycleStatus == 'In Maintenance',
             'nonoperational': applicationDetails?.lifecycleStatus == 'Non-operational',
             'repair-in-progress': applicationDetails?.lifecycleStatus == 'Repair in progress',
-            'retired': applicationDetails?.lifecycleStatus == 'RETIRED'
+            'retired': applicationDetails?.lifecycleStatus == 'Retired'
           }">
             {{ applicationDetails?.lifecycleStatus ?? 'UNKNOWN' }}
           </span>
@@ -169,7 +169,7 @@
                   'in-maintenance': s.lifecycleStatus == 'In Maintenance',
                   'nonoperational': s.lifecycleStatus == 'Non-Operational',
                   'repair-in-progress': s.lifecycleStatus == 'Repair in progress',
-                  'retired': s.lifecycleStatus == 'RETIRED'
+                  'retired': s.lifecycleStatus == 'Retired'
               }">
                   {{s.lifecycleStatus || 'UNKNOWN'}}
                 </span>
@@ -202,7 +202,7 @@
         }
       </section>
 
-      @if (applicationDetails.lifecycleStatus !== 'RETIRED' && applicationDetails.lifecycleStatus !== 'Non-operational')
+      @if (applicationDetails.lifecycleStatus !== 'Retired' && applicationDetails.lifecycleStatus !== 'Non-operational')
       {
       <section class="audit-section">
         <div class="section-header">
@@ -318,7 +318,7 @@
       }
 
       <section>
-        @if (applicationDetails.lifecycleStatus == 'RETIRED'){
+        @if (applicationDetails.lifecycleStatus == 'Retired'){
         <div class="sec-warn retired">
           <span class="msg-warn">
             🚫 This service is retired. It should not be used for new projects.
