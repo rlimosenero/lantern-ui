@@ -189,7 +189,7 @@
                     @if (WSDetails?.cicsRegion) {
                     <div class="data-field">
                         <label>CICS Region</label>
-                        <div>
+                        <div class="pipeline-regions">
                             @let cicsRegion = (WSDetails?.cicsRegion | split);
 
                             @for (item of cicsRegion; track item) {
@@ -259,7 +259,30 @@
                     @if (WSDetails?.pipeline) {
                     <div class="data-field">
                         <label>Pipeline</label>
-                        <span class="badge">{{ WSDetails?.pipeline ?? '—' }}</span>
+                        <div class="pipeline-container">
+                            @for (pipeline of parsedPipelines; track pipeline.name) {
+
+                            <div class="pipeline-row">
+
+                                <div class="pipeline-name">
+                                    {{ pipeline.name }}
+                                </div>
+
+                                <div class="pipeline-regions">
+
+                                    @for (region of pipeline.regions; track region) {
+                                    <span class="custom-chip">
+                                        {{ region }}
+                                    </span>
+                                    }
+
+                                </div>
+
+                            </div>
+
+                            }
+                        </div>
+
                     </div>
                     }
 

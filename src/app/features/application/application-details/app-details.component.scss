@@ -100,7 +100,8 @@ span.custom-chip {
   margin: 0;
 }
 
-th, td {
+th,
+td {
   vertical-align: middle;
   white-space: nowrap;
   overflow: hidden;
@@ -122,13 +123,37 @@ th, td {
 }
 
 .data-field {
-  label { @include shared.data-field-label; }
-  p { margin: 0; font-size: 1rem; }
+  label {
+    @include shared.data-field-label;
+  }
+
+  p {
+    margin: 0;
+    font-size: 1rem;
+  }
 }
 
-.link-field { @include shared.link-field; }
+.link-field {
+  @include shared.link-field;
+}
 
-.stack-group { @include shared.stack-group; }
+.stack-group {
+  @include shared.stack-group;
+
+  >div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .custom-chip {
+    max-width: 100%;
+    white-space: normal;
+    height: auto;
+    line-height: 1.4;
+    word-break: break-word;
+  }
+}
 
 .info-bar {
   display: flex;
@@ -144,22 +169,35 @@ th, td {
   margin-bottom: 1rem;
 }
 
-.table-container { @include shared.table-container; }
+.table-container {
+  @include shared.table-container;
+}
 
-.empty-container { @include shared.empty-container; }
+.empty-container {
+  @include shared.empty-container;
+}
 
-table, .mat-mdc-table {
+table,
+.mat-mdc-table {
   width: 900px !important;
   display: table !important;
 }
 
-.section-header { @include shared.section-header; }
+.section-header {
+  @include shared.section-header;
+}
 
-.border-table { @include shared.border-table; }
+.border-table {
+  @include shared.border-table;
+}
 
-.btn-custom-blue { color: shared.$primary-blue !important; }
+.btn-custom-blue {
+  color: shared.$primary-blue !important;
+}
 
-.badge { @include shared.status-badge; }
+.badge {
+  @include shared.status-badge;
+}
 
 .status-row {
   display: flex;
@@ -172,4 +210,6 @@ table, .mat-mdc-table {
   }
 }
 
-.sec-warn { @include shared.sec-warn; }
+.sec-warn {
+  @include shared.sec-warn;
+}

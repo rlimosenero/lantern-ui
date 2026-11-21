@@ -33,6 +33,11 @@ import { DisplayMissingFieldsComponent } from '../../../shared/components/displa
 import { LocalFileContentResponse, LocalFileResponse } from '../../../core/models/interface';
 import { SplitPipe } from '../../../shared/pipes/split/split.pipe';
 
+export interface PipelineMapping {
+  name: string;
+  regions: string[];
+}
+
 @Component({
   selector: 'app-web-services-details',
   imports: [
@@ -76,6 +81,8 @@ export class WebServicesDetailsComponent implements OnInit {
   versionData: any = [];
 
   isMainframe: any = [];
+
+  parsedPipelines: PipelineMapping[] = [];
 
   // displaying of localfiles
   localFiles: LocalFileResponse[] = [];
@@ -206,6 +213,8 @@ export class WebServicesDetailsComponent implements OnInit {
     this.webServiceApiService.getWebServicesDetails(WSId).subscribe({
       next: (res: any) => {
         this.WSDetails = res.data;
+
+        this.parsedPipelines = this.parsePipelines(this.WSDetails?.pipeline);
 
         this.getFileLocation();
 
@@ -631,6 +640,51 @@ export class WebServicesDetailsComponent implements OnInit {
         ...payload,
         formattedPayload: this.formatSample(payload.generatedPayload)
       })) ?? [];
+  }
+
+  parsePipelines(value: string | null | undefined): PipelineMapping[] {
+    if (!value) {
+      return [];
+    }
+
+    const entries: string[] = [];
+    let current = '';
+    let depth = 0;
+
+    for (const char of value) {
+      if (char === '(') depth++;
+      if (char === ')') depth--;
+
+      if (char === ',' && depth === 0) {
+        entries.push(current.trim());
+        current = '';
+      } else {
+        current += char;
+      }
+    }
+
+    if (current.trim()) {
+      entries.push(current.trim());
+    }
+
+    return entries.map(entry => {
+      const match = entry.match(/^(.+?)\s*\((.*?)\)$/);
+
+      if (!match) {
+        return {
+          name: entry,
+          regions: []
+        };
+      }
+
+      return {
+        name: match[1].trim(),
+        regions: match[2]
+          .split(',')
+          .map(r => r.trim())
+          .filter(Boolean)
+      };
+    });
   }
 
 }
