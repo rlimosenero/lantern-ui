@@ -80,7 +80,7 @@ export class WebServicesDetailsComponent implements OnInit {
 
   versionData: any = [];
 
-  isMainframe: any = [];
+  isMainframe: boolean = false;
 
   parsedPipelines: PipelineMapping[] = [];
 
